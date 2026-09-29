@@ -6,10 +6,7 @@
 <title>Plataforma de Codificación AQ</title>
 
 <style>
-
-*{
-  box-sizing:border-box
-}
+*{box-sizing:border-box}
 
 body{
   margin:0;
@@ -18,14 +15,9 @@ body{
   color:#1f2937
 }
 
-.hidden{
-  display:none!important
-}
+.hidden{display:none!important}
 
-button,
-input,
-select,
-textarea{
+button,input,select,textarea{
   font:inherit
 }
 
@@ -277,7 +269,7 @@ textarea{
 }
 
 
-/* ESTADÍSTICAS */
+/* INDICADORES */
 
 .stats{
   display:grid;
@@ -312,6 +304,9 @@ textarea{
   margin-top:6px
 }
 
+
+/* SECCIONES */
+
 .section{
   margin-bottom:20px
 }
@@ -336,11 +331,103 @@ textarea{
 }
 
 
+/* DASHBOARD POR PROYECTO */
+
+.project-dashboard-grid{
+  display:grid;
+  grid-template-columns:
+    repeat(auto-fit,minmax(280px,1fr));
+  gap:14px
+}
+
+.project-card{
+  border:1px solid #dbe2e8;
+  border-radius:10px;
+  background:#fff;
+  overflow:hidden
+}
+
+.project-card-header{
+  padding:14px 15px;
+  background:#f7fafc;
+  border-bottom:1px solid #e5eaf0
+}
+
+.project-card-title{
+  font-size:16px;
+  font-weight:800;
+  color:#063b66
+}
+
+.project-card-subtitle{
+  font-size:11px;
+  color:#6b7280;
+  margin-top:4px
+}
+
+.project-card-body{
+  padding:14px 15px
+}
+
+.project-total{
+  font-size:24px;
+  font-weight:800;
+  color:#063b66
+}
+
+.project-total-label{
+  font-size:10px;
+  color:#6b7280;
+  text-transform:uppercase;
+  font-weight:700;
+  margin-top:2px
+}
+
+.indicator-list{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:14px
+}
+
+.indicator-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  border:1px solid #dbe2e8;
+  background:#f8fafc;
+  border-radius:20px;
+  padding:6px 9px;
+  font-size:10px;
+  color:#334155;
+  font-weight:700
+}
+
+.indicator-chip strong{
+  color:#063b66;
+  font-size:12px
+}
+
+.project-card.internal-card
+.project-card-header{
+  background:#f1f5f9
+}
+
+.dashboard-empty{
+  padding:35px;
+  text-align:center;
+  color:#6b7280;
+  border:1px dashed #cbd5e1;
+  border-radius:8px
+}
+
+
 /* FORMULARIOS */
 
 .form-grid{
   display:grid;
-  grid-template-columns:repeat(4,minmax(150px,1fr));
+  grid-template-columns:
+    repeat(4,minmax(150px,1fr));
   gap:13px
 }
 
@@ -596,7 +683,7 @@ tbody tr:hover{
 }
 
 
-/* LOADING */
+/* CARGA */
 
 #loading{
   position:fixed;
@@ -631,11 +718,13 @@ tbody tr:hover{
 @media(max-width:1000px){
 
   .stats{
-    grid-template-columns:repeat(2,1fr)
+    grid-template-columns:
+      repeat(2,1fr)
   }
 
   .form-grid{
-    grid-template-columns:repeat(2,1fr)
+    grid-template-columns:
+      repeat(2,1fr)
   }
 
   .span-4{
@@ -687,31 +776,19 @@ tbody tr:hover{
   }
 
 }
-
 </style>
 </head>
 
 <body>
 
 
-<!-- =========================================================
-     LOADING
-========================================================= -->
-
 <div id="loading" class="hidden">
-
   <div class="spinner"></div>
-
-  <div>
-    Cargando plataforma...
-  </div>
-
+  <div>Cargando plataforma...</div>
 </div>
 
 
-<!-- =========================================================
-     LOGIN
-========================================================= -->
+<!-- LOGIN -->
 
 <div id="loginScreen">
 
@@ -736,8 +813,8 @@ tbody tr:hover{
 
     <div
       id="loginError"
-      class="login-error hidden"
-    ></div>
+      class="login-error hidden">
+    </div>
 
 
     <form id="loginForm">
@@ -754,8 +831,7 @@ tbody tr:hover{
           type="email"
           autocomplete="email"
           placeholder="usuario@aquaservices.cl"
-          required
-        >
+          required>
 
       </div>
 
@@ -772,17 +848,17 @@ tbody tr:hover{
           type="password"
           autocomplete="current-password"
           placeholder="Contraseña"
-          required
-        >
+          required>
 
       </div>
 
 
       <button
         class="btn btn-primary btn-block"
-        type="submit"
-      >
+        type="submit">
+
         Ingresar
+
       </button>
 
     </form>
@@ -792,9 +868,10 @@ tbody tr:hover{
 
       <button
         id="forgotPasswordBtn"
-        type="button"
-      >
+        type="button">
+
         ¿Olvidaste tu contraseña?
+
       </button>
 
     </div>
@@ -804,14 +881,10 @@ tbody tr:hover{
 </div>
 
 
-<!-- =========================================================
-     APP
-========================================================= -->
+<!-- APLICACIÓN -->
 
-<div
-  id="appScreen"
-  class="hidden"
->
+<div id="appScreen" class="hidden">
+
 
   <aside class="sidebar">
 
@@ -832,45 +905,49 @@ tbody tr:hover{
 
       <button
         class="menu-item active"
-        data-section="dashboard"
-      >
+        data-section="dashboard">
+
         <span>▣</span>
         <span class="menu-text">
           Dashboard
         </span>
+
       </button>
 
 
       <button
         class="menu-item"
-        data-section="newDocument"
-      >
+        data-section="newDocument">
+
         <span>＋</span>
         <span class="menu-text">
           Nuevo documento
         </span>
+
       </button>
 
 
       <button
         class="menu-item"
-        data-section="masterList"
-      >
+        data-section="masterList">
+
         <span>☷</span>
         <span class="menu-text">
           Listado Maestro
         </span>
+
       </button>
 
 
       <button
         class="menu-item"
-        data-section="matrix"
-      >
+        data-section="matrix">
+
         <span>▤</span>
         <span class="menu-text">
           Matriz de Trazabilidad
         </span>
+
       </button>
 
     </div>
@@ -880,15 +957,15 @@ tbody tr:hover{
 
       <div
         id="sidebarEmail"
-        class="sidebar-user-email"
-      ></div>
-
+        class="sidebar-user-email">
+      </div>
 
       <button
         id="logoutBtn"
-        class="btn btn-danger btn-block"
-      >
+        class="btn btn-danger btn-block">
+
         Cerrar sesión
+
       </button>
 
     </div>
@@ -898,20 +975,22 @@ tbody tr:hover{
 
   <main class="main">
 
+
     <header class="topbar">
 
       <div
         id="topbarTitle"
-        class="topbar-title"
-      >
+        class="topbar-title">
+
         Dashboard
+
       </div>
 
 
       <div
         id="topbarUser"
-        class="topbar-user"
-      ></div>
+        class="topbar-user">
+      </div>
 
     </header>
 
@@ -919,16 +998,15 @@ tbody tr:hover{
     <div class="content">
 
 
-      <!-- =====================================================
-           DASHBOARD
-      ====================================================== -->
+      <!-- DASHBOARD -->
 
       <section
         id="dashboardSection"
-        class="app-section"
-      >
+        class="app-section">
+
 
         <div class="stats">
+
 
           <div class="stat-card">
 
@@ -938,9 +1016,10 @@ tbody tr:hover{
 
             <div
               id="statTotal"
-              class="stat-number"
-            >
+              class="stat-number">
+
               0
+
             </div>
 
           </div>
@@ -954,9 +1033,10 @@ tbody tr:hover{
 
             <div
               id="statProjects"
-              class="stat-number"
-            >
+              class="stat-number">
+
               0
+
             </div>
 
           </div>
@@ -970,9 +1050,10 @@ tbody tr:hover{
 
             <div
               id="statInternal"
-              class="stat-number"
-            >
+              class="stat-number">
+
               0
+
             </div>
 
           </div>
@@ -987,30 +1068,34 @@ tbody tr:hover{
             <div
               id="statLast"
               class="stat-number"
-              style="font-size:18px"
-            >
+              style="font-size:18px">
+
               —
+
             </div>
 
           </div>
 
+
         </div>
 
+
+        <!-- INDICADORES -->
 
         <div class="section">
 
           <div class="section-header">
 
             <div class="section-title">
-              Documentos registrados
+              Indicadores por proyecto
             </div>
-
 
             <button
               id="dashboardRefresh"
-              class="btn btn-secondary"
-            >
+              class="btn btn-secondary">
+
               Actualizar
+
             </button>
 
           </div>
@@ -1018,36 +1103,9 @@ tbody tr:hover{
 
           <div class="section-body">
 
-            <div class="table-wrapper">
-
-              <table>
-
-                <thead>
-
-                  <tr>
-
-                    <th>CÓDIGO</th>
-                    <th>DOCUMENTO</th>
-                    <th>PROYECTO</th>
-                    <th>CLIENTE</th>
-                    <th>N° PROY.</th>
-                    <th>ÁREA</th>
-                    <th>TIPO</th>
-                    <th>REV.</th>
-                    <th>FECHA</th>
-                    <th>ESTADO</th>
-                    <th>ACCIÓN</th>
-
-                  </tr>
-
-                </thead>
-
-
-                <tbody
-                  id="dashboardTable"
-                ></tbody>
-
-              </table>
+            <div
+              id="dashboardProjects"
+              class="project-dashboard-grid">
 
             </div>
 
@@ -1055,19 +1113,19 @@ tbody tr:hover{
 
         </div>
 
+
       </section>
 
 
-      <!-- =====================================================
-           NUEVO DOCUMENTO
-      ====================================================== -->
+      <!-- NUEVO DOCUMENTO -->
 
       <section
         id="newDocumentSection"
-        class="app-section hidden"
-      >
+        class="app-section hidden">
+
 
         <div class="section">
+
 
           <div class="section-header">
 
@@ -1080,7 +1138,9 @@ tbody tr:hover{
 
           <div class="section-body">
 
+
             <form id="documentForm">
+
 
               <div class="form-grid">
 
@@ -1094,14 +1154,14 @@ tbody tr:hover{
 
                   <div class="radio-group">
 
+
                     <label class="radio-option">
 
                       <input
                         type="radio"
                         name="mode"
                         value="project"
-                        checked
-                      >
+                        checked>
 
                       Proyecto
 
@@ -1113,12 +1173,12 @@ tbody tr:hover{
                       <input
                         type="radio"
                         name="mode"
-                        value="internal"
-                      >
+                        value="internal">
 
                       Documentación Interna
 
                     </label>
+
 
                   </div>
 
@@ -1127,10 +1187,11 @@ tbody tr:hover{
 
                 <div
                   id="projectFields"
-                  class="span-4"
-                >
+                  class="span-4">
+
 
                   <div class="form-grid">
+
 
                     <div class="form-group">
 
@@ -1141,8 +1202,7 @@ tbody tr:hover{
                       <input
                         id="client"
                         class="form-control"
-                        placeholder="Ej. Alto Norte"
-                      >
+                        placeholder="Ej. Alto Norte">
 
                     </div>
 
@@ -1156,8 +1216,7 @@ tbody tr:hover{
                       <input
                         id="projectNo"
                         class="form-control"
-                        placeholder="Ej. 04"
-                      >
+                        placeholder="Ej. 04">
 
                     </div>
 
@@ -1170,10 +1229,10 @@ tbody tr:hover{
 
                       <input
                         id="projectName"
-                        class="form-control"
-                      >
+                        class="form-control">
 
                     </div>
+
 
                   </div>
 
@@ -1186,12 +1245,10 @@ tbody tr:hover{
                     Área / Sistema *
                   </label>
 
-
                   <select
                     id="area"
                     class="form-control"
-                    required
-                  >
+                    required>
 
                     <option value="">
                       Seleccionar...
@@ -1260,12 +1317,10 @@ tbody tr:hover{
                     Tipo de documento *
                   </label>
 
-
                   <select
                     id="docType"
                     class="form-control"
-                    required
-                  >
+                    required>
 
                     <option value="">
                       Seleccionar...
@@ -1345,8 +1400,8 @@ tbody tr:hover{
                   <select
                     id="revision"
                     class="form-control"
-                    required
-                  ></select>
+                    required>
+                  </select>
 
                 </div>
 
@@ -1360,8 +1415,7 @@ tbody tr:hover{
                   <input
                     id="documentName"
                     class="form-control"
-                    required
-                  >
+                    required>
 
                 </div>
 
@@ -1375,8 +1429,7 @@ tbody tr:hover{
                   <input
                     id="issueDate"
                     type="date"
-                    class="form-control"
-                  >
+                    class="form-control">
 
                 </div>
 
@@ -1387,11 +1440,9 @@ tbody tr:hover{
                     Estado
                   </label>
 
-
                   <select
                     id="state"
-                    class="form-control"
-                  >
+                    class="form-control">
 
                     <option value="">
                       Seleccionar...
@@ -1427,8 +1478,7 @@ tbody tr:hover{
                   <input
                     id="docLink"
                     type="url"
-                    class="form-control"
-                  >
+                    class="form-control">
 
                 </div>
 
@@ -1441,8 +1491,7 @@ tbody tr:hover{
 
                   <input
                     id="distribution"
-                    class="form-control"
-                  >
+                    class="form-control">
 
                 </div>
 
@@ -1455,8 +1504,7 @@ tbody tr:hover{
 
                   <input
                     id="diffusion"
-                    class="form-control"
-                  >
+                    class="form-control">
 
                 </div>
 
@@ -1469,8 +1517,7 @@ tbody tr:hover{
 
                   <input
                     id="associated"
-                    class="form-control"
-                  >
+                    class="form-control">
 
                 </div>
 
@@ -1483,8 +1530,7 @@ tbody tr:hover{
 
                   <input
                     id="evidence"
-                    class="form-control"
-                  >
+                    class="form-control">
 
                 </div>
 
@@ -1497,8 +1543,7 @@ tbody tr:hover{
 
                   <input
                     id="standard"
-                    class="form-control"
-                  >
+                    class="form-control">
 
                 </div>
 
@@ -1512,8 +1557,8 @@ tbody tr:hover{
                   <textarea
                     id="observations"
                     class="form-control"
-                    style="min-height:75px"
-                  ></textarea>
+                    rows="3">
+                  </textarea>
 
                 </div>
 
@@ -1526,12 +1571,14 @@ tbody tr:hover{
 
                   <div
                     id="codePreview"
-                    class="code-preview-value"
-                  >
+                    class="code-preview-value">
+
                     Complete los campos para generar el código
+
                   </div>
 
                 </div>
+
 
               </div>
 
@@ -1539,31 +1586,35 @@ tbody tr:hover{
               <div class="form-actions">
 
                 <button
-                  type="button"
                   id="previewBtn"
-                  class="btn btn-secondary"
-                >
+                  type="button"
+                  class="btn btn-secondary">
+
                   Generar código
+
                 </button>
 
 
                 <button
-                  type="button"
                   id="clearBtn"
-                  class="btn btn-secondary"
-                >
+                  type="button"
+                  class="btn btn-secondary">
+
                   Limpiar
+
                 </button>
 
 
                 <button
                   type="submit"
-                  class="btn btn-primary"
-                >
+                  class="btn btn-primary">
+
                   Registrar documento
+
                 </button>
 
               </div>
+
 
             </form>
 
@@ -1574,16 +1625,15 @@ tbody tr:hover{
       </section>
 
 
-      <!-- =====================================================
-           LISTADO MAESTRO
-      ====================================================== -->
+      <!-- LISTADO MAESTRO -->
 
       <section
         id="masterListSection"
-        class="app-section hidden"
-      >
+        class="app-section hidden">
+
 
         <div class="section">
+
 
           <div class="section-header">
 
@@ -1591,12 +1641,12 @@ tbody tr:hover{
               Listado Maestro
             </div>
 
-
             <button
               id="masterRefresh"
-              class="btn btn-secondary"
-            >
+              class="btn btn-secondary">
+
               Actualizar
+
             </button>
 
           </div>
@@ -1604,21 +1654,18 @@ tbody tr:hover{
 
           <div class="section-body">
 
+
             <div class="table-tools">
 
               <input
                 id="masterSearch"
                 class="form-control search"
-                placeholder="Buscar código, documento, proyecto, área..."
-              >
+                placeholder="Buscar código, documento, proyecto, área...">
 
 
-              <span
-                id="masterCount"
-                style="font-size:12px;color:#6b7280"
-              >
+              <div id="masterCount">
                 0 registros
-              </span>
+              </div>
 
             </div>
 
@@ -1647,10 +1694,7 @@ tbody tr:hover{
 
                 </thead>
 
-
-                <tbody
-                  id="masterTable"
-                ></tbody>
+                <tbody id="masterTable"></tbody>
 
               </table>
 
@@ -1663,16 +1707,15 @@ tbody tr:hover{
       </section>
 
 
-      <!-- =====================================================
-           MATRIZ
-      ====================================================== -->
+      <!-- MATRIZ -->
 
       <section
         id="matrixSection"
-        class="app-section hidden"
-      >
+        class="app-section hidden">
+
 
         <div class="section">
+
 
           <div class="section-header">
 
@@ -1680,12 +1723,12 @@ tbody tr:hover{
               Matriz de Trazabilidad
             </div>
 
-
             <button
               id="matrixRefresh"
-              class="btn btn-secondary"
-            >
+              class="btn btn-secondary">
+
               Actualizar
+
             </button>
 
           </div>
@@ -1693,21 +1736,18 @@ tbody tr:hover{
 
           <div class="section-body">
 
+
             <div class="table-tools">
 
               <input
                 id="matrixSearch"
                 class="form-control search"
-                placeholder="Buscar..."
-              >
+                placeholder="Buscar...">
 
 
-              <span
-                id="matrixCount"
-                style="font-size:12px;color:#6b7280"
-              >
+              <div id="matrixCount">
                 0 registros
-              </span>
+              </div>
 
             </div>
 
@@ -1736,10 +1776,7 @@ tbody tr:hover{
 
                 </thead>
 
-
-                <tbody
-                  id="matrixTable"
-                ></tbody>
+                <tbody id="matrixTable"></tbody>
 
               </table>
 
@@ -1750,6 +1787,7 @@ tbody tr:hover{
         </div>
 
       </section>
+
 
     </div>
 
@@ -1758,16 +1796,15 @@ tbody tr:hover{
 </div>
 
 
-<!-- =========================================================
-     MODAL EDICIÓN
-========================================================= -->
+<!-- MODAL EDITAR -->
 
 <div
   id="editModal"
-  class="modal-backdrop hidden"
->
+  class="modal-backdrop hidden">
+
 
   <div class="modal">
+
 
     <div class="modal-header">
 
@@ -1777,9 +1814,10 @@ tbody tr:hover{
 
       <button
         id="closeEditModal"
-        class="modal-close"
-      >
+        class="modal-close">
+
         ×
+
       </button>
 
     </div>
@@ -1787,10 +1825,10 @@ tbody tr:hover{
 
     <div class="modal-body">
 
+
       <input
         id="editOriginalCode"
-        type="hidden"
-      >
+        type="hidden">
 
 
       <div class="form-grid">
@@ -1804,8 +1842,7 @@ tbody tr:hover{
 
           <select
             id="editMode"
-            class="form-control"
-          >
+            class="form-control">
 
             <option value="project">
               Proyecto
@@ -1828,8 +1865,7 @@ tbody tr:hover{
 
           <input
             id="editClient"
-            class="form-control"
-          >
+            class="form-control">
 
         </div>
 
@@ -1842,8 +1878,7 @@ tbody tr:hover{
 
           <input
             id="editProjectNo"
-            class="form-control"
-          >
+            class="form-control">
 
         </div>
 
@@ -1856,8 +1891,7 @@ tbody tr:hover{
 
           <input
             id="editProjectName"
-            class="form-control"
-          >
+            class="form-control">
 
         </div>
 
@@ -1870,22 +1904,59 @@ tbody tr:hover{
 
           <select
             id="editArea"
-            class="form-control"
-          >
+            class="form-control">
 
-            <option>AD</option>
-            <option>QA</option>
-            <option>QC</option>
-            <option>PR</option>
-            <option>ING</option>
-            <option>SEC</option>
-            <option>ADQ</option>
-            <option>VEN</option>
-            <option>RRHH</option>
-            <option>SSO</option>
-            <option>MA</option>
-            <option>MANT</option>
-            <option>SIG</option>
+            <option value="AD">
+              AD
+            </option>
+
+            <option value="QA">
+              QA
+            </option>
+
+            <option value="QC">
+              QC
+            </option>
+
+            <option value="PR">
+              PR
+            </option>
+
+            <option value="ING">
+              ING
+            </option>
+
+            <option value="SEC">
+              SEC
+            </option>
+
+            <option value="ADQ">
+              ADQ
+            </option>
+
+            <option value="VEN">
+              VEN
+            </option>
+
+            <option value="RRHH">
+              RRHH
+            </option>
+
+            <option value="SSO">
+              SSO
+            </option>
+
+            <option value="MA">
+              MA
+            </option>
+
+            <option value="MANT">
+              MANT
+            </option>
+
+            <option value="SIG">
+              SIG
+            </option>
 
           </select>
 
@@ -1900,24 +1971,67 @@ tbody tr:hover{
 
           <select
             id="editDocType"
-            class="form-control"
-          >
+            class="form-control">
 
-            <option>PROC</option>
-            <option>INS</option>
-            <option>REG</option>
-            <option>MAN</option>
-            <option>PL</option>
-            <option>PROG</option>
-            <option>ESQ</option>
-            <option>MAT</option>
-            <option>PLN</option>
-            <option>INF</option>
-            <option>PAC</option>
-            <option>PROT</option>
-            <option>PIE</option>
-            <option>CHK</option>
-            <option>ORG</option>
+            <option value="PROC">
+              PROC
+            </option>
+
+            <option value="INS">
+              INS
+            </option>
+
+            <option value="REG">
+              REG
+            </option>
+
+            <option value="MAN">
+              MAN
+            </option>
+
+            <option value="PL">
+              PL
+            </option>
+
+            <option value="PROG">
+              PROG
+            </option>
+
+            <option value="ESQ">
+              ESQ
+            </option>
+
+            <option value="MAT">
+              MAT
+            </option>
+
+            <option value="PLN">
+              PLN
+            </option>
+
+            <option value="INF">
+              INF
+            </option>
+
+            <option value="PAC">
+              PAC
+            </option>
+
+            <option value="PROT">
+              PROT
+            </option>
+
+            <option value="PIE">
+              PIE
+            </option>
+
+            <option value="CHK">
+              CHK
+            </option>
+
+            <option value="ORG">
+              ORG
+            </option>
 
           </select>
 
@@ -1932,16 +2046,35 @@ tbody tr:hover{
 
           <select
             id="editRevision"
-            class="form-control"
-          >
+            class="form-control">
 
-            <option>Rev.B</option>
-            <option>Rev0</option>
-            <option>Rev1</option>
-            <option>Rev2</option>
-            <option>Rev3</option>
-            <option>Rev4</option>
-            <option>Rev5</option>
+            <option value="Rev.B">
+              Rev.B
+            </option>
+
+            <option value="Rev0">
+              Rev0
+            </option>
+
+            <option value="Rev1">
+              Rev1
+            </option>
+
+            <option value="Rev2">
+              Rev2
+            </option>
+
+            <option value="Rev3">
+              Rev3
+            </option>
+
+            <option value="Rev4">
+              Rev4
+            </option>
+
+            <option value="Rev5">
+              Rev5
+            </option>
 
           </select>
 
@@ -1956,8 +2089,7 @@ tbody tr:hover{
 
           <input
             id="editName"
-            class="form-control"
-          >
+            class="form-control">
 
         </div>
 
@@ -1971,8 +2103,7 @@ tbody tr:hover{
           <input
             id="editIssueDate"
             type="date"
-            class="form-control"
-          >
+            class="form-control">
 
         </div>
 
@@ -1985,8 +2116,7 @@ tbody tr:hover{
 
           <select
             id="editState"
-            class="form-control"
-          >
+            class="form-control">
 
             <option value="">
               Seleccionar...
@@ -2021,8 +2151,7 @@ tbody tr:hover{
 
           <input
             id="editDocLink"
-            class="form-control"
-          >
+            class="form-control">
 
         </div>
 
@@ -2035,8 +2164,7 @@ tbody tr:hover{
 
           <input
             id="editDistribution"
-            class="form-control"
-          >
+            class="form-control">
 
         </div>
 
@@ -2049,8 +2177,7 @@ tbody tr:hover{
 
           <input
             id="editDiffusion"
-            class="form-control"
-          >
+            class="form-control">
 
         </div>
 
@@ -2063,8 +2190,7 @@ tbody tr:hover{
 
           <input
             id="editAssociated"
-            class="form-control"
-          >
+            class="form-control">
 
         </div>
 
@@ -2077,8 +2203,7 @@ tbody tr:hover{
 
           <input
             id="editEvidence"
-            class="form-control"
-          >
+            class="form-control">
 
         </div>
 
@@ -2086,13 +2211,12 @@ tbody tr:hover{
         <div class="form-group">
 
           <label>
-            Norma / Requisito
+            Norma
           </label>
 
           <input
             id="editStandard"
-            class="form-control"
-          >
+            class="form-control">
 
         </div>
 
@@ -2106,8 +2230,8 @@ tbody tr:hover{
           <textarea
             id="editObservations"
             class="form-control"
-            style="min-height:75px"
-          ></textarea>
+            rows="3">
+          </textarea>
 
         </div>
 
@@ -2115,19 +2239,22 @@ tbody tr:hover{
         <div class="span-4 code-preview">
 
           <div class="code-preview-label">
-            Código
+            Código generado
           </div>
 
           <div
             id="editCodePreview"
-            class="code-preview-value"
-          >
+            class="code-preview-value">
+
             —
+
           </div>
 
         </div>
 
+
       </div>
+
 
     </div>
 
@@ -2136,20 +2263,23 @@ tbody tr:hover{
 
       <button
         id="cancelEdit"
-        class="btn btn-secondary"
-      >
+        class="btn btn-secondary">
+
         Cancelar
+
       </button>
 
 
       <button
         id="saveEdit"
-        class="btn btn-primary"
-      >
+        class="btn btn-primary">
+
         Guardar cambios
+
       </button>
 
     </div>
+
 
   </div>
 
@@ -2159,9 +2289,7 @@ tbody tr:hover{
 <div id="toastContainer"></div>
 
 
-<!-- =========================================================
-     FIREBASE
-========================================================= -->
+<!-- FIREBASE -->
 
 <script type="module">
 
@@ -2183,7 +2311,7 @@ from
 "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
 
-const firebaseConfig = {
+const firebaseConfig={
 
   apiKey:
     "AIzaSyAgKLxc9Ui0YrrBCC8jIAvGWfwrtdUTmHs",
@@ -2213,7 +2341,9 @@ const app =
 
 
 const auth =
-  getAuth(app);
+  getAuth(
+    app
+  );
 
 
 const BACKEND_URL =
@@ -2233,18 +2363,16 @@ let data = {
 };
 
 
-/* =========================================================
-   HELPERS
-========================================================= */
-
 const $ =
   id =>
-    document.getElementById(id);
+    document.getElementById(
+      id
+    );
 
 
 function loading(
   value
-){
+) {
 
   $("loading")
     .classList
@@ -2257,29 +2385,30 @@ function loading(
 
 
 function toast(
-  message,
+  msg,
   type="info"
-){
+) {
 
-  const div =
+  const d =
     document.createElement(
       "div"
     );
 
-  div.className =
+  d.className =
     "toast toast-" +
     type;
 
-  div.textContent =
-    message;
+  d.textContent =
+    msg;
 
   $("toastContainer")
     .appendChild(
-      div
+      d
     );
 
   setTimeout(
-    () => div.remove(),
+    () =>
+      d.remove(),
     4500
   );
 
@@ -2288,7 +2417,7 @@ function toast(
 
 function esc(
   value
-){
+) {
 
   return String(
     value ?? ""
@@ -2319,21 +2448,25 @@ function esc(
 
 function dateText(
   value
-){
+) {
 
-  if(!value){
+  if (
+    !value
+  ) {
+
     return "";
+
   }
+
 
   const d =
     new Date(
       value
     );
 
+
   return isNaN(d)
-
     ? String(value)
-
     : d.toLocaleDateString(
         "es-CL"
       );
@@ -2343,32 +2476,40 @@ function dateText(
 
 function inputDate(
   value
-){
+) {
 
-  if(!value){
+  if (
+    !value
+  ) {
+
     return "";
+
   }
 
-  if(
+
+  if (
     /^\d{4}-\d{2}-\d{2}$/
       .test(
         String(value)
       )
-  ){
+  ) {
 
-    return String(value);
+    return String(
+      value
+    );
 
   }
 
+
   const d =
-    new Date(value);
+    new Date(
+      value
+    );
+
 
   return isNaN(d)
-
     ? ""
-
-    : d
-        .toISOString()
+    : d.toISOString()
         .slice(
           0,
           10
@@ -2377,13 +2518,15 @@ function inputDate(
 }
 
 
-/* =========================================================
-   TOKEN FIREBASE
-========================================================= */
+/***************************************************************
+ * FIREBASE TOKEN
+ ***************************************************************/
 
 async function getToken(){
 
-  if(!currentUser){
+  if(
+    !currentUser
+  ){
 
     throw new Error(
       "La sesión de Firebase no está disponible."
@@ -2391,12 +2534,17 @@ async function getToken(){
 
   }
 
-  const token =
-    await currentUser.getIdToken(
-      false
-    );
 
-  if(!token){
+  const token =
+    await currentUser
+      .getIdToken(
+        false
+      );
+
+
+  if(
+    !token
+  ){
 
     throw new Error(
       "Firebase no devolvió el ID token."
@@ -2404,14 +2552,15 @@ async function getToken(){
 
   }
 
+
   return token;
 
 }
 
 
-/* =========================================================
-   API
-========================================================= */
+/***************************************************************
+ * API
+ ***************************************************************/
 
 async function api(
   action,
@@ -2420,6 +2569,7 @@ async function api(
 
   const token =
     await getToken();
+
 
   const body = {
 
@@ -2431,10 +2581,12 @@ async function api(
 
   };
 
+
   const response =
     await fetch(
       BACKEND_URL,
       {
+
         method:
           "POST",
 
@@ -2447,13 +2599,17 @@ async function api(
           JSON.stringify(
             body
           )
+
       }
     );
+
 
   const text =
     await response.text();
 
+
   let result;
+
 
   try{
 
@@ -2474,7 +2630,10 @@ async function api(
 
   }
 
-  if(!result.ok){
+
+  if(
+    !result.ok
+  ){
 
     throw new Error(
       result.error ||
@@ -2483,14 +2642,55 @@ async function api(
 
   }
 
+
   return result;
 
 }
 
 
-/* =========================================================
-   LOGIN
-========================================================= */
+/***************************************************************
+ * ERRORES FIREBASE
+ ***************************************************************/
+
+function firebaseError(
+  e
+){
+
+  const messages={
+
+    "auth/invalid-credential":
+      "Correo o contraseña incorrectos.",
+
+    "auth/user-not-found":
+      "No existe un usuario con ese correo.",
+
+    "auth/wrong-password":
+      "Contraseña incorrecta.",
+
+    "auth/invalid-email":
+      "El correo electrónico no es válido.",
+
+    "auth/too-many-requests":
+      "Demasiados intentos. Intenta nuevamente más tarde.",
+
+    "auth/network-request-failed":
+      "No fue posible conectarse con Firebase."
+
+  };
+
+
+  return (
+    messages[e.code] ||
+    e.message ||
+    "No fue posible iniciar sesión."
+  );
+
+}
+
+
+/***************************************************************
+ * LOGIN
+ ***************************************************************/
 
 $("loginForm")
   .addEventListener(
@@ -2501,32 +2701,34 @@ $("loginForm")
 
       $("loginError")
         .classList
-        .add(
-          "hidden"
-        );
+        .add("hidden");
+
 
       try{
 
-        loading(true);
+        loading(
+          true
+        );
+
 
         await signInWithEmailAndPassword(
-
           auth,
-
           $("loginEmail")
             .value
             .trim(),
 
           $("loginPassword")
             .value
-
         );
 
-      }catch(error){
+
+      }catch(err){
 
         $("loginError")
           .textContent =
-          error.message;
+          firebaseError(
+            err
+          );
 
         $("loginError")
           .classList
@@ -2534,9 +2736,12 @@ $("loginForm")
             "hidden"
           );
 
+
       }finally{
 
-        loading(false);
+        loading(
+          false
+        );
 
       }
 
@@ -2544,9 +2749,9 @@ $("loginForm")
   );
 
 
-/* =========================================================
-   RECUPERAR CONTRASEÑA
-========================================================= */
+/***************************************************************
+ * RECUPERAR CONTRASEÑA
+ ***************************************************************/
 
 $("forgotPasswordBtn")
   .addEventListener(
@@ -2558,41 +2763,51 @@ $("forgotPasswordBtn")
           .value
           .trim();
 
-      if(!email){
 
-        toast(
+      if(
+        !email
+      ){
+
+        return toast(
           "Ingresa primero tu correo.",
           "error"
         );
 
-        return;
-
       }
+
 
       try{
 
-        loading(true);
+        loading(
+          true
+        );
+
 
         await sendPasswordResetEmail(
           auth,
           email
         );
 
+
         toast(
           "Se envió el correo para restablecer la contraseña.",
           "success"
         );
 
+
       }catch(e){
 
         toast(
-          e.message,
+          firebaseError(e),
           "error"
         );
 
+
       }finally{
 
-        loading(false);
+        loading(
+          false
+        );
 
       }
 
@@ -2600,30 +2815,36 @@ $("forgotPasswordBtn")
   );
 
 
-/* =========================================================
-   CERRAR SESIÓN
-========================================================= */
+/***************************************************************
+ * CERRAR SESIÓN
+ ***************************************************************/
 
 $("logoutBtn")
   .addEventListener(
     "click",
     () =>
-      signOut(auth)
+      signOut(
+        auth
+      )
   );
 
 
-/* =========================================================
-   AUTH
-========================================================= */
+/***************************************************************
+ * AUTENTICACIÓN
+ ***************************************************************/
 
 onAuthStateChanged(
   auth,
   async user => {
 
     currentUser =
-      user || null;
+      user ||
+      null;
 
-    if(!user){
+
+    if(
+      !user
+    ){
 
       $("loginScreen")
         .classList
@@ -2641,11 +2862,13 @@ onAuthStateChanged(
 
     }
 
+
     $("loginScreen")
       .classList
       .add(
         "hidden"
       );
+
 
     $("appScreen")
       .classList
@@ -2653,17 +2876,24 @@ onAuthStateChanged(
         "hidden"
       );
 
+
     $("sidebarEmail")
       .textContent =
-      user.email || "";
+      user.email ||
+      "";
+
 
     $("topbarUser")
       .textContent =
-      user.email || "";
+      user.email ||
+      "";
+
 
     try{
 
-      loading(true);
+      loading(
+        true
+      );
 
       await loadData();
 
@@ -2676,7 +2906,9 @@ onAuthStateChanged(
 
     }finally{
 
-      loading(false);
+      loading(
+        false
+      );
 
     }
 
@@ -2684,62 +2916,320 @@ onAuthStateChanged(
 );
 
 
-/* =========================================================
-   CARGAR DATOS
-========================================================= */
+/***************************************************************
+ * CARGAR DATOS
+ ***************************************************************/
 
 async function loadData(){
 
-  const result =
+  const r =
     await api(
       "getData"
     );
 
+
   data.listado =
     Array.isArray(
-      result.listado
+      r.listado
     )
-      ? result.listado
+      ? r.listado
       : [];
+
 
   data.matriz =
     Array.isArray(
-      result.matriz
+      r.matriz
     )
-      ? result.matriz
+      ? r.matriz
       : [];
+
 
   renderAll();
 
 }
 
 
-/* =========================================================
-   REGISTROS ÚNICOS
-========================================================= */
+/***************************************************************
+ * UTILIDADES DASHBOARD
+ ***************************************************************/
 
 function unique(){
 
-  const map =
+  const m =
     new Map();
+
 
   [
     ...data.listado,
     ...data.matriz
   ]
+  .forEach(
+    r => {
+
+      if(
+        r.code &&
+        !m.has(
+          r.code
+        )
+      ){
+
+        m.set(
+          r.code,
+          r
+        );
+
+      }
+
+    }
+  );
+
+
+  return [
+    ...m.values()
+  ];
+
+}
+
+
+/*
+ * INTERNO se determina por el
+ * Nombre del Proyecto de la Matriz.
+ */
+
+function isInternalRecord(
+  r
+){
+
+  const project =
+    String(
+      r.projectName ||
+      ""
+    )
+      .trim()
+      .toUpperCase();
+
+
+  return (
+    project ===
+      "INTERNO" ||
+    project ===
+      "INTERNA"
+  );
+
+}
+
+
+/*
+ * Nombre del proyecto.
+ */
+
+function projectLabel(
+  r
+){
+
+  return (
+    String(
+      r.projectName ||
+      ""
+    ).trim() ||
+    "SIN PROYECTO"
+  );
+
+}
+
+
+/*
+ * Nombre completo de cada
+ * tipo documental.
+ */
+
+function typeLabel(
+  type
+){
+
+  const t =
+    String(
+      type ||
+      ""
+    )
+      .trim()
+      .toUpperCase();
+
+
+  const labels = {
+
+    PROC:
+      "Procedimientos",
+
+    INS:
+      "Instructivos",
+
+    REG:
+      "Registros",
+
+    MAN:
+      "Manuales",
+
+    PL:
+      "Políticas",
+
+    PROG:
+      "Programas",
+
+    ESQ:
+      "Esquemas",
+
+    MAT:
+      "Matrices",
+
+    PLN:
+      "Planos",
+
+    INF:
+      "Informes",
+
+    PAC:
+      "PAC",
+
+    PROT:
+      "Protocolos",
+
+    PIE:
+      "PIE",
+
+    CHK:
+      "Checklists",
+
+    ORG:
+      "Organigramas"
+
+  };
+
+
+  return (
+    labels[t] ||
+    String(
+      type ||
+      "Otros"
+    )
+  );
+
+}
+
+
+/***************************************************************
+ * INDICADORES POR PROYECTO
+ *
+ * FUENTE:
+ * MATRIZ DE TRAZABILIDAD
+ ***************************************************************/
+
+function buildProjectIndicators(){
+
+  const groups =
+    new Map();
+
+
+  data.matriz
     .forEach(
       r => {
 
+        const internal =
+          isInternalRecord(
+            r
+          );
+
+
+        const key =
+          internal
+            ? "__INTERNAL__"
+            : projectLabel(
+                r
+              );
+
+
         if(
-          r.code &&
-          !map.has(
-            r.code
+          !groups.has(
+            key
           )
         ){
 
-          map.set(
-            r.code,
-            r
+          groups.set(
+            key,
+            {
+
+              name:
+                internal
+                  ? "Documentación Interna"
+                  : projectLabel(r),
+
+              internal,
+
+              total:
+                0,
+
+              types:
+                new Map(),
+
+              client:
+                new Set(),
+
+              projectNo:
+                new Set()
+
+            }
+          );
+
+        }
+
+
+        const g =
+          groups.get(
+            key
+          );
+
+
+        g.total++;
+
+
+        const type =
+          typeLabel(
+            r.docType
+          );
+
+
+        g.types.set(
+          type,
+          (
+            g.types.get(
+              type
+            ) ||
+            0
+          ) + 1
+        );
+
+
+        if(
+          r.client
+        ){
+
+          g.client.add(
+            String(
+              r.client
+            ).trim()
+          );
+
+        }
+
+
+        if(
+          r.projectNo
+        ){
+
+          g.projectNo.add(
+            String(
+              r.projectNo
+            ).trim()
           );
 
         }
@@ -2747,70 +3237,127 @@ function unique(){
       }
     );
 
+
   return [
-    ...map.values()
-  ];
+    ...groups.values()
+  ]
+  .sort(
+    (a,b) => {
+
+      if(
+        a.internal !==
+        b.internal
+      ){
+
+        return a.internal
+          ? 1
+          : -1;
+
+      }
+
+
+      return a.name
+        .localeCompare(
+          b.name,
+          "es"
+        );
+
+    }
+  );
 
 }
 
 
-/* =========================================================
-   RENDER GENERAL
-========================================================= */
+/***************************************************************
+ * RENDER GENERAL
+ ***************************************************************/
 
 function renderAll(){
 
   renderDashboard();
 
+
   renderList(
     "masterTable",
     data.listado,
-    $("masterSearch").value || "",
+    $("masterSearch")
+      .value ||
+      "",
     "masterCount"
   );
+
 
   renderList(
     "matrixTable",
     data.matriz,
-    $("matrixSearch").value || "",
+    $("matrixSearch")
+      .value ||
+      "",
     "matrixCount"
   );
 
 }
 
 
-/* =========================================================
-   DASHBOARD
-   IMPORTANTE:
-   AQUÍ SE MUESTRAN TODOS LOS REGISTROS.
-   ANTES ESTABA:
-   r.slice(0,30)
-   ========================================================= */
+/***************************************************************
+ * RENDER DASHBOARD
+ ***************************************************************/
 
 function renderDashboard(){
 
-  const r =
-    unique();
+  /*
+   * IMPORTANTE:
+   * Todo el Dashboard utiliza
+   * la Matriz de Trazabilidad.
+   */
+
+  const records =
+    data.matriz;
+
+
+  const groups =
+    buildProjectIndicators();
+
+
+  const internalCount =
+    records.filter(
+      isInternalRecord
+    ).length;
+
+
+  const projectCount =
+    records.length -
+    internalCount;
+
+
+  const projectNames =
+    new Set(
+      groups
+        .filter(
+          g =>
+            !g.internal
+        )
+        .map(
+          g =>
+            g.name
+        )
+    );
+
 
   $("statTotal")
     .textContent =
-    r.length;
+    records.length;
+
 
   $("statProjects")
     .textContent =
-    r.filter(
-      x =>
-        x.mode ===
-        "project"
-    ).length;
+    projectNames.size;
+
 
   $("statInternal")
     .textContent =
-    r.filter(
-      x =>
-        x.mode !==
-        "project"
-    ).length;
+    internalCount;
+
 
   $("statLast")
     .textContent =
@@ -2819,29 +3366,142 @@ function renderDashboard(){
         "es-CL"
       );
 
-  /*
-   * ANTES:
-   *
-   * renderTableRows(
-   *   "dashboardTable",
-   *   r.slice(0,30)
-   * )
-   *
-   * AHORA:
-   * TODOS LOS REGISTROS.
-   */
 
-  renderTableRows(
-    "dashboardTable",
-    r
-  );
+  const box =
+    $("dashboardProjects");
+
+
+  if(
+    !groups.length
+  ){
+
+    box.innerHTML =
+      '<div class="dashboard-empty">' +
+      'No hay registros en la Matriz de Trazabilidad.' +
+      '</div>';
+
+    return;
+
+  }
+
+
+  box.innerHTML =
+    groups
+      .map(
+        g => {
+
+          const subtitle =
+            g.internal
+
+              ? "Documentación propia de la empresa"
+
+              :
+
+                `Cliente: ${
+                  [
+                    ...g.client
+                  ].join(
+                    ", "
+                  ) ||
+                  "—"
+                }${
+                  [
+                    ...g.projectNo
+                  ].length
+
+                    ?
+
+                      ` · N° proyecto: ${
+                        [
+                          ...g.projectNo
+                        ].join(
+                          ", "
+                        )
+                      }`
+
+                    : ""
+                }`;
+
+
+          const chips =
+            [
+              ...g.types.entries()
+            ]
+            .sort(
+              (a,b) =>
+                b[1] -
+                a[1]
+            )
+            .map(
+              ([label,count]) =>
+
+                `<span class="indicator-chip">
+                  <strong>${count}</strong>
+                  ${esc(label)}
+                </span>`
+
+            )
+            .join(
+              ""
+            );
+
+
+          return `
+
+            <div class="project-card ${
+              g.internal
+                ? "internal-card"
+                : ""
+            }">
+
+              <div class="project-card-header">
+
+                <div class="project-card-title">
+                  ${esc(g.name)}
+                </div>
+
+                <div class="project-card-subtitle">
+                  ${esc(subtitle)}
+                </div>
+
+              </div>
+
+
+              <div class="project-card-body">
+
+                <div class="project-total">
+                  ${g.total}
+                </div>
+
+                <div class="project-total-label">
+                  documentos registrados
+                </div>
+
+
+                <div class="indicator-list">
+
+                  ${chips}
+
+                </div>
+
+              </div>
+
+            </div>
+
+          `;
+
+        }
+      )
+      .join(
+        ""
+      );
 
 }
 
 
-/* =========================================================
-   FILTRO
-========================================================= */
+/***************************************************************
+ * FILTRO
+ ***************************************************************/
 
 function filter(
   records,
@@ -2850,44 +3510,46 @@ function filter(
 
   query =
     (
-      query || ""
+      query ||
+      ""
     )
-      .toLowerCase()
-      .trim();
+    .toLowerCase()
+    .trim();
 
-  if(!query){
+
+  if(
+    !query
+  ){
 
     return records;
 
   }
 
+
   return records.filter(
     r =>
-
       Object.values(
         r
       )
-        .some(
-          value =>
-
-            String(
-              value ?? ""
-            )
-              .toLowerCase()
-              .includes(
-                query
-              )
-
-        )
-
+      .some(
+        v =>
+          String(
+            v ??
+            ""
+          )
+          .toLowerCase()
+          .includes(
+            query
+          )
+      )
   );
 
 }
 
 
-/* =========================================================
-   RENDER LISTAS
-========================================================= */
+/***************************************************************
+ * RENDER LISTADOS
+ ***************************************************************/
 
 function renderList(
   tbody,
@@ -2896,62 +3558,59 @@ function renderList(
   countId
 ){
 
-  const filtered =
+  const result =
     filter(
       records,
       query
     );
 
+
   $(countId)
     .textContent =
-    filtered.length +
+    result.length +
     (
-      filtered.length === 1
+      result.length ===
+      1
         ? " registro"
         : " registros"
     );
 
+
   renderTableRows(
     tbody,
-    filtered
+    result
   );
 
 }
 
 
-/* =========================================================
-   RENDER FILAS
-========================================================= */
+/***************************************************************
+ * RENDER FILAS
+ ***************************************************************/
 
 function renderTableRows(
   id,
   records
 ){
 
-  const tbody =
+  const tb =
     $(id);
 
-  tbody.innerHTML =
+
+  tb.innerHTML =
     "";
 
-  if(!records.length){
 
-    tbody.innerHTML =
+  if(
+    !records.length
+  ){
 
-      `
-      <tr>
-        <td
-          colspan="11"
-          style="
-            text-align:center;
-            padding:25px;
-            color:#6b7280
-          "
-        >
-          No hay registros.
-        </td>
-      </tr>
-      `;
+    tb.innerHTML =
+      '<tr>' +
+      '<td colspan="11" style="text-align:center;padding:25px;color:#6b7280">' +
+      'No hay registros.' +
+      '</td>' +
+      '</tr>';
 
     return;
 
@@ -2967,46 +3626,54 @@ function renderTableRows(
         );
 
 
-      tr.innerHTML =
-
-        `
+      tr.innerHTML = `
 
         <td
           class="code-cell"
-          title="${esc(r.code)}"
-        >
+          title="${esc(r.code)}">
+
           ${esc(r.code)}
+
         </td>
 
+
         <td
-          title="${esc(r.name)}"
-        >
+          title="${esc(r.name)}">
+
           ${esc(r.name)}
+
         </td>
+
 
         <td>
           ${esc(r.projectName)}
         </td>
 
+
         <td>
           ${esc(r.client)}
         </td>
+
 
         <td>
           ${esc(r.projectNo)}
         </td>
 
+
         <td>
           ${esc(r.area)}
         </td>
+
 
         <td>
           ${esc(r.docType)}
         </td>
 
+
         <td>
           ${esc(r.revision)}
         </td>
+
 
         <td>
           ${esc(
@@ -3016,78 +3683,96 @@ function renderTableRows(
           )}
         </td>
 
+
         <td>
 
           ${
             r.state
 
-              ? `
-                <span
-                  class="badge badge-success"
-                >
-                  ${esc(r.state)}
-                </span>
-                `
+              ?
 
-              : ""
+                `<span class="badge badge-success">
+                  ${esc(r.state)}
+                </span>`
+
+              :
+
+                ""
+
           }
 
         </td>
 
+
         <td>
 
-          <span
-            class="badge ${
-              r.mode === "project"
-                ? "badge-project"
-                : "badge-internal"
-            }"
-          >
+          <span class="badge ${
+            r.mode ===
+            "project"
+
+              ? "badge-project"
+
+              : "badge-internal"
+
+          }">
+
             ${
-              r.mode === "project"
+              r.mode ===
+              "project"
+
                 ? "PROYECTO"
+
                 : "INTERNO"
             }
+
           </span>
+
 
           <button
             class="action-btn"
-            data-action="edit"
-          >
+            data-action="edit">
+
             Editar
+
           </button>
+
 
           <button
             class="action-delete"
-            data-action="delete"
-          >
+            data-action="delete">
+
             Eliminar
+
           </button>
 
         </td>
 
-        `;
+      `;
 
 
       tr
         .querySelector(
-          '[data-action="edit"]'
+          "[data-action=edit]"
         )
         .onclick =
         () =>
-          openEdit(r);
+          openEdit(
+            r
+          );
 
 
       tr
         .querySelector(
-          '[data-action="delete"]'
+          "[data-action=delete]"
         )
         .onclick =
         () =>
-          deleteDocument(r);
+          deleteDocument(
+            r
+          );
 
 
-      tbody.appendChild(
+      tb.appendChild(
         tr
       );
 
@@ -3097,9 +3782,9 @@ function renderTableRows(
 }
 
 
-/* =========================================================
-   CAMBIO DE SECCIÓN
-========================================================= */
+/***************************************************************
+ * CAMBIAR SECCIÓN
+ ***************************************************************/
 
 function switchSection(
   section
@@ -3111,13 +3796,11 @@ function switchSection(
     )
     .forEach(
       x =>
-
         x.classList.toggle(
           "active",
           x.dataset.section ===
-          section
+            section
         )
-
     );
 
 
@@ -3150,7 +3833,9 @@ function switchSection(
   };
 
 
-  $(map[section])
+  $(
+    map[section]
+  )
     .classList
     .remove(
       "hidden"
@@ -3195,9 +3880,9 @@ document
   );
 
 
-/* =========================================================
-   REVISIONES
-========================================================= */
+/***************************************************************
+ * REVISIONES
+ ***************************************************************/
 
 function setRevisionOptions(
   internal=false
@@ -3206,78 +3891,83 @@ function setRevisionOptions(
   $("revision")
     .innerHTML =
 
-    internal
+      internal
 
-      ? `
+        ?
 
-        <option value="">
-          Seleccionar...
-        </option>
+          `
 
-        <option value="Rev0">
-          Rev0 - Original
-        </option>
+          <option value="">
+            Seleccionar...
+          </option>
 
-        <option value="Rev1">
-          Rev1
-        </option>
+          <option value="Rev0">
+            Rev0 - Original
+          </option>
 
-        <option value="Rev2">
-          Rev2
-        </option>
+          <option value="Rev1">
+            Rev1
+          </option>
 
-        <option value="Rev3">
-          Rev3
-        </option>
+          <option value="Rev2">
+            Rev2
+          </option>
 
-        <option value="Rev4">
-          Rev4
-        </option>
+          <option value="Rev3">
+            Rev3
+          </option>
 
-        <option value="Rev5">
-          Rev5
-        </option>
+          <option value="Rev4">
+            Rev4
+          </option>
 
-      `
+          <option value="Rev5">
+            Rev5
+          </option>
 
-      : `
+          `
 
-        <option value="">
-          Seleccionar...
-        </option>
+        :
 
-        <option value="Rev.B">
-          Rev.B - Origen / Revisión del cliente
-        </option>
+          `
 
-        <option value="Rev0">
-          Rev0 - Aprobado por cliente / Original
-        </option>
+          <option value="">
+            Seleccionar...
+          </option>
 
-        <option value="Rev1">
-          Rev1
-        </option>
+          <option value="Rev.B">
+            Rev.B - Origen / Revisión del cliente
+          </option>
 
-        <option value="Rev2">
-          Rev2
-        </option>
+          <option value="Rev0">
+            Rev0 - Aprobado por cliente / Original
+          </option>
 
-        <option value="Rev3">
-          Rev3
-        </option>
+          <option value="Rev1">
+            Rev1
+          </option>
 
-        <option value="Rev4">
-          Rev4
-        </option>
+          <option value="Rev2">
+            Rev2
+          </option>
 
-        <option value="Rev5">
-          Rev5
-        </option>
+          <option value="Rev3">
+            Rev3
+          </option>
 
-      `;
+          <option value="Rev4">
+            Rev4
+          </option>
+
+          <option value="Rev5">
+            Rev5
+          </option>
+
+          `;
 
 
-  $("revision").value =
+  $("revision")
+    .value =
     internal
       ? "Rev0"
       : "Rev.B";
@@ -3290,36 +3980,40 @@ document
     'input[name="mode"]'
   )
   .forEach(
-    x =>
+    x => {
 
-      x.onchange = () => {
+      x.onchange =
+        () => {
 
-        $("projectFields")
-          .classList
-          .toggle(
-            "hidden",
-            x.value !==
-              "project" ||
-            !x.checked
-          );
+          $(
+            "projectFields"
+          )
+            .classList
+            .toggle(
+              "hidden",
+              x.value !==
+                "project" ||
+              !x.checked
+            );
 
 
-        if(
-          x.checked
-        ){
+          if(
+            x.checked
+          ){
 
-          setRevisionOptions(
-            x.value ===
+            setRevisionOptions(
+              x.value ===
               "internal"
-          );
+            );
 
-        }
+          }
 
 
-        updatePreview();
+          updatePreview();
 
-      }
+        };
 
+    }
   );
 
 
@@ -3328,9 +4022,9 @@ setRevisionOptions(
 );
 
 
-/* =========================================================
-   DATOS FORMULARIO
-========================================================= */
+/***************************************************************
+ * DATOS FORMULARIO
+ ***************************************************************/
 
 function formData(){
 
@@ -3423,33 +4117,28 @@ function formData(){
 }
 
 
-/* =========================================================
-   PREVIEW CÓDIGO
-========================================================= */
+/***************************************************************
+ * PREVIEW
+ ***************************************************************/
 
 async function updatePreview(){
 
   const d =
     formData();
 
+
   if(
-
     !d.area ||
-
     !d.docType ||
-
     !d.revision ||
-
     (
       d.mode ===
-      "project" &&
-
+        "project" &&
       (
         !d.client ||
         !d.projectNo
       )
     )
-
   ){
 
     $("codePreview")
@@ -3469,9 +4158,11 @@ async function updatePreview(){
         d
       );
 
+
     $("codePreview")
       .textContent =
       r.code;
+
 
   }catch(e){
 
@@ -3499,14 +4190,15 @@ async function updatePreview(){
       "change"
     ]
     .forEach(
-      ev =>
+      event => {
 
         $(id)
           .addEventListener(
-            ev,
+            event,
             updatePreview
-          )
+          );
 
+      }
     );
 
   }
@@ -3518,9 +4210,9 @@ $("previewBtn")
   updatePreview;
 
 
-/* =========================================================
-   CREAR DOCUMENTO
-========================================================= */
+/***************************************************************
+ * REGISTRAR DOCUMENTO
+ ***************************************************************/
 
 $("documentForm")
   .addEventListener(
@@ -3529,8 +4221,10 @@ $("documentForm")
 
       e.preventDefault();
 
+
       const d =
         formData();
+
 
       try{
 
@@ -3549,15 +4243,12 @@ $("documentForm")
 
 
         if(
-
           d.mode ===
-          "project" &&
-
+            "project" &&
           (
             !d.client ||
             !d.projectNo
           )
-
         ){
 
           throw new Error(
@@ -3567,14 +4258,17 @@ $("documentForm")
         }
 
 
-        loading(true);
+        loading(
+          true
+        );
 
 
         const r =
           await api(
             "createDocument",
             {
-              document:d
+              document:
+                d
             }
           );
 
@@ -3615,9 +4309,12 @@ $("documentForm")
           "error"
         );
 
+
       }finally{
 
-        loading(false);
+        loading(
+          false
+        );
 
       }
 
@@ -3625,9 +4322,9 @@ $("documentForm")
   );
 
 
-/* =========================================================
-   LIMPIAR FORMULARIO
-========================================================= */
+/***************************************************************
+ * LIMPIAR
+ ***************************************************************/
 
 $("clearBtn")
   .onclick =
@@ -3635,6 +4332,7 @@ $("clearBtn")
 
     $("documentForm")
       .reset();
+
 
     setRevisionOptions(
       document
@@ -3645,6 +4343,7 @@ $("clearBtn")
         "internal"
     );
 
+
     $("codePreview")
       .textContent =
       "Complete los campos para generar el código";
@@ -3652,9 +4351,9 @@ $("clearBtn")
   };
 
 
-/* =========================================================
-   BUSCADORES
-========================================================= */
+/***************************************************************
+ * BÚSQUEDAS
+ ***************************************************************/
 
 $("masterSearch")
   .oninput =
@@ -3678,9 +4377,9 @@ $("matrixSearch")
     );
 
 
-/* =========================================================
-   ACTUALIZAR
-========================================================= */
+/***************************************************************
+ * ACTUALIZAR
+ ***************************************************************/
 
 [
   "dashboardRefresh",
@@ -3688,84 +4387,111 @@ $("matrixSearch")
   "matrixRefresh"
 ]
 .forEach(
-  id =>
+  id => {
 
-    $(id).onclick =
-    async () => {
+    $(id)
+      .onclick =
+      async () => {
 
-      try{
+        try{
 
-        loading(true);
+          loading(
+            true
+          );
 
-        await loadData();
 
-        toast(
-          "Datos actualizados.",
-          "success"
-        );
+          await loadData();
 
-      }catch(e){
 
-        toast(
-          e.message,
-          "error"
-        );
+          toast(
+            "Datos actualizados.",
+            "success"
+          );
 
-      }finally{
 
-        loading(false);
+        }catch(e){
 
-      }
+          toast(
+            e.message,
+            "error"
+          );
 
-    }
+
+        }finally{
+
+          loading(
+            false
+          );
+
+        }
+
+      };
+
+  }
 );
 
 
-/* =========================================================
-   EDITAR
-========================================================= */
+/***************************************************************
+ * EDITAR
+ ***************************************************************/
 
-function openEdit(r){
+function openEdit(
+  r
+){
 
   $("editOriginalCode")
     .value =
-    r.code || "";
+    r.code ||
+    "";
+
 
   $("editMode")
     .value =
     r.mode ||
     "internal";
 
+
   $("editClient")
     .value =
-    r.client || "";
+    r.client ||
+    "";
+
 
   $("editProjectNo")
     .value =
-    r.projectNo || "";
+    r.projectNo ||
+    "";
+
 
   $("editProjectName")
     .value =
-    r.projectName || "";
+    r.projectName ||
+    "";
+
 
   $("editArea")
     .value =
     r.area ||
     "QA";
 
+
   $("editDocType")
     .value =
     r.docType ||
     "PROC";
+
 
   $("editRevision")
     .value =
     r.revision ||
     "Rev0";
 
+
   $("editName")
     .value =
-    r.name || "";
+    r.name ||
+    "";
+
 
   $("editIssueDate")
     .value =
@@ -3773,37 +4499,54 @@ function openEdit(r){
       r.issueDate
     );
 
+
   $("editState")
     .value =
-    r.state || "";
+    r.state ||
+    "";
+
 
   $("editDocLink")
     .value =
-    r.docLink || "";
+    r.docLink ||
+    "";
+
 
   $("editDistribution")
     .value =
-    r.distribution || "";
+    r.distribution ||
+    "";
+
 
   $("editDiffusion")
     .value =
-    r.diffusion || "";
+    r.diffusion ||
+    "";
+
 
   $("editAssociated")
     .value =
-    r.associated || "";
+    r.associated ||
+    "";
+
 
   $("editEvidence")
     .value =
-    r.evidence || "";
+    r.evidence ||
+    "";
+
 
   $("editStandard")
     .value =
-    r.standard || "";
+    r.standard ||
+    "";
+
 
   $("editObservations")
     .value =
-    r.observations || "";
+    r.observations ||
+    "";
+
 
   updateEditPreview();
 
@@ -3816,10 +4559,6 @@ function openEdit(r){
 
 }
 
-
-/* =========================================================
-   CERRAR MODAL
-========================================================= */
 
 function closeEdit(){
 
@@ -3857,10 +4596,6 @@ $("editModal")
 
   };
 
-
-/* =========================================================
-   DATOS EDICIÓN
-========================================================= */
 
 function editData(){
 
@@ -3954,10 +4689,6 @@ function editData(){
 }
 
 
-/* =========================================================
-   PREVIEW EDICIÓN
-========================================================= */
-
 async function updateEditPreview(){
 
   try{
@@ -3968,9 +4699,11 @@ async function updateEditPreview(){
         editData()
       );
 
+
     $("editCodePreview")
       .textContent =
       r.code;
+
 
   }catch(e){
 
@@ -4001,9 +4734,9 @@ async function updateEditPreview(){
 );
 
 
-/* =========================================================
-   GUARDAR EDICIÓN
-========================================================= */
+/***************************************************************
+ * GUARDAR EDICIÓN
+ ***************************************************************/
 
 $("saveEdit")
   .onclick =
@@ -4027,15 +4760,12 @@ $("saveEdit")
 
 
       if(
-
         d.mode ===
-        "project" &&
-
+          "project" &&
         (
           !d.client ||
           !d.projectNo
         )
-
       ){
 
         throw new Error(
@@ -4045,14 +4775,17 @@ $("saveEdit")
       }
 
 
-      loading(true);
+      loading(
+        true
+      );
 
 
       const r =
         await api(
           "updateDocument",
           {
-            document:d
+            document:
+              d
           }
         );
 
@@ -4077,75 +4810,66 @@ $("saveEdit")
         "error"
       );
 
+
     }finally{
 
-      loading(false);
+      loading(
+        false
+      );
 
     }
 
   };
 
 
-/* =========================================================
-   ELIMINAR DOCUMENTO
-========================================================= */
+/***************************************************************
+ * ELIMINAR
+ ***************************************************************/
 
-async function deleteDocument(r){
+async function deleteDocument(
+  r
+){
 
   const code =
-    r.code || "";
+    r.code ||
+    "";
 
 
-  if(!code){
+  if(
+    !code
+  ){
 
-    toast(
+    return toast(
       "El documento no tiene código.",
       "error"
     );
 
-    return;
-
   }
 
 
-  const confirmed =
-    window.confirm(
-
+  if(
+    !window.confirm(
       "¿Estás segura de que deseas eliminar este documento?\n\n" +
-
       "Código:\n" +
-
       code +
-
       "\n\n" +
-
       "Se eliminará del Listado Maestro y de la Matriz de Trazabilidad."
-
-    );
-
-
-  if(!confirmed){
+    )
+  ){
 
     return;
 
   }
 
 
-  const secondConfirm =
-    window.confirm(
-
+  if(
+    !window.confirm(
       "CONFIRMA ELIMINACIÓN\n\n" +
-
       code +
-
       "\n\n" +
-
       "¿Continuar?"
-
-    );
-
-
-  if(!secondConfirm){
+    )
+  ){
 
     return;
 
@@ -4154,7 +4878,9 @@ async function deleteDocument(r){
 
   try{
 
-    loading(true);
+    loading(
+      true
+    );
 
 
     const result =
@@ -4162,7 +4888,7 @@ async function deleteDocument(r){
         "deleteDocument",
         {
           document:{
-            code:code
+            code
           }
         }
       );
@@ -4185,18 +4911,21 @@ async function deleteDocument(r){
       "error"
     );
 
+
   }finally{
 
-    loading(false);
+    loading(
+      false
+    );
 
   }
 
 }
 
 
-/* =========================================================
-   INICIO
-========================================================= */
+/***************************************************************
+ * INICIO
+ ***************************************************************/
 
 switchSection(
   "dashboard"
