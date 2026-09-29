@@ -594,6 +594,51 @@ tbody tr:hover{
 }
 
 
+
+/* TIPOS DOCUMENTALES */
+
+.doc-type-row{
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
+.doc-type-row select{
+  flex:1;
+}
+
+.btn-add-type{
+  white-space:nowrap;
+  padding:10px 12px;
+  background:#eef7fb;
+  color:#063b66;
+  border:1px solid #b8dfea;
+}
+
+.btn-add-type:hover{
+  background:#dff1f7;
+}
+
+.type-help{
+  font-size:10px;
+  color:#6b7280;
+  margin-top:5px;
+}
+
+/* MODAL TIPO DOCUMENTO */
+
+#typeModal .modal{
+  width:min(520px,100%);
+}
+
+.type-code-preview{
+  margin-top:8px;
+  font-family:Consolas,monospace;
+  font-weight:800;
+  color:#063b66;
+  font-size:14px;
+}
+
 /* MODAL */
 
 .modal-backdrop{
@@ -1317,76 +1362,28 @@ tbody tr:hover{
                     Tipo de documento *
                   </label>
 
-                  <select
-                    id="docType"
-                    class="form-control"
-                    required>
+                  <div class="doc-type-row">
+                    <select
+                      id="docType"
+                      class="form-control"
+                      required>
+                      <option value="">
+                        Seleccionar...
+                      </option>
+                    </select>
 
-                    <option value="">
-                      Seleccionar...
-                    </option>
+                    <button
+                      id="addDocTypeBtn"
+                      type="button"
+                      class="btn btn-add-type"
+                      title="Agregar tipo de documento">
+                      ＋ Agregar
+                    </button>
+                  </div>
 
-                    <option value="PROC">
-                      PROC - Procedimiento
-                    </option>
-
-                    <option value="INS">
-                      INS - Instructivo
-                    </option>
-
-                    <option value="REG">
-                      REG - Registro
-                    </option>
-
-                    <option value="MAN">
-                      MAN - Manual
-                    </option>
-
-                    <option value="PL">
-                      PL - Política
-                    </option>
-
-                    <option value="PROG">
-                      PROG - Programa
-                    </option>
-
-                    <option value="ESQ">
-                      ESQ - Esquema
-                    </option>
-
-                    <option value="MAT">
-                      MAT - Matriz
-                    </option>
-
-                    <option value="PLN">
-                      PLN - Plano
-                    </option>
-
-                    <option value="INF">
-                      INF - Informe
-                    </option>
-
-                    <option value="PAC">
-                      PAC - Plan de Aseguramiento de Calidad
-                    </option>
-
-                    <option value="PROT">
-                      PROT - Protocolo
-                    </option>
-
-                    <option value="PIE">
-                      PIE - Plan de Inspección y Ensayo
-                    </option>
-
-                    <option value="CHK">
-                      CHK - Checklist
-                    </option>
-
-                    <option value="ORG">
-                      ORG - Organigrama
-                    </option>
-
-                  </select>
+                  <div class="type-help">
+                    Puede agregar un nuevo tipo documental y su código de identificación.
+                  </div>
 
                 </div>
 
@@ -1965,77 +1962,16 @@ tbody tr:hover{
 
         <div class="form-group">
 
-          <label>
+            <label>
             Tipo documento
-          </label>
+            </label>
 
-          <select
-            id="editDocType"
-            class="form-control">
+            <select
+              id="editDocType"
+              class="form-control">
+            </select>
 
-            <option value="PROC">
-              PROC
-            </option>
-
-            <option value="INS">
-              INS
-            </option>
-
-            <option value="REG">
-              REG
-            </option>
-
-            <option value="MAN">
-              MAN
-            </option>
-
-            <option value="PL">
-              PL
-            </option>
-
-            <option value="PROG">
-              PROG
-            </option>
-
-            <option value="ESQ">
-              ESQ
-            </option>
-
-            <option value="MAT">
-              MAT
-            </option>
-
-            <option value="PLN">
-              PLN
-            </option>
-
-            <option value="INF">
-              INF
-            </option>
-
-            <option value="PAC">
-              PAC
-            </option>
-
-            <option value="PROT">
-              PROT
-            </option>
-
-            <option value="PIE">
-              PIE
-            </option>
-
-            <option value="CHK">
-              CHK
-            </option>
-
-            <option value="ORG">
-              ORG
-            </option>
-
-          </select>
-
-        </div>
+          </div>
 
 
         <div class="form-group">
@@ -2286,6 +2222,90 @@ tbody tr:hover{
 </div>
 
 
+
+<!-- MODAL AGREGAR TIPO DOCUMENTAL -->
+
+<div
+  id="typeModal"
+  class="modal-backdrop hidden">
+
+  <div class="modal">
+
+    <div class="modal-header">
+
+      <div class="modal-title">
+        Agregar tipo de documento
+      </div>
+
+      <button
+        id="closeTypeModal"
+        type="button"
+        class="modal-close">
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <div class="form-group">
+        <label>
+          Nombre del tipo de documento *
+        </label>
+
+        <input
+          id="newTypeName"
+          class="form-control"
+          maxlength="80"
+          placeholder="Ej. Informe de Inspección">
+      </div>
+
+      <div class="form-group">
+        <label>
+          Código *
+        </label>
+
+        <input
+          id="newTypeCode"
+          class="form-control"
+          maxlength="10"
+          placeholder="Ej. INSP"
+          style="text-transform:uppercase">
+
+        <div class="type-help">
+          Use una abreviatura corta, única y sin espacios. Ej.: INSP.
+        </div>
+
+        <div
+          id="newTypeCodePreview"
+          class="type-code-preview">
+        </div>
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+
+      <button
+        id="cancelType"
+        type="button"
+        class="btn btn-secondary">
+        Cancelar
+      </button>
+
+      <button
+        id="saveType"
+        type="button"
+        class="btn btn-primary">
+        Guardar tipo
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
 <div id="toastContainer"></div>
 
 
@@ -2298,6 +2318,16 @@ import {
 }
 from
 "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  addDoc,
+  serverTimestamp
+}
+from
+"https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
 
 import {
@@ -2345,6 +2375,11 @@ const auth =
     app
   );
 
+const db =
+  getFirestore(
+    app
+  );
+
 
 const BACKEND_URL =
   "https://script.google.com/macros/s/AKfycbxyFbgc0RqkKuDpFK3m8uPAQXGs8_9USjR7gFNVH-PBkTAVujzvgK9OQTd4Snsx5SRk/exec";
@@ -2361,6 +2396,32 @@ let data = {
   matriz: []
 
 };
+
+/*
+ * Catálogo de tipos documentales.
+ * Los tipos base mantienen los códigos existentes.
+ * Los tipos nuevos se guardan en Firestore para que
+ * puedan ser compartidos entre usuarios autenticados.
+ */
+const DEFAULT_DOCUMENT_TYPES = [
+  {code:"PROC", name:"Procedimiento"},
+  {code:"INS", name:"Instructivo"},
+  {code:"REG", name:"Registro"},
+  {code:"MAN", name:"Manual"},
+  {code:"PL", name:"Política"},
+  {code:"PROG", name:"Programa"},
+  {code:"ESQ", name:"Esquema"},
+  {code:"MAT", name:"Matriz"},
+  {code:"PLN", name:"Plano"},
+  {code:"INF", name:"Informe"},
+  {code:"PAC", name:"Plan de Aseguramiento de Calidad"},
+  {code:"PROT", name:"Protocolo"},
+  {code:"PIE", name:"Plan de Inspección y Ensayo"},
+  {code:"CHK", name:"Checklist"},
+  {code:"ORG", name:"Organigrama"}
+];
+
+let documentTypes = [...DEFAULT_DOCUMENT_TYPES];
 
 
 const $ =
@@ -2916,6 +2977,356 @@ onAuthStateChanged(
 );
 
 
+
+/***************************************************************
+ * TIPOS DOCUMENTALES
+ ***************************************************************/
+
+function normalizeTypeCode(value){
+  return String(value || "")
+    .trim()
+    .toUpperCase()
+    .replace(/\s+/g,"");
+}
+
+function normalizeTypeName(value){
+  return String(value || "")
+    .trim()
+    .replace(/\s+/g," ");
+}
+
+function sortDocumentTypes(){
+  documentTypes.sort(
+    (a,b) =>
+      String(a.name).localeCompare(
+        String(b.name),
+        "es"
+      )
+  );
+}
+
+function getTypeName(code){
+  const item =
+    documentTypes.find(
+      x =>
+        String(x.code).toUpperCase() ===
+        String(code || "").toUpperCase()
+    );
+
+  return item
+    ? item.name
+    : String(code || "Otros");
+}
+
+function populateDocumentTypeSelects(){
+  const selects = [
+    $("docType"),
+    $("editDocType")
+  ];
+
+  selects.forEach(
+    select => {
+      if(!select) return;
+
+      const current = select.value;
+
+      select.innerHTML =
+        '<option value="">Seleccionar...</option>' +
+        documentTypes
+          .map(
+            t =>
+              `<option value="${esc(t.code)}">${esc(t.code)} - ${esc(t.name)}</option>`
+          )
+          .join("");
+
+      if(
+        current &&
+        documentTypes.some(
+          t => t.code === current
+        )
+      ){
+        select.value = current;
+      }
+    }
+  );
+}
+
+async function loadDocumentTypes(){
+  try{
+
+    const snap =
+      await getDocs(
+        collection(
+          db,
+          "documentTypes"
+        )
+      );
+
+    const remoteTypes = [];
+
+    snap.forEach(
+      doc => {
+        const d = doc.data();
+
+        if(
+          d &&
+          d.code &&
+          d.name
+        ){
+          remoteTypes.push({
+            code: normalizeTypeCode(d.code),
+            name: normalizeTypeName(d.name)
+          });
+        }
+      }
+    );
+
+    const merged = [
+      ...DEFAULT_DOCUMENT_TYPES,
+      ...remoteTypes
+    ];
+
+    const map = new Map();
+
+    merged.forEach(
+      t => {
+        if(
+          t.code &&
+          t.name &&
+          !map.has(t.code)
+        ){
+          map.set(
+            t.code,
+            t
+          );
+        }
+      }
+    );
+
+    documentTypes = [
+      ...map.values()
+    ];
+
+    sortDocumentTypes();
+    populateDocumentTypeSelects();
+
+  }catch(e){
+
+    console.warn(
+      "No fue posible cargar el catálogo de tipos desde Firestore.",
+      e
+    );
+
+    /*
+     * Si Firestore todavía no tiene reglas configuradas,
+     * la plataforma conserva los tipos base y funciona
+     * normalmente mientras se configura la colección.
+     */
+    documentTypes = [
+      ...DEFAULT_DOCUMENT_TYPES
+    ];
+
+    sortDocumentTypes();
+    populateDocumentTypeSelects();
+  }
+}
+
+function openTypeModal(){
+
+  $("newTypeName").value = "";
+  $("newTypeCode").value = "";
+  $("newTypeCodePreview").textContent = "";
+
+  $("typeModal")
+    .classList
+    .remove("hidden");
+
+  setTimeout(
+    () =>
+      $("newTypeName").focus(),
+    50
+  );
+}
+
+function closeTypeModal(){
+
+  $("typeModal")
+    .classList
+    .add("hidden");
+}
+
+async function saveDocumentType(){
+
+  const name =
+    normalizeTypeName(
+      $("newTypeName").value
+    );
+
+  const code =
+    normalizeTypeCode(
+      $("newTypeCode").value
+    );
+
+  if(!name){
+    return toast(
+      "Ingrese el nombre del tipo de documento.",
+      "error"
+    );
+  }
+
+  if(!code){
+    return toast(
+      "Ingrese el código del tipo de documento.",
+      "error"
+    );
+  }
+
+  if(!/^[A-Z0-9_-]{2,10}$/.test(code)){
+    return toast(
+      "El código debe tener entre 2 y 10 caracteres: letras, números, guion o guion bajo.",
+      "error"
+    );
+  }
+
+  const exists =
+    documentTypes.some(
+      t =>
+        t.code.toUpperCase() ===
+        code.toUpperCase()
+    );
+
+  if(exists){
+    return toast(
+      "Ese código ya existe. Utilice otro.",
+      "error"
+    );
+  }
+
+  const nameExists =
+    documentTypes.some(
+      t =>
+        t.name.toLowerCase() ===
+        name.toLowerCase()
+    );
+
+  if(nameExists){
+    return toast(
+      "Ese tipo de documento ya existe.",
+      "error"
+    );
+  }
+
+  try{
+
+    loading(true);
+
+    await addDoc(
+      collection(
+        db,
+        "documentTypes"
+      ),
+      {
+        code,
+        name,
+        createdBy:
+          currentUser?.email ||
+          "",
+        createdAt:
+          serverTimestamp()
+      }
+    );
+
+    documentTypes.push({
+      code,
+      name
+    });
+
+    sortDocumentTypes();
+    populateDocumentTypeSelects();
+
+    $("docType").value = code;
+
+    updatePreview();
+
+    closeTypeModal();
+
+    toast(
+      `Tipo documental "${name}" (${code}) agregado correctamente.`,
+      "success"
+    );
+
+  }catch(e){
+
+    console.error(e);
+
+    toast(
+      "No fue posible guardar el tipo documental. Verifique las reglas de Firestore.",
+      "error"
+    );
+
+  }finally{
+
+    loading(false);
+
+  }
+}
+
+$("addDocTypeBtn")
+  .addEventListener(
+    "click",
+    openTypeModal
+  );
+
+$("closeTypeModal")
+  .addEventListener(
+    "click",
+    closeTypeModal
+  );
+
+$("cancelType")
+  .addEventListener(
+    "click",
+    closeTypeModal
+  );
+
+$("typeModal")
+  .addEventListener(
+    "click",
+    e => {
+      if(
+        e.target.id ===
+        "typeModal"
+      ){
+        closeTypeModal();
+      }
+    }
+  );
+
+$("newTypeCode")
+  .addEventListener(
+    "input",
+    e => {
+      const code =
+        normalizeTypeCode(
+          e.target.value
+        );
+
+      e.target.value = code;
+
+      $("newTypeCodePreview")
+        .textContent =
+        code
+          ? `Código: ${code}`
+          : "";
+    }
+  );
+
+$("saveType")
+  .addEventListener(
+    "click",
+    saveDocumentType
+  );
+
 /***************************************************************
  * CARGAR DATOS
  ***************************************************************/
@@ -2942,6 +3353,9 @@ async function loadData(){
     )
       ? r.matriz
       : [];
+
+
+  await loadDocumentTypes();
 
 
   renderAll();
@@ -3047,78 +3461,14 @@ function typeLabel(
   type
 ){
 
-  const t =
-    String(
-      type ||
-      ""
-    )
-      .trim()
-      .toUpperCase();
-
-
-  const labels = {
-
-    PROC:
-      "Procedimientos",
-
-    INS:
-      "Instructivos",
-
-    REG:
-      "Registros",
-
-    MAN:
-      "Manuales",
-
-    PL:
-      "Políticas",
-
-    PROG:
-      "Programas",
-
-    ESQ:
-      "Esquemas",
-
-    MAT:
-      "Matrices",
-
-    PLN:
-      "Planos",
-
-    INF:
-      "Informes",
-
-    PAC:
-      "PAC",
-
-    PROT:
-      "Protocolos",
-
-    PIE:
-      "PIE",
-
-    CHK:
-      "Checklists",
-
-    ORG:
-      "Organigramas"
-
-  };
-
-
-  return (
-    labels[t] ||
-    String(
-      type ||
-      "Otros"
-    )
-  );
+  return getTypeName(type);
 
 }
 
 
 /***************************************************************
  * INDICADORES POR PROYECTO
+
  *
  * FUENTE:
  * MATRIZ DE TRAZABILIDAD
@@ -4926,6 +5276,8 @@ async function deleteDocument(
 /***************************************************************
  * INICIO
  ***************************************************************/
+
+populateDocumentTypeSelects();
 
 switchSection(
   "dashboard"
