@@ -594,51 +594,6 @@ tbody tr:hover{
 }
 
 
-
-/* TIPOS DOCUMENTALES */
-
-.doc-type-row{
-  display:flex;
-  gap:8px;
-  align-items:center;
-}
-
-.doc-type-row select{
-  flex:1;
-}
-
-.btn-add-type{
-  white-space:nowrap;
-  padding:10px 12px;
-  background:#eef7fb;
-  color:#063b66;
-  border:1px solid #b8dfea;
-}
-
-.btn-add-type:hover{
-  background:#dff1f7;
-}
-
-.type-help{
-  font-size:10px;
-  color:#6b7280;
-  margin-top:5px;
-}
-
-/* MODAL TIPO DOCUMENTO */
-
-#typeModal .modal{
-  width:min(520px,100%);
-}
-
-.type-code-preview{
-  margin-top:8px;
-  font-family:Consolas,monospace;
-  font-weight:800;
-  color:#063b66;
-  font-size:14px;
-}
-
 /* MODAL */
 
 .modal-backdrop{
@@ -727,6 +682,22 @@ tbody tr:hover{
   background:#063b66
 }
 
+
+/* TIPOS DOCUMENTALES */
+.doc-type-control{display:flex;gap:8px;align-items:center}
+.doc-type-control .form-control{flex:1}
+.btn-add-type{white-space:nowrap;min-height:42px}
+.type-help{margin-top:6px;font-size:12px;color:#6b7280}
+.type-code-preview{margin-top:12px;padding:12px;border:1px solid #dbe3ea;border-radius:8px;background:#f8fafc;color:#475569;font-size:13px}
+#typeModal{position:fixed;inset:0;z-index:220;background:rgba(15,23,42,.45);display:flex;align-items:center;justify-content:center;padding:20px}
+#typeModal.hidden{display:none}
+#typeModal .modal-content{width:100%;background:#fff;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.2);overflow:hidden}
+#typeModal .modal-header,#typeModal .modal-footer{padding:16px 20px;border-bottom:1px solid #e5e7eb}
+#typeModal .modal-footer{border-top:1px solid #e5e7eb;border-bottom:0;display:flex;justify-content:flex-end;gap:8px}
+#typeModal .modal-header{display:flex;justify-content:space-between;align-items:center}
+#typeModal .modal-header h3{margin:0}
+#typeModal .modal-body{padding:20px}
+#typeModal .modal-close{border:0;background:transparent;font-size:26px;cursor:pointer;color:#64748b}
 
 /* CARGA */
 
@@ -1362,7 +1333,7 @@ tbody tr:hover{
                     Tipo de documento *
                   </label>
 
-                  <div class="doc-type-row">
+                  <div class="doc-type-control">
                     <select
                       id="docType"
                       class="form-control"
@@ -1373,16 +1344,15 @@ tbody tr:hover{
                     </select>
 
                     <button
-                      id="addDocTypeBtn"
                       type="button"
-                      class="btn btn-add-type"
-                      title="Agregar tipo de documento">
+                      id="addDocTypeBtn"
+                      class="btn btn-secondary btn-add-type">
                       ＋ Agregar
                     </button>
                   </div>
 
                   <div class="type-help">
-                    Puede agregar un nuevo tipo documental y su código de identificación.
+                    Los tipos documentales se administran desde la hoja Nomenclatura de Códigos.
                   </div>
 
                 </div>
@@ -1962,16 +1932,16 @@ tbody tr:hover{
 
         <div class="form-group">
 
-            <label>
+          <label>
             Tipo documento
-            </label>
+          </label>
 
-            <select
-              id="editDocType"
-              class="form-control">
-            </select>
+          <select
+            id="editDocType"
+            class="form-control">
+          </select>
 
-          </div>
+        </div>
 
 
         <div class="form-group">
@@ -2222,88 +2192,29 @@ tbody tr:hover{
 </div>
 
 
-
-<!-- MODAL AGREGAR TIPO DOCUMENTAL -->
-
-<div
-  id="typeModal"
-  class="modal-backdrop hidden">
-
-  <div class="modal">
-
+<div id="typeModal" class="modal hidden">
+  <div class="modal-content" style="max-width:520px">
     <div class="modal-header">
-
-      <div class="modal-title">
-        Agregar tipo de documento
-      </div>
-
-      <button
-        id="closeTypeModal"
-        type="button"
-        class="modal-close">
-        ×
-      </button>
-
+      <h3>Agregar tipo documental</h3>
+      <button type="button" id="closeTypeModal" class="modal-close">×</button>
     </div>
-
     <div class="modal-body">
-
       <div class="form-group">
-        <label>
-          Nombre del tipo de documento *
-        </label>
-
-        <input
-          id="newTypeName"
-          class="form-control"
-          maxlength="80"
-          placeholder="Ej. Informe de Inspección">
+        <label>Nombre del tipo documental *</label>
+        <input id="newTypeName" class="form-control" type="text" maxlength="80" placeholder="Ej.: Instructivo Técnico">
       </div>
-
       <div class="form-group">
-        <label>
-          Código *
-        </label>
-
-        <input
-          id="newTypeCode"
-          class="form-control"
-          maxlength="10"
-          placeholder="Ej. INSP"
-          style="text-transform:uppercase">
-
-        <div class="type-help">
-          Use una abreviatura corta, única y sin espacios. Ej.: INSP.
-        </div>
-
-        <div
-          id="newTypeCodePreview"
-          class="type-code-preview">
-        </div>
+        <label>Código *</label>
+        <input id="newTypeCode" class="form-control" type="text" maxlength="10" placeholder="Ej.: IT" style="text-transform:uppercase">
+        <div class="type-help">2 a 10 caracteres: letras, números, guion o guion bajo.</div>
       </div>
-
+      <div class="type-code-preview">El nuevo tipo quedará disponible para generar códigos.</div>
     </div>
-
     <div class="modal-footer">
-
-      <button
-        id="cancelType"
-        type="button"
-        class="btn btn-secondary">
-        Cancelar
-      </button>
-
-      <button
-        id="saveType"
-        type="button"
-        class="btn btn-primary">
-        Guardar tipo
-      </button>
-
+      <button type="button" id="cancelType" class="btn btn-secondary">Cancelar</button>
+      <button type="button" id="saveType" class="btn btn-primary">Guardar tipo</button>
     </div>
-
   </div>
-
 </div>
 
 <div id="toastContainer"></div>
@@ -2318,16 +2229,6 @@ import {
 }
 from
 "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  addDoc,
-  serverTimestamp
-}
-from
-"https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
 
 import {
@@ -2375,11 +2276,6 @@ const auth =
     app
   );
 
-const db =
-  getFirestore(
-    app
-  );
-
 
 const BACKEND_URL =
   "https://script.google.com/macros/s/AKfycbxyFbgc0RqkKuDpFK3m8uPAQXGs8_9USjR7gFNVH-PBkTAVujzvgK9OQTd4Snsx5SRk/exec";
@@ -2397,13 +2293,7 @@ let data = {
 
 };
 
-/*
- * Catálogo de tipos documentales.
- * Los tipos base mantienen los códigos existentes.
- * Los tipos nuevos se guardan en Firestore para que
- * puedan ser compartidos entre usuarios autenticados.
- */
-const DEFAULT_DOCUMENT_TYPES = [
+let documentTypes = [
   {code:"PROC", name:"Procedimiento"},
   {code:"INS", name:"Instructivo"},
   {code:"REG", name:"Registro"},
@@ -2420,8 +2310,6 @@ const DEFAULT_DOCUMENT_TYPES = [
   {code:"CHK", name:"Checklist"},
   {code:"ORG", name:"Organigrama"}
 ];
-
-let documentTypes = [...DEFAULT_DOCUMENT_TYPES];
 
 
 const $ =
@@ -2977,391 +2865,6 @@ onAuthStateChanged(
 );
 
 
-
-/***************************************************************
- * TIPOS DOCUMENTALES
- ***************************************************************/
-
-function normalizeTypeCode(value){
-  return String(value || "")
-    .trim()
-    .toUpperCase()
-    .replace(/\s+/g,"");
-}
-
-function normalizeTypeName(value){
-  return String(value || "")
-    .trim()
-    .replace(/\s+/g," ");
-}
-
-function sortDocumentTypes(){
-  documentTypes.sort(
-    (a,b) =>
-      String(a.name).localeCompare(
-        String(b.name),
-        "es"
-      )
-  );
-}
-
-function getTypeName(code){
-  const item =
-    documentTypes.find(
-      x =>
-        String(x.code).toUpperCase() ===
-        String(code || "").toUpperCase()
-    );
-
-  return item
-    ? item.name
-    : String(code || "Otros");
-}
-
-function populateDocumentTypeSelects(){
-  const selects = [
-    $("docType"),
-    $("editDocType")
-  ];
-
-  selects.forEach(
-    select => {
-      if(!select) return;
-
-      const current = select.value;
-
-      select.innerHTML =
-        '<option value="">Seleccionar...</option>' +
-        documentTypes
-          .map(
-            t =>
-              `<option value="${esc(t.code)}">${esc(t.code)} - ${esc(t.name)}</option>`
-          )
-          .join("");
-
-      if(
-        current &&
-        documentTypes.some(
-          t => t.code === current
-        )
-      ){
-        select.value = current;
-      }
-    }
-  );
-}
-
-async function loadDocumentTypes(){
-  try{
-
-    /*
-     * Firestore NO bloquea el inicio de la plataforma.
-     * Si tarda demasiado, se mantienen los tipos base.
-     */
-    const timeout = new Promise((_, reject) =>
-      setTimeout(
-        () => reject(new Error("TIMEOUT_FIRESTORE")),
-        8000
-      )
-    );
-
-    const request = getDocs(
-      collection(
-        db,
-        "documentTypes"
-      )
-    );
-
-    const snap = await Promise.race([
-      request,
-      timeout
-    ]);
-
-    const remoteTypes = [];
-
-    snap.forEach(
-      doc => {
-        const d = doc.data();
-
-        if(
-          d &&
-          d.code &&
-          d.name
-        ){
-          remoteTypes.push({
-            code: normalizeTypeCode(d.code),
-            name: normalizeTypeName(d.name)
-          });
-        }
-      }
-    );
-
-    const merged = [
-      ...DEFAULT_DOCUMENT_TYPES,
-      ...remoteTypes
-    ];
-
-    const map = new Map();
-
-    merged.forEach(
-      t => {
-        if(
-          t.code &&
-          t.name &&
-          !map.has(t.code)
-        ){
-          map.set(
-            t.code,
-            t
-          );
-        }
-      }
-    );
-
-    documentTypes = [
-      ...map.values()
-    ];
-
-    sortDocumentTypes();
-    populateDocumentTypeSelects();
-
-  }catch(e){
-
-    console.warn(
-      "No fue posible cargar el catálogo de tipos desde Firestore.",
-      e
-    );
-
-    /*
-     * Si Firestore todavía no tiene reglas configuradas,
-     * la plataforma conserva los tipos base y funciona
-     * normalmente mientras se configura la colección.
-     */
-    documentTypes = [
-      ...DEFAULT_DOCUMENT_TYPES
-    ];
-
-    sortDocumentTypes();
-    populateDocumentTypeSelects();
-  }
-}
-
-function openTypeModal(){
-
-  $("newTypeName").value = "";
-  $("newTypeCode").value = "";
-  $("newTypeCodePreview").textContent = "";
-
-  $("typeModal")
-    .classList
-    .remove("hidden");
-
-  setTimeout(
-    () =>
-      $("newTypeName").focus(),
-    50
-  );
-}
-
-function closeTypeModal(){
-
-  $("typeModal")
-    .classList
-    .add("hidden");
-}
-
-async function saveDocumentType(){
-
-  const name =
-    normalizeTypeName(
-      $("newTypeName").value
-    );
-
-  const code =
-    normalizeTypeCode(
-      $("newTypeCode").value
-    );
-
-  if(!name){
-    return toast(
-      "Ingrese el nombre del tipo de documento.",
-      "error"
-    );
-  }
-
-  if(!code){
-    return toast(
-      "Ingrese el código del tipo de documento.",
-      "error"
-    );
-  }
-
-  if(!/^[A-Z0-9_-]{2,10}$/.test(code)){
-    return toast(
-      "El código debe tener entre 2 y 10 caracteres: letras, números, guion o guion bajo.",
-      "error"
-    );
-  }
-
-  const exists =
-    documentTypes.some(
-      t =>
-        t.code.toUpperCase() ===
-        code.toUpperCase()
-    );
-
-  if(exists){
-    return toast(
-      "Ese código ya existe. Utilice otro.",
-      "error"
-    );
-  }
-
-  const nameExists =
-    documentTypes.some(
-      t =>
-        t.name.toLowerCase() ===
-        name.toLowerCase()
-    );
-
-  if(nameExists){
-    return toast(
-      "Ese tipo de documento ya existe.",
-      "error"
-    );
-  }
-
-  try{
-
-    loading(true);
-
-    /*
-     * El catálogo se configura UNA SOLA VEZ en Firebase.
-     * Después, los usuarios agregan tipos desde esta pantalla.
-     * El timeout evita que el botón quede cargando indefinidamente.
-     */
-    const saveRequest = addDoc(
-      collection(
-        db,
-        "documentTypes"
-      ),
-      {
-        code,
-        name,
-        createdBy:
-          currentUser?.email ||
-          "",
-        createdAt:
-          serverTimestamp()
-      }
-    );
-
-    await Promise.race([
-      saveRequest,
-      new Promise((_, reject) =>
-        setTimeout(
-          () => reject(new Error("TIMEOUT_FIRESTORE_SAVE")),
-          8000
-        )
-      )
-    ]);
-
-    documentTypes.push({
-      code,
-      name
-    });
-
-    sortDocumentTypes();
-    populateDocumentTypeSelects();
-
-    $("docType").value = code;
-
-    updatePreview();
-
-    closeTypeModal();
-
-    toast(
-      `Tipo documental "${name}" (${code}) agregado correctamente.`,
-      "success"
-    );
-
-  }catch(e){
-
-    console.error(e);
-
-    const message =
-      e?.message === "TIMEOUT_FIRESTORE_SAVE"
-        ? "Firebase no respondió dentro de 8 segundos. Revise la conexión o las reglas de Firestore."
-        : "No fue posible guardar el tipo documental. Revise las reglas de Firestore.";
-
-    toast(
-      message,
-      "error"
-    );
-
-  }finally{
-
-    loading(false);
-
-  }
-}
-
-$("addDocTypeBtn")
-  .addEventListener(
-    "click",
-    openTypeModal
-  );
-
-$("closeTypeModal")
-  .addEventListener(
-    "click",
-    closeTypeModal
-  );
-
-$("cancelType")
-  .addEventListener(
-    "click",
-    closeTypeModal
-  );
-
-$("typeModal")
-  .addEventListener(
-    "click",
-    e => {
-      if(
-        e.target.id ===
-        "typeModal"
-      ){
-        closeTypeModal();
-      }
-    }
-  );
-
-$("newTypeCode")
-  .addEventListener(
-    "input",
-    e => {
-      const code =
-        normalizeTypeCode(
-          e.target.value
-        );
-
-      e.target.value = code;
-
-      $("newTypeCodePreview")
-        .textContent =
-        code
-          ? `Código: ${code}`
-          : "";
-    }
-  );
-
-$("saveType")
-  .addEventListener(
-    "click",
-    saveDocumentType
-  );
-
 /***************************************************************
  * CARGAR DATOS
  ***************************************************************/
@@ -3373,30 +2876,17 @@ async function loadData(){
       "getData"
     );
 
-
   data.listado =
-    Array.isArray(
-      r.listado
-    )
-      ? r.listado
-      : [];
-
+    Array.isArray(r.listado) ? r.listado : [];
 
   data.matriz =
-    Array.isArray(
-      r.matriz
-    )
-      ? r.matriz
-      : [];
+    Array.isArray(r.matriz) ? r.matriz : [];
 
+  if(Array.isArray(r.documentTypes) && r.documentTypes.length){
+    documentTypes = r.documentTypes;
+  }
 
-  /*
-   * Firestore se carga en segundo plano.
-   * La plataforma no espera a Firebase para mostrar la interfaz.
-   */
-  loadDocumentTypes();
-
-
+  populateDocumentTypeSelects();
   renderAll();
 
 }
@@ -3496,18 +2986,88 @@ function projectLabel(
  * tipo documental.
  */
 
-function typeLabel(
-  type
-){
+function getTypeName(type){
 
-  return getTypeName(type);
+  const code = String(type || "").trim().toUpperCase();
+  const found = documentTypes.find(x => String(x.code || "").toUpperCase() === code);
+  return found ? found.name : (code || "Otros");
 
 }
+
+function typeLabel(type){
+  return getTypeName(type);
+}
+
+function populateDocumentTypeSelects(selectedMain=null, selectedEdit=null){
+
+  const main = $("docType");
+  const edit = $("editDocType");
+  if(!main || !edit) return;
+
+  const currentMain = selectedMain !== null ? selectedMain : main.value;
+  const currentEdit = selectedEdit !== null ? selectedEdit : edit.value;
+
+  const options = documentTypes.map(x =>
+    `<option value="${esc(x.code)}">${esc(x.code)} - ${esc(x.name)}</option>`
+  ).join("");
+
+  main.innerHTML = `<option value="">Seleccionar...</option>${options}`;
+  edit.innerHTML = options;
+
+  if(currentMain) main.value = currentMain;
+  if(currentEdit) edit.value = currentEdit;
+}
+
+function openTypeModal(){
+  $("newTypeName").value = "";
+  $("newTypeCode").value = "";
+  $("typeModal").classList.remove("hidden");
+  $("newTypeName").focus();
+}
+
+function closeTypeModal(){
+  $("typeModal").classList.add("hidden");
+}
+
+$("addDocTypeBtn").onclick = openTypeModal;
+$("closeTypeModal").onclick = closeTypeModal;
+$("cancelType").onclick = closeTypeModal;
+$("typeModal").onclick = e => { if(e.target.id === "typeModal") closeTypeModal(); };
+
+$("newTypeCode").addEventListener("input", e => {
+  e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9_-]/g, "").slice(0,10);
+});
+
+$("saveType").onclick = async () => {
+
+  const name = $("newTypeName").value.trim();
+  const code = $("newTypeCode").value.trim().toUpperCase();
+
+  if(!name) return toast("Ingresa el nombre del tipo documental.", "error");
+  if(!/^[A-Z0-9_-]{2,10}$/.test(code)) return toast("El código debe tener entre 2 y 10 caracteres.", "error");
+  if(documentTypes.some(x => String(x.code).toUpperCase() === code)) return toast("El código ya existe: " + code, "error");
+  if(documentTypes.some(x => String(x.name).trim().toLowerCase() === name.toLowerCase())) return toast("El nombre del tipo documental ya existe.", "error");
+
+  const btn = $("saveType");
+  btn.disabled = true;
+
+  try{
+    const r = await api("createDocumentType", {name, code});
+    documentTypes = Array.isArray(r.documentTypes) ? r.documentTypes : [...documentTypes, {code, name}];
+    populateDocumentTypeSelects(code, code);
+    updatePreview();
+    closeTypeModal();
+    toast("Tipo documental agregado: " + code + " - " + name, "success");
+  }catch(e){
+    toast(e.message || "No fue posible guardar el tipo documental.", "error");
+  }finally{
+    btn.disabled = false;
+  }
+};
 
 
 /***************************************************************
  * INDICADORES POR PROYECTO
-
  *
  * FUENTE:
  * MATRIZ DE TRAZABILIDAD
@@ -4410,6 +3970,8 @@ setRevisionOptions(
   false
 );
 
+populateDocumentTypeSelects();
+
 
 /***************************************************************
  * DATOS FORMULARIO
@@ -4864,10 +4426,10 @@ function openEdit(
     "QA";
 
 
-  $("editDocType")
-    .value =
-    r.docType ||
-    "PROC";
+  populateDocumentTypeSelects(
+    $("docType").value,
+    r.docType || "PROC"
+  );
 
 
   $("editRevision")
@@ -5315,8 +4877,6 @@ async function deleteDocument(
 /***************************************************************
  * INICIO
  ***************************************************************/
-
-populateDocumentTypeSelects();
 
 switchSection(
   "dashboard"
