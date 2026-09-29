@@ -1,966 +1,1054 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>
-Aqua Service | Sistema de Codificación Documental
-</title>
-
-<style>
-
-:root{
-  --navy:#082f49;
-  --navy2:#0d4668;
-  --blue:#087db5;
-  --blue2:#1296d4;
-  --light:#f3f8fb;
-  --border:#d7e3ea;
-  --text:#183447;
-  --muted:#6b8190;
-  --white:#ffffff;
-  --green:#15945b;
-  --green-bg:#eaf8f1;
-  --orange:#e88b16;
-  --orange-bg:#fff6e6;
-  --red:#c52b21;
-  --red-bg:#fff0ee;
-  --shadow:0 5px 20px rgba(10,45,70,.07);
-}
-
-*{
-  box-sizing:border-box;
-}
-
-body{
-  margin:0;
-  font-family:
-    Arial,
-    Helvetica,
-    sans-serif;
-  background:#f4f8fa;
-  color:var(--text);
-}
-
-button,
-input,
-select,
-textarea{
-  font-family:inherit;
-}
-
-.hidden{
-  display:none!important;
-}
-
-
-/* =========================================================
-   LOGIN
-========================================================= */
-
-.login{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:
-    linear-gradient(
-      135deg,
-      #082f49 0%,
-      #0b4668 45%,
-      #eaf4f8 100%
-    );
-}
-
-.login-box{
-  width:min(440px,92vw);
-  background:white;
-  border-radius:20px;
-  padding:38px;
-  box-shadow:0 20px 60px rgba(0,0,0,.18);
-}
-
-.login-logo{
-  width:70px;
-  height:70px;
-  border-radius:18px;
-  background:linear-gradient(
-    135deg,
-    #0a84bd,
-    #0d4c6e
-  );
-  color:white;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:28px;
-  font-weight:bold;
-  margin:0 auto 18px;
-}
-
-.login-brand{
-  text-align:center;
-}
-
-.login-brand h1{
-  margin:0;
-  color:var(--navy);
-  font-size:28px;
-}
-
-.login-brand p{
-  color:var(--muted);
-  margin-top:8px;
-}
-
-.login-info{
-  background:#f2f8fb;
-  border-left:4px solid var(--blue);
-  padding:13px;
-  border-radius:7px;
-  font-size:13px;
-  margin:25px 0;
-}
-
-
-/* =========================================================
-   APP
-========================================================= */
-
-.app{
-  min-height:100vh;
-  display:flex;
-}
-
-
-/* =========================================================
-   SIDEBAR
-========================================================= */
-
-.sidebar{
-  width:285px;
-  background:
-    linear-gradient(
-      180deg,
-      #07314d 0%,
-      #0b3d5c 70%,
-      #082f49 100%
-    );
-  color:white;
-  position:fixed;
-  top:0;
-  bottom:0;
-  left:0;
-  padding:25px 18px;
-  z-index:20;
-}
-
-.brand{
-  padding:5px 12px 25px;
-  border-bottom:1px solid rgba(255,255,255,.12);
-}
-
-.brand-title{
-  font-size:24px;
-  font-weight:800;
-  letter-spacing:.3px;
-}
-
-.brand-subtitle{
-  color:#bdd0dc;
-  font-size:13px;
-  line-height:1.4;
-  margin-top:5px;
-}
-
-.nav{
-  margin-top:25px;
-}
-
-.nav-title{
-  color:#89a7b9;
-  font-size:11px;
-  font-weight:700;
-  letter-spacing:1px;
-  padding:15px 12px 7px;
-}
-
-.nav button{
-  width:100%;
-  border:0;
-  background:transparent;
-  color:#edf7fb;
-  text-align:left;
-  padding:13px 14px;
-  margin:3px 0;
-  border-radius:10px;
-  font-size:15px;
-  cursor:pointer;
-  transition:.2s;
-}
-
-.nav button:hover{
-  background:rgba(255,255,255,.09);
-}
-
-.nav button.active{
-  background:#245674;
-  box-shadow:
-    inset 3px 0 0 #27a9e0;
-}
-
-.nav-icon{
-  width:25px;
-  display:inline-block;
-}
-
-.logout{
-  position:absolute;
-  bottom:22px;
-  left:18px;
-  right:18px;
-}
-
-
-/* =========================================================
-   MAIN
-========================================================= */
-
-.main{
-  margin-left:285px;
-  width:calc(100% - 285px);
-  min-height:100vh;
-  padding:25px 35px 45px;
-}
-
-.topbar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:25px;
-}
-
-.topbar h1{
-  margin:0;
-  font-size:28px;
-  color:#102f45;
-}
-
-.topbar-sub{
-  color:var(--muted);
-  font-size:14px;
-  margin-top:5px;
-}
-
-.user-box{
-  background:white;
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:9px 14px;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  box-shadow:var(--shadow);
-}
-
-.user-avatar{
-  width:36px;
-  height:36px;
-  border-radius:50%;
-  background:var(--navy);
-  color:white;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:bold;
-}
-
-.user-email{
-  font-size:13px;
-  font-weight:700;
-}
-
-
-/* =========================================================
-   CARDS
-========================================================= */
-
-.cards{
-  display:grid;
-  grid-template-columns:
-    repeat(4,1fr);
-  gap:16px;
-  margin-bottom:20px;
-}
-
-.stat-card{
-  background:white;
-  border:1px solid var(--border);
-  border-radius:15px;
-  padding:19px;
-  box-shadow:var(--shadow);
-  position:relative;
-  overflow:hidden;
-}
-
-.stat-card-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-}
-
-.stat-icon{
-  width:43px;
-  height:43px;
-  border-radius:12px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:20px;
-}
-
-.icon-blue{
-  background:#e6f3fb;
-  color:#087db5;
-}
-
-.icon-green{
-  background:#e9f8f0;
-  color:#15945b;
-}
-
-.icon-purple{
-  background:#f0eaff;
-  color:#7651cf;
-}
-
-.icon-orange{
-  background:#fff1dc;
-  color:#e88b16;
-}
-
-.stat-label{
-  color:var(--muted);
-  font-size:13px;
-}
-
-.stat-number{
-  font-size:27px;
-  font-weight:800;
-  margin-top:6px;
-  color:#112f46;
-}
-
-.stat-foot{
-  color:var(--muted);
-  font-size:12px;
-  margin-top:5px;
-}
-
-
-/* =========================================================
-   CARDS GENERALES
-========================================================= */
-
-.card{
-  background:white;
-  border:1px solid var(--border);
-  border-radius:15px;
-  padding:23px;
-  margin-bottom:20px;
-  box-shadow:var(--shadow);
-}
-
-.card-title{
-  margin:0;
-  font-size:20px;
-}
-
-.card-subtitle{
-  color:var(--muted);
-  margin:5px 0 0;
-  font-size:14px;
-}
-
-
-/* =========================================================
-   CONEXIÓN
-========================================================= */
-
-.connection{
-  display:flex;
-  align-items:center;
-  gap:9px;
-  padding:10px 14px;
-  background:white;
-  border:1px solid var(--border);
-  border-radius:10px;
-  font-size:13px;
-}
-
-.connection-dot{
-  width:10px;
-  height:10px;
-  border-radius:50%;
-  background:#b8c4ca;
-}
-
-.connection.ok .connection-dot{
-  background:#20b46e;
-}
-
-.connection.error .connection-dot{
-  background:#d52e26;
-}
-
-
-/* =========================================================
-   FORMULARIO
-========================================================= */
-
-.form-header{
-  display:flex;
-  align-items:center;
-  gap:14px;
-  margin-bottom:20px;
-}
-
-.form-header-icon{
-  width:48px;
-  height:48px;
-  border-radius:13px;
-  background:#e8f5fb;
-  color:var(--blue);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:23px;
-}
-
-.radio-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:15px;
-  margin-bottom:22px;
-}
-
-.mode-card{
-  border:1.5px solid var(--border);
-  border-radius:13px;
-  padding:18px;
-  cursor:pointer;
-  transition:.2s;
-  background:white;
-}
-
-.mode-card:hover{
-  border-color:#8ebed4;
-}
-
-.mode-card.selected{
-  border-color:#0782bd;
-  background:#f0f9fd;
-  box-shadow:
-    0 0 0 2px rgba(8,125,181,.08);
-}
-
-.mode-radio{
-  display:flex;
-  gap:12px;
-  align-items:flex-start;
-}
-
-.mode-radio input{
-  margin-top:4px;
-  accent-color:var(--blue);
-}
-
-.mode-title{
-  font-size:16px;
-  font-weight:800;
-}
-
-.mode-description{
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.5;
-  margin-top:5px;
-}
-
-.section-label{
-  font-size:14px;
-  font-weight:800;
-  color:#234457;
-  margin:20px 0 12px;
-  padding-bottom:7px;
-  border-bottom:1px solid #edf1f3;
-}
-
-.grid2{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:17px;
-}
-
-.grid3{
-  display:grid;
-  grid-template-columns:
-    repeat(3,1fr);
-  gap:17px;
-}
-
-.field{
-  margin-bottom:14px;
-}
-
-.field label{
-  display:block;
-  font-size:13px;
-  font-weight:800;
-  margin-bottom:7px;
-  color:#234457;
-}
-
-.field input,
-.field select,
-.field textarea{
-  width:100%;
-  border:1px solid #cad9e1;
-  border-radius:9px;
-  padding:12px 13px;
-  font-size:14px;
-  color:#173042;
-  background:#fff;
-  outline:none;
-  transition:.2s;
-}
-
-.field input:focus,
-.field select:focus,
-.field textarea:focus{
-  border-color:#0782bd;
-  box-shadow:
-    0 0 0 3px rgba(8,125,181,.09);
-}
-
-.field textarea{
-  min-height:90px;
-  resize:vertical;
-}
-
-
-/* =========================================================
-   CÓDIGO PROPUESTO
-========================================================= */
-
-.code-panel{
-  border:1px solid #c9e2ee;
-  background:#f0f9fd;
-  border-radius:14px;
-  overflow:hidden;
-  margin:22px 0;
-}
-
-.code-panel-title{
-  background:#dff1f9;
-  color:#0675a9;
-  text-align:center;
-  font-size:12px;
-  font-weight:800;
-  letter-spacing:.8px;
-  padding:10px;
-}
-
-.code-value{
-  text-align:center;
-  padding:17px 10px 10px;
-  font-size:27px;
-  font-weight:900;
-  color:#0c2d45;
-  word-break:break-word;
-}
-
-.code-status{
-  margin:0 18px 18px;
-  padding:12px;
-  border-radius:9px;
-  text-align:center;
-  font-size:13px;
-  font-weight:700;
-}
-
-.code-status.ok{
-  background:var(--green-bg);
-  color:var(--green);
-}
-
-.code-status.warn{
-  background:var(--orange-bg);
-  color:#94600a;
-}
-
-.code-status.danger{
-  background:var(--red-bg);
-  color:var(--red);
-}
-
-
-/* =========================================================
-   BOTONES
-========================================================= */
-
-.buttons{
-  display:flex;
-  justify-content:flex-end;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
-.btn{
-  border:0;
-  border-radius:9px;
-  padding:12px 17px;
-  font-size:14px;
-  font-weight:800;
-  cursor:pointer;
-  transition:.2s;
-}
-
-.btn:hover{
-  transform:translateY(-1px);
-}
-
-.btn-primary{
-  background:#087db5;
-  color:white;
-}
-
-.btn-success{
-  background:#15945b;
-  color:white;
-}
-
-.btn-secondary{
-  background:#edf2f5;
-  color:#29495b;
-}
-
-.btn:disabled{
-  opacity:.5;
-  cursor:not-allowed;
-  transform:none;
-}
-
-
-/* =========================================================
-   TABLAS
-========================================================= */
-
-.table-toolbar{
-  display:flex;
-  justify-content:space-between;
-  gap:15px;
-  align-items:center;
-  margin-bottom:16px;
-}
-
-.search{
-  max-width:400px;
-}
-
-.table-wrap{
-  overflow:auto;
-  border:1px solid var(--border);
-  border-radius:10px;
-}
-
-.table{
-  width:100%;
-  border-collapse:collapse;
-  font-size:13px;
-  background:white;
-}
-
-.table th{
-  background:#f1f6f9;
-  color:#3c5667;
-  font-size:12px;
-  text-align:left;
-  padding:12px;
-  white-space:nowrap;
-}
-
-.table td{
-  padding:11px 12px;
-  border-top:1px solid #edf1f3;
-  white-space:nowrap;
-}
-
-.table tr:hover td{
-  background:#f8fbfc;
-}
-
-
-/* =========================================================
-   DASHBOARD INFO
-========================================================= */
-
-.dashboard-grid{
-  display:grid;
-  grid-template-columns:
-    1.3fr .7fr;
-  gap:20px;
-}
-
-.info-list{
-  margin:0;
-  padding-left:20px;
-}
-
-.info-list li{
-  margin-bottom:11px;
-  color:#526b79;
-}
-
-
-/* =========================================================
-   ESTADOS
-========================================================= */
-
-.status{
-  padding:12px 14px;
-  border-radius:9px;
-  font-size:13px;
-  font-weight:600;
-  margin:10px 0;
-}
-
-.status.ok{
-  background:var(--green-bg);
-  color:var(--green);
-}
-
-.status.warn{
-  background:var(--orange-bg);
-  color:#94600a;
-}
-
-.status.danger{
-  background:var(--red-bg);
-  color:var(--red);
-}
-
-
-/* =========================================================
-   LOADER
-========================================================= */
-
-.loader{
-  width:15px;
-  height:15px;
-  display:inline-block;
-  border:2px solid #ccd8df;
-  border-top-color:#087db5;
-  border-radius:50%;
-  animation:spin .8s linear infinite;
-  vertical-align:-2px;
-}
-
-@keyframes spin{
-  to{
-    transform:rotate(360deg);
-  }
-}
-
-
-/* =========================================================
-   RESPONSIVE
-========================================================= */
-
-@media(max-width:1100px){
-
-  .cards{
-    grid-template-columns:
-      repeat(2,1fr);
-  }
-
-  .dashboard-grid{
-    grid-template-columns:1fr;
-  }
-
-}
-
-@media(max-width:850px){
-
-  .sidebar{
-    position:relative;
-    width:100%;
-    height:auto;
-  }
-
-  .app{
-    display:block;
-  }
-
-  .main{
-    width:100%;
-    margin:0;
-    padding:20px;
-  }
-
-  .logout{
-    position:static;
-    margin-top:20px;
-    width:100%;
-  }
-
-  .topbar{
-    align-items:flex-start;
-    gap:15px;
-    flex-direction:column;
-  }
-
-  .grid2,
-  .grid3,
-  .radio-grid,
-  .cards{
-    grid-template-columns:1fr;
-  }
-
-}
-
-
-/* =========================================================
-   REV.B BADGE
-========================================================= */
-
-.revision-origin{
-  display:inline-flex;
-  align-items:center;
-  gap:5px;
-  background:#fff2dd;
-  color:#a96300;
-  border:1px solid #f1d29f;
-  border-radius:6px;
-  padding:4px 7px;
-  font-size:11px;
-  font-weight:800;
-}
-
-</style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Plataforma de Codificación | Aqua Service</title>
+
+  <!-- =========================================================
+       FIREBASE
+       ========================================================= -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signInWithEmailAndPassword,
+      sendPasswordResetEmail,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAgKLxc9Ui0YrrBCC8jIAvGWfwrtdUTmHs",
+      authDomain: "plataforma-codificacion-aq.firebaseapp.com",
+      projectId: "plataforma-codificacion-aq",
+      storageBucket: "plataforma-codificacion-aq.firebasestorage.app",
+      messagingSenderId: "970638544563",
+      appId: "1:970638544563:web:37f586952991faa593eac6"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    window.firebaseAuth = auth;
+    window.firebaseFunctions = {
+      signInWithEmailAndPassword,
+      sendPasswordResetEmail,
+      signOut
+    };
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        window.currentFirebaseUser = user;
+
+        document.getElementById("loginScreen").style.display = "none";
+        document.getElementById("appScreen").style.display = "flex";
+
+        document.getElementById("userEmail").textContent =
+          user.email || "Usuario";
+
+        await window.loadDataFromBackend();
+      } else {
+        window.currentFirebaseUser = null;
+
+        document.getElementById("loginScreen").style.display = "flex";
+        document.getElementById("appScreen").style.display = "none";
+      }
+    });
+  </script>
+
+  <style>
+    /* =========================================================
+       VARIABLES
+       ========================================================= */
+
+    :root {
+      --blue-dark: #082c4c;
+      --blue: #0b4f7c;
+      --blue-light: #1b6fa8;
+      --cyan: #00a9d6;
+
+      --bg: #f3f6f9;
+      --card: #ffffff;
+      --border: #dce3e9;
+
+      --text: #17212b;
+      --muted: #687782;
+
+      --green: #198754;
+      --orange: #e58b1a;
+      --red: #c0392b;
+
+      --shadow:
+        0 4px 18px rgba(8, 44, 76, 0.08);
+
+      --radius: 10px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100%;
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font-family: inherit;
+    }
+
+    /* =========================================================
+       LOGIN
+       ========================================================= */
+
+    #loginScreen {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background:
+        linear-gradient(
+          135deg,
+          #062641 0%,
+          #0b4f7c 55%,
+          #0d739b 100%
+        );
+      padding: 20px;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+      background: white;
+      border-radius: 18px;
+      padding: 35px;
+      box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.25);
+    }
+
+    .login-logo {
+      width: 72px;
+      height: 72px;
+      border-radius: 16px;
+      margin: 0 auto 18px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: var(--blue-dark);
+      color: white;
+
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .login-title {
+      text-align: center;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--blue-dark);
+      margin-bottom: 5px;
+    }
+
+    .login-subtitle {
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 25px;
+    }
+
+    .login-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #34434f;
+    }
+
+    .login-input {
+      width: 100%;
+      padding: 12px 13px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 15px;
+      outline: none;
+      font-size: 14px;
+    }
+
+    .login-input:focus {
+      border-color: var(--cyan);
+      box-shadow:
+        0 0 0 3px rgba(0, 169, 214, 0.1);
+    }
+
+    .login-button {
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      padding: 13px;
+      background: var(--blue-dark);
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .login-button:hover {
+      background: var(--blue);
+    }
+
+    .forgot-password {
+      text-align: center;
+      margin-top: 15px;
+      color: var(--blue-light);
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .login-error {
+      display: none;
+      background: #fff0ef;
+      color: var(--red);
+      border: 1px solid #f3c3be;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 15px;
+      font-size: 12px;
+    }
+
+    /* =========================================================
+       APP LAYOUT
+       ========================================================= */
+
+    #appScreen {
+      display: none;
+      min-height: 100vh;
+      width: 100%;
+    }
+
+    .sidebar {
+      width: 240px;
+      min-width: 240px;
+      min-height: 100vh;
+
+      background: var(--blue-dark);
+      color: white;
+
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand {
+      padding: 22px 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .brand-title {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+
+    .brand-subtitle {
+      font-size: 11px;
+      color: rgba(255,255,255,0.65);
+      margin-top: 4px;
+    }
+
+    .menu {
+      padding: 15px 10px;
+    }
+
+    .menu-button {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      padding: 11px 12px;
+
+      border: none;
+      background: transparent;
+      color: rgba(255,255,255,0.78);
+
+      border-radius: 8px;
+
+      text-align: left;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .menu-button:hover,
+    .menu-button.active {
+      background: rgba(255,255,255,0.12);
+      color: white;
+    }
+
+    .menu-icon {
+      width: 22px;
+      text-align: center;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 15px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .user-email {
+      font-size: 10px;
+      color: rgba(255,255,255,0.65);
+      overflow-wrap: anywhere;
+      margin-bottom: 10px;
+    }
+
+    .logout-button {
+      width: 100%;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 7px;
+      padding: 8px;
+      background: transparent;
+      color: white;
+      cursor: pointer;
+      font-size: 11px;
+    }
+
+    .logout-button:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .main {
+      flex: 1;
+      min-width: 0;
+      padding: 22px;
+      overflow-x: hidden;
+    }
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .page-title {
+      font-size: 23px;
+      font-weight: 800;
+      color: var(--blue-dark);
+      margin: 0;
+    }
+
+    .page-subtitle {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+
+      padding: 7px 10px;
+
+      border-radius: 20px;
+
+      background: #eaf7ef;
+      color: var(--green);
+
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    /* =========================================================
+       CARDS
+       ========================================================= */
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .card-header {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--blue-dark);
+    }
+
+    .card-body {
+      padding: 16px;
+    }
+
+    /* =========================================================
+       DASHBOARD
+       ========================================================= */
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .stat-card {
+      padding: 15px;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 25px;
+      font-weight: 800;
+      color: var(--blue-dark);
+    }
+
+    .stat-small {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    /* =========================================================
+       FORMS
+       ========================================================= */
+
+    .form-grid {
+      display: grid;
+      grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+      gap: 11px;
+    }
+
+    .form-group {
+      min-width: 0;
+    }
+
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    .form-group.span2 {
+      grid-column: span 2;
+    }
+
+    label {
+      display: block;
+      font-size: 10px;
+      font-weight: 800;
+      color: #40505b;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.2px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid #d4dde4;
+      background: white;
+      color: var(--text);
+
+      border-radius: 7px;
+      padding: 9px 10px;
+
+      font-size: 12px;
+      outline: none;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--cyan);
+      box-shadow:
+        0 0 0 3px rgba(0,169,214,0.08);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 70px;
+    }
+
+    .radio-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .radio-option {
+      flex: 1;
+      cursor: pointer;
+    }
+
+    .radio-option input {
+      display: none;
+    }
+
+    .radio-label {
+      display: block;
+      text-align: center;
+      padding: 9px 8px;
+
+      border: 1px solid #d4dde4;
+      border-radius: 7px;
+
+      font-size: 11px;
+      font-weight: 700;
+
+      color: #52616c;
+      background: white;
+    }
+
+    .radio-option input:checked + .radio-label {
+      border-color: var(--blue-light);
+      background: #edf6fb;
+      color: var(--blue-dark);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* =========================================================
+       CODE PREVIEW
+       ========================================================= */
+
+    .code-preview {
+      background: #f5f8fa;
+      border: 1px dashed #aebec9;
+      border-radius: 8px;
+
+      padding: 12px;
+
+      margin-top: 14px;
+    }
+
+    .code-preview-label {
+      font-size: 10px;
+      color: var(--muted);
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+
+    .code-preview-value {
+      font-family:
+        Consolas,
+        "Courier New",
+        monospace;
+
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--blue-dark);
+
+      word-break: break-all;
+    }
+
+    /* =========================================================
+       BUTTONS
+       ========================================================= */
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 15px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 7px;
+      padding: 9px 13px;
+
+      font-size: 11px;
+      font-weight: 800;
+
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: var(--blue-dark);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--blue);
+    }
+
+    .btn-secondary {
+      background: #eef2f5;
+      color: #33424d;
+    }
+
+    .btn-secondary:hover {
+      background: #e2e8ed;
+    }
+
+    .btn-success {
+      background: var(--green);
+      color: white;
+    }
+
+    .btn-warning {
+      background: var(--orange);
+      color: white;
+    }
+
+    .btn-danger {
+      background: var(--red);
+      color: white;
+    }
+
+    .btn-small {
+      padding: 5px 8px;
+      font-size: 9px;
+    }
+
+    /* =========================================================
+       TABLES
+       ========================================================= */
+
+    .table-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+
+      margin-bottom: 10px;
+    }
+
+    .search-box {
+      max-width: 320px;
+    }
+
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    table {
+      width: 100%;
+      min-width: 1100px;
+
+      border-collapse: collapse;
+      background: white;
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+
+      background: var(--blue-dark);
+      color: white;
+
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.2px;
+
+      padding: 8px 7px;
+      text-align: left;
+
+      white-space: nowrap;
+    }
+
+    td {
+      font-size: 10px;
+      padding: 7px;
+      border-bottom: 1px solid #edf0f2;
+
+      white-space: nowrap;
+      max-width: 220px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    tr:hover td {
+      background: #f7fafc;
+    }
+
+    .code-cell {
+      font-family:
+        Consolas,
+        "Courier New",
+        monospace;
+
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--blue-dark);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 6px;
+      border-radius: 12px;
+      font-size: 8px;
+      font-weight: 800;
+    }
+
+    .badge-green {
+      background: #e8f6ee;
+      color: #167243;
+    }
+
+    .badge-orange {
+      background: #fff4e2;
+      color: #a76105;
+    }
+
+    .badge-gray {
+      background: #eef1f3;
+      color: #5e6b74;
+    }
+
+    /* =========================================================
+       MODAL
+       ========================================================= */
+
+    .modal-overlay {
+      display: none;
+
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+
+      background:
+        rgba(3, 21, 34, 0.62);
+
+      padding: 20px;
+
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 950px;
+      max-height: 92vh;
+      overflow-y: auto;
+
+      background: white;
+      border-radius: 12px;
+      box-shadow:
+        0 25px 80px rgba(0,0,0,0.3);
+    }
+
+    .modal-header {
+      padding: 15px 18px;
+
+      border-bottom: 1px solid var(--border);
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--blue-dark);
+    }
+
+    .modal-close {
+      border: none;
+      background: transparent;
+      font-size: 22px;
+      cursor: pointer;
+      color: #697984;
+    }
+
+    .modal-body {
+      padding: 18px;
+    }
+
+    /* =========================================================
+       TOAST
+       ========================================================= */
+
+    #toastContainer {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 2000;
+
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .toast {
+      min-width: 260px;
+      max-width: 400px;
+
+      background: #152b3c;
+      color: white;
+
+      border-radius: 8px;
+      padding: 11px 13px;
+
+      font-size: 11px;
+
+      box-shadow:
+        0 8px 25px rgba(0,0,0,0.2);
+    }
+
+    .toast.success {
+      background: #17663e;
+    }
+
+    .toast.error {
+      background: #9e3329;
+    }
+
+    .toast.warning {
+      background: #a9670d;
+    }
+
+    /* =========================================================
+       LOADING
+       ========================================================= */
+
+    #loadingOverlay {
+      display: none;
+
+      position: fixed;
+      inset: 0;
+
+      z-index: 3000;
+
+      background:
+        rgba(255,255,255,0.72);
+
+      align-items: center;
+      justify-content: center;
+    }
+
+    .loading-box {
+      background: white;
+      border-radius: 10px;
+      padding: 20px 25px;
+      box-shadow: var(--shadow);
+
+      text-align: center;
+      font-size: 12px;
+      color: var(--blue-dark);
+      font-weight: 700;
+    }
+
+    .spinner {
+      width: 28px;
+      height: 28px;
+
+      border: 3px solid #dbe5eb;
+      border-top-color: var(--blue-light);
+
+      border-radius: 50%;
+
+      animation:
+        spin 0.8s linear infinite;
+
+      margin: 0 auto 10px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @media (max-width: 1100px) {
+      .stats-grid {
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+      }
+
+      .form-grid {
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 760px) {
+      #appScreen {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        min-width: 0;
+        min-height: auto;
+      }
+
+      .brand {
+        padding: 15px;
+      }
+
+      .menu {
+        display: flex;
+        gap: 5px;
+        overflow-x: auto;
+      }
+
+      .menu-button {
+        min-width: 130px;
+      }
+
+      .sidebar-footer {
+        display: none;
+      }
+
+      .main {
+        padding: 12px;
+      }
+
+      .stats-grid {
+        grid-template-columns:
+          1fr 1fr;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-group.span2 {
+        grid-column: span 1;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
-
 
 <body>
 
+<!-- =========================================================
+     LOGIN SCREEN
+     ========================================================= -->
 
-<!-- =====================================================
-LOGIN
-===================================================== -->
+<div id="loginScreen">
 
-<div
-  id="loginView"
-  class="login">
-
-  <div class="login-box">
+  <div class="login-card">
 
     <div class="login-logo">
       AQ
     </div>
 
-    <div class="login-brand">
-
-      <h1>
-        AQUA SERVICE
-      </h1>
-
-      <p>
-        Sistema de Codificación Documental
-      </p>
-
+    <div class="login-title">
+      Plataforma de Codificación
     </div>
 
-    <div class="login-info">
-
-      Acceso mediante correo y contraseña
-      autorizados en Firebase.
-
+    <div class="login-subtitle">
+      Aqua Service · Gestión documental
     </div>
 
-    <div id="loginMsg"></div>
+    <div id="loginError" class="login-error"></div>
 
+    <label class="login-label">
+      Correo electrónico
+    </label>
 
-    <div class="field">
+    <input
+      id="loginEmail"
+      class="login-input"
+      type="email"
+      placeholder="usuario@aquaservices.cl"
+      autocomplete="email"
+    >
 
-      <label>
-        Correo electrónico
-      </label>
+    <label class="login-label">
+      Contraseña
+    </label>
 
-      <input
-        id="email"
-        type="email"
-        autocomplete="username"
-        placeholder="correo@aquaservices.cl">
-
-    </div>
-
-
-    <div class="field">
-
-      <label>
-        Contraseña
-      </label>
-
-      <input
-        id="password"
-        type="password"
-        autocomplete="current-password"
-        placeholder="••••••••">
-
-    </div>
-
+    <input
+      id="loginPassword"
+      class="login-input"
+      type="password"
+      placeholder="Contraseña"
+      autocomplete="current-password"
+    >
 
     <button
-      id="loginBtn"
-      class="btn btn-primary"
-      style="width:100%">
-
+      id="loginButton"
+      class="login-button"
+      type="button"
+    >
       Ingresar
-
     </button>
 
-
-    <button
-      id="resetBtn"
-      class="btn btn-secondary"
-      style="width:100%;margin-top:10px">
-
-      Restablecer contraseña
-
-    </button>
+    <div
+      id="forgotPassword"
+      class="forgot-password"
+    >
+      ¿Olvidaste tu contraseña?
+    </div>
 
   </div>
 
 </div>
 
 
-<!-- =====================================================
-APLICACIÓN
-===================================================== -->
+<!-- =========================================================
+     APPLICATION
+     ========================================================= -->
 
-<div
-  id="appView"
-  class="app hidden">
+<div id="appScreen">
 
-
-  <!-- ===================================================
-  SIDEBAR
-  =================================================== -->
+  <!-- SIDEBAR -->
 
   <aside class="sidebar">
 
@@ -971,2795 +1059,2802 @@ APLICACIÓN
       </div>
 
       <div class="brand-subtitle">
-        Sistema de Codificación Documental
+        Plataforma de Codificación Documental
       </div>
 
     </div>
 
+    <nav class="menu">
 
-    <div class="nav">
-
-      <div class="nav-title">
-        PRINCIPAL
-      </div>
-
-
-      <button data-page="dashboard">
-
-        <span class="nav-icon">⌂</span>
-
+      <button
+        class="menu-button active"
+        data-section="dashboardSection"
+      >
+        <span class="menu-icon">▦</span>
         Dashboard
-
       </button>
 
-
-      <button data-page="new">
-
-        <span class="nav-icon">▣</span>
-
+      <button
+        class="menu-button"
+        data-section="newDocumentSection"
+      >
+        <span class="menu-icon">＋</span>
         Nuevo documento
-
       </button>
 
-
-      <div class="nav-title">
-        CONTROL DOCUMENTAL
-      </div>
-
-
-      <button data-page="listado">
-
-        <span class="nav-icon">▤</span>
-
+      <button
+        class="menu-button"
+        data-section="listadoSection"
+      >
+        <span class="menu-icon">☷</span>
         Listado Maestro
-
       </button>
 
-
-      <button data-page="matriz">
-
-        <span class="nav-icon">⌘</span>
-
+      <button
+        class="menu-button"
+        data-section="matrizSection"
+      >
+        <span class="menu-icon">▤</span>
         Matriz de Trazabilidad
-
       </button>
 
+    </nav>
 
-      <div class="nav-title">
-        SISTEMA
+    <div class="sidebar-footer">
+
+      <div
+        id="userEmail"
+        class="user-email"
+      >
+        Usuario
       </div>
 
-
-      <button data-page="config">
-
-        <span class="nav-icon">⚙</span>
-
-        Configuración
-
+      <button
+        id="logoutButton"
+        class="logout-button"
+      >
+        Cerrar sesión
       </button>
 
     </div>
-
-
-    <button
-      id="logoutBtn"
-      class="btn btn-secondary logout">
-
-      ⇥ &nbsp; Cerrar sesión
-
-    </button>
 
   </aside>
 
 
-  <!-- ===================================================
-  MAIN
-  =================================================== -->
+  <!-- MAIN -->
 
   <main class="main">
 
+    <!-- =====================================================
+         DASHBOARD
+         ===================================================== -->
 
-    <div class="topbar">
+    <section
+      id="dashboardSection"
+      class="app-section"
+    >
 
-      <div>
-
-        <h1 id="pageTitle">
-          Dashboard
-        </h1>
-
-        <div class="topbar-sub">
-          Sistema de Control y Codificación Documental
-        </div>
-
-      </div>
-
-
-      <div class="user-box">
-
-        <div
-          id="userAvatar"
-          class="user-avatar">
-          AQ
-        </div>
+      <div class="topbar">
 
         <div>
 
+          <h1 class="page-title">
+            Dashboard
+          </h1>
+
+          <div class="page-subtitle">
+            Control de documentos y trazabilidad
+          </div>
+
+        </div>
+
+        <div class="status-pill">
+
+          <span class="status-dot"></span>
+
+          Sistema conectado
+
+        </div>
+
+      </div>
+
+
+      <div class="stats-grid">
+
+        <div class="card stat-card">
+
+          <div class="stat-label">
+            DOCUMENTOS REGISTRADOS
+          </div>
+
           <div
-            id="userEmail"
-            class="user-email">
+            id="statDocs"
+            class="stat-value"
+          >
+            0
+          </div>
+
+          <div class="stat-small">
+            Registros consolidados
+          </div>
+
+        </div>
+
+
+        <div class="card stat-card">
+
+          <div class="stat-label">
+            CÓDIGOS ÚNICOS
           </div>
 
           <div
-            style="font-size:11px;color:#789">
+            id="statUnique"
+            class="stat-value"
+          >
+            0
+          </div>
 
-            Usuario autorizado
+          <div class="stat-small">
+            Identificaciones únicas
+          </div>
 
+        </div>
+
+
+        <div class="card stat-card">
+
+          <div class="stat-label">
+            LISTADO MAESTRO
+          </div>
+
+          <div
+            id="statListado"
+            class="stat-value"
+          >
+            0
+          </div>
+
+          <div class="stat-small">
+            Registros en control maestro
+          </div>
+
+        </div>
+
+
+        <div class="card stat-card">
+
+          <div class="stat-label">
+            MATRIZ TRAZABILIDAD
+          </div>
+
+          <div
+            id="statMatriz"
+            class="stat-value"
+          >
+            0
+          </div>
+
+          <div class="stat-small">
+            Registros de trazabilidad
           </div>
 
         </div>
 
       </div>
-
-    </div>
-
-
-    <!-- =================================================
-    DASHBOARD
-    ================================================= -->
-
-    <section
-      id="page-dashboard"
-      class="page">
-
-
-      <div
-        id="backendNotice"
-        class="status warn">
-
-        Conectando con los controles documentales...
-
-      </div>
-
-
-      <div class="cards">
-
-
-        <div class="stat-card">
-
-          <div class="stat-card-top">
-
-            <div>
-
-              <div class="stat-label">
-                Documentos registrados
-              </div>
-
-              <div
-                id="statDocs"
-                class="stat-number">
-
-                —
-
-              </div>
-
-              <div class="stat-foot">
-                Registros disponibles
-              </div>
-
-            </div>
-
-            <div class="stat-icon icon-blue">
-              ▣
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <div class="stat-card">
-
-          <div class="stat-card-top">
-
-            <div>
-
-              <div class="stat-label">
-                Códigos verificados
-              </div>
-
-              <div
-                id="statChecked"
-                class="stat-number">
-
-                —
-
-              </div>
-
-              <div class="stat-foot">
-                Códigos únicos
-              </div>
-
-            </div>
-
-            <div class="stat-icon icon-green">
-              ✓
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <div class="stat-card">
-
-          <div class="stat-card-top">
-
-            <div>
-
-              <div class="stat-label">
-                Listado Maestro
-              </div>
-
-              <div
-                id="statListado"
-                class="stat-number">
-
-                —
-
-              </div>
-
-              <div class="stat-foot">
-                Registros detectados
-              </div>
-
-            </div>
-
-            <div class="stat-icon icon-purple">
-              ▤
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <div class="stat-card">
-
-          <div class="stat-card-top">
-
-            <div>
-
-              <div class="stat-label">
-                Matriz
-              </div>
-
-              <div
-                id="statMatriz"
-                class="stat-number">
-
-                —
-
-              </div>
-
-              <div class="stat-foot">
-                Registros detectados
-              </div>
-
-            </div>
-
-            <div class="stat-icon icon-orange">
-              ⌘
-            </div>
-
-          </div>
-
-        </div>
-
-
-      </div>
-
-
-      <div class="dashboard-grid">
-
-
-        <div class="card">
-
-          <h2 class="card-title">
-            Control de codificación
-          </h2>
-
-          <p class="card-subtitle">
-            La plataforma verifica la documentación antes de asignar un nuevo código.
-          </p>
-
-
-          <ol class="info-list">
-
-            <li>
-              Selecciona
-              <b>Documentación Interna</b>
-              o
-              <b>Proyecto</b>.
-            </li>
-
-            <li>
-              Ingresa los datos del documento.
-            </li>
-
-            <li>
-              El sistema consulta el
-              <b>Listado Maestro</b>
-              y la
-              <b>Matriz de Trazabilidad</b>.
-            </li>
-
-            <li>
-              Se identifica el último correlativo utilizado.
-            </li>
-
-            <li>
-              Se verifica que el código no exista.
-            </li>
-
-            <li>
-              El documento queda disponible para registro.
-            </li>
-
-          </ol>
-
-        </div>
-
-
-        <div class="card">
-
-          <h2 class="card-title">
-            Reglas de revisión
-          </h2>
-
-          <p class="card-subtitle">
-            Ciclo documental
-          </p>
-
-
-          <div style="margin-top:18px">
-
-            <div style="margin-bottom:13px">
-
-              <b>Documentación Interna</b>
-
-              <div
-                style="margin-top:5px;color:#657b89">
-
-                Rev0 → Rev1 → Rev2 → ...
-
-              </div>
-
-            </div>
-
-
-            <div>
-
-              <b>Proyecto</b>
-
-              <div
-                style="margin-top:5px;color:#657b89">
-
-                Rev.B →
-                aprobación cliente →
-                Rev0 →
-                Rev1 →
-
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
-
-      </div>
-
-
-    </section>
-
-
-    <!-- =================================================
-    NUEVO DOCUMENTO
-    ================================================= -->
-
-    <section
-      id="page-new"
-      class="page hidden">
 
 
       <div class="card">
 
+        <div class="card-header">
 
-        <div class="form-header">
-
-          <div class="form-header-icon">
-            ▣
-          </div>
-
-          <div>
-
-            <h2
-              class="card-title">
-
-              Nuevo documento
-
-            </h2>
-
-            <p
-              class="card-subtitle">
-
-              Genera y registra un nuevo código documental.
-
-            </p>
-
+          <div class="card-title">
+            Información del sistema
           </div>
 
         </div>
 
+        <div class="card-body">
 
-        <!-- TIPO -->
+          <p style="
+            font-size:12px;
+            line-height:1.6;
+            color:#5d6b75;
+            margin:0;
+          ">
+            Esta plataforma permite generar, verificar y controlar
+            códigos documentales de Aqua Service, manteniendo la
+            trazabilidad entre el Listado Maestro y la Matriz de
+            Trazabilidad.
+          </p>
 
-        <div class="section-label">
-          1. Tipo de documento
         </div>
 
+      </div>
 
-        <div class="radio-grid">
-
-
-          <label
-            id="radioInternal"
-            class="mode-card selected">
+    </section>
 
 
-            <div class="mode-radio">
+    <!-- =====================================================
+         NEW DOCUMENT
+         ===================================================== -->
 
-              <input
-                type="radio"
-                name="mode"
-                value="internal"
-                checked>
+    <section
+      id="newDocumentSection"
+      class="app-section hidden"
+    >
+
+      <div class="topbar">
+
+        <div>
+
+          <h1 class="page-title">
+            Nuevo documento
+          </h1>
+
+          <div class="page-subtitle">
+            Generación y registro de identificación documental
+          </div>
+
+        </div>
+
+      </div>
 
 
-              <div>
+      <div class="card">
 
-                <div class="mode-title">
+        <div class="card-header">
 
-                  Documentación Interna
+          <div class="card-title">
+            Datos del documento
+          </div>
 
-                </div>
+        </div>
 
-                <div class="mode-description">
+        <div class="card-body">
 
-                  AQ + Área + Tipo +
-                  Correlativo + Revisión
+          <div class="form-grid">
 
-                </div>
+            <!-- TIPO DE DOCUMENTACIÓN -->
+
+            <div class="form-group full">
+
+              <label>
+                Tipo de documentación
+              </label>
+
+              <div class="radio-group">
+
+                <label class="radio-option">
+
+                  <input
+                    type="radio"
+                    name="newMode"
+                    value="internal"
+                    checked
+                  >
+
+                  <span class="radio-label">
+                    Documentación Interna
+                  </span>
+
+                </label>
+
+                <label class="radio-option">
+
+                  <input
+                    type="radio"
+                    name="newMode"
+                    value="project"
+                  >
+
+                  <span class="radio-label">
+                    Proyecto
+                  </span>
+
+                </label>
 
               </div>
 
             </div>
 
-          </label>
 
+            <!-- CLIENTE -->
 
-          <label
-            id="radioProject"
-            class="mode-card">
-
-
-            <div class="mode-radio">
-
-              <input
-                type="radio"
-                name="mode"
-                value="project">
-
-
-              <div>
-
-                <div class="mode-title">
-
-                  Proyecto
-
-                </div>
-
-                <div class="mode-description">
-
-                  AQ + Cliente + N° Proyecto +
-                  Área + Tipo + Correlativo + Revisión
-
-                </div>
-
-              </div>
-
-            </div>
-
-          </label>
-
-
-        </div>
-
-
-        <!-- PROYECTO -->
-
-        <div
-          id="projectFields"
-          class="hidden">
-
-
-          <div class="section-label">
-
-            2. Identificación del proyecto
-
-          </div>
-
-
-          <div class="grid3">
-
-
-            <div class="field">
+            <div
+              id="newClientGroup"
+              class="form-group"
+            >
 
               <label>
                 Cliente
               </label>
 
               <input
-                id="client"
-                placeholder="Ej.: AN">
+                id="newClient"
+                type="text"
+                placeholder="Ej.: Alto Norte"
+              >
 
             </div>
 
 
-            <div class="field">
+            <!-- N° PROYECTO -->
+
+            <div
+              id="newProjectNoGroup"
+              class="form-group"
+            >
 
               <label>
                 N° proyecto / N° cliente
               </label>
 
               <input
-                id="projectNo"
-                placeholder="Ej.: 04">
+                id="newProjectNo"
+                type="text"
+                placeholder="Ej.: 04"
+              >
 
             </div>
 
 
-            <div class="field">
+            <!-- NOMBRE PROYECTO -->
+
+            <div
+              id="newProjectNameGroup"
+              class="form-group span2"
+            >
 
               <label>
                 Nombre del proyecto
               </label>
 
               <input
-                id="projectName"
-                placeholder="Ej.: ELECTROIMAN">
+                id="newProjectName"
+                type="text"
+                placeholder="Nombre del proyecto"
+              >
 
             </div>
 
 
-          </div>
+            <!-- AREA -->
 
+            <div class="form-group">
 
-        </div>
+              <label>
+                Área / sistema
+              </label>
 
+              <select id="newArea">
 
-        <!-- CLASIFICACIÓN -->
+                <option value="">
+                  Seleccionar...
+                </option>
 
-        <div class="section-label">
+                <option value="AD">
+                  AD · Administración
+                </option>
 
-          3. Clasificación documental
+                <option value="QA">
+                  QA · Aseguramiento de Calidad
+                </option>
 
-        </div>
+                <option value="QC">
+                  QC · Control de Calidad
+                </option>
 
+                <option value="PR">
+                  PR · Producción
+                </option>
 
-        <div class="grid2">
+                <option value="ING">
+                  ING · Ingeniería
+                </option>
 
+                <option value="SEC">
+                  SEC · Seguridad
+                </option>
 
-          <div class="field">
+                <option value="ADQ">
+                  ADQ · Adquisiciones
+                </option>
 
-            <label>
-              Área / Sistema
-            </label>
+                <option value="VEN">
+                  VEN · Ventas
+                </option>
 
-            <select id="area"></select>
+                <option value="RRHH">
+                  RRHH · Recursos Humanos
+                </option>
 
-          </div>
+                <option value="SSO">
+                  SSO · Seguridad y Salud Ocupacional
+                </option>
 
+                <option value="MA">
+                  MA · Medio Ambiente
+                </option>
 
-          <div class="field">
+                <option value="MANT">
+                  MANT · Mantención
+                </option>
 
-            <label>
-              Tipo de documento
-            </label>
+                <option value="SIG">
+                  SIG · Sistema Integrado de Gestión
+                </option>
 
-            <select id="docType"></select>
-
-          </div>
-
-
-        </div>
-
-
-        <!-- IDENTIFICACIÓN -->
-
-        <div class="grid2">
-
-
-          <div class="field">
-
-            <label>
-              Revisión
-            </label>
-
-            <select id="revision"></select>
-
-
-            <div
-              id="revisionHelp"
-              class="small muted"
-              style="margin-top:5px">
+              </select>
 
             </div>
 
-          </div>
+
+            <!-- TIPO DOCUMENTO -->
+
+            <div class="form-group">
+
+              <label>
+                Tipo de documento
+              </label>
+
+              <select id="newDocType">
+
+                <option value="">
+                  Seleccionar...
+                </option>
+
+                <option value="PROC">
+                  PROC · Procedimiento
+                </option>
+
+                <option value="INS">
+                  INS · Instructivo
+                </option>
+
+                <option value="REG">
+                  REG · Registro
+                </option>
+
+                <option value="MAN">
+                  MAN · Manual
+                </option>
+
+                <option value="PL">
+                  PL · Política
+                </option>
+
+                <option value="PROG">
+                  PROG · Programa
+                </option>
+
+                <option value="ESQ">
+                  ESQ · Esquema
+                </option>
+
+                <option value="MAT">
+                  MAT · Matriz
+                </option>
+
+                <option value="PLN">
+                  PLN · Plano
+                </option>
+
+                <option value="INF">
+                  INF · Informe
+                </option>
+
+                <option value="PAC">
+                  PAC · Plan de Aseguramiento de Calidad
+                </option>
+
+                <option value="PROT">
+                  PROT · Protocolo
+                </option>
+
+                <option value="PIE">
+                  PIE · Plan de Inspección y Ensayo
+                </option>
+
+                <option value="CHK">
+                  CHK · Checklist
+                </option>
+
+                <option value="ORG">
+                  ORG · Organigrama
+                </option>
+
+              </select>
+
+            </div>
 
 
-          <div class="field">
+            <!-- REVISION -->
 
-            <label>
-              Nombre del documento
-            </label>
+            <div class="form-group">
 
-            <input
-              id="docName"
-              placeholder="Ej.: Protocolo de recepción de materiales">
+              <label>
+                Revisión
+              </label>
 
-          </div>
+              <select id="newRevision">
+                <!-- Se llena dinámicamente -->
+              </select>
 
-
-        </div>
-
-
-        <!-- PROYECTO INFO -->
-
-        <div
-          id="projectExtra"
-          class="hidden">
+            </div>
 
 
-          <div class="section-label">
+            <!-- NOMBRE -->
 
-            4. Información complementaria
+            <div class="form-group span2">
 
-          </div>
+              <label>
+                Nombre del documento
+              </label>
+
+              <input
+                id="newName"
+                type="text"
+                placeholder="Ej.: Procedimiento de control documental"
+              >
+
+            </div>
 
 
-          <div class="grid2">
+            <!-- FECHA -->
+
+            <div class="form-group">
+
+              <label>
+                Fecha emisión
+              </label>
+
+              <input
+                id="newIssueDate"
+                type="date"
+              >
+
+            </div>
 
 
-            <div class="field">
+            <!-- ESTADO -->
+
+            <div class="form-group">
+
+              <label>
+                Estado
+              </label>
+
+              <select id="newState">
+
+                <option value="Vigente">
+                  Vigente
+                </option>
+
+                <option value="En revisión">
+                  En revisión
+                </option>
+
+                <option value="Obsoleto">
+                  Obsoleto
+                </option>
+
+                <option value="Borrador">
+                  Borrador
+                </option>
+
+              </select>
+
+            </div>
+
+
+            <!-- LINK -->
+
+            <div class="form-group span2">
+
+              <label>
+                Enlace al documento
+              </label>
+
+              <input
+                id="newDocLink"
+                type="url"
+                placeholder="https://..."
+              >
+
+            </div>
+
+
+            <!-- DISTRIBUCION -->
+
+            <div class="form-group">
+
+              <label>
+                Distribución
+              </label>
+
+              <input
+                id="newDistribution"
+                type="text"
+                placeholder="Ej.: Interna"
+              >
+
+            </div>
+
+
+            <!-- ASOCIADOS -->
+
+            <div class="form-group">
 
               <label>
                 Documentos asociados
               </label>
 
               <input
-                id="associated"
-                placeholder="Ej.: PAC, planos, procedimientos">
+                id="newAssociated"
+                type="text"
+                placeholder="Código / documento asociado"
+              >
 
             </div>
 
 
-            <div class="field">
+            <!-- DIFUSION -->
+
+            <div class="form-group">
 
               <label>
-                Difusión del documento
+                Difusión
               </label>
 
               <input
-                id="diffusion"
-                placeholder="Ej.: Primera difusión">
+                id="newDiffusion"
+                type="text"
+                placeholder="Ej.: Teams / correo"
+              >
 
             </div>
 
+
+            <!-- EVIDENCIA -->
+
+            <div class="form-group">
+
+              <label>
+                Evidencia / registro
+              </label>
+
+              <input
+                id="newEvidence"
+                type="text"
+                placeholder="Registro asociado"
+              >
+
+            </div>
+
+
+            <!-- NORMA -->
+
+            <div class="form-group">
+
+              <label>
+                Norma / requisito
+              </label>
+
+              <input
+                id="newStandard"
+                type="text"
+                placeholder="Ej.: ISO 9001:2015"
+              >
+
+            </div>
+
+
+            <!-- OBSERVACIONES -->
+
+            <div class="form-group full">
+
+              <label>
+                Observaciones
+              </label>
+
+              <textarea
+                id="newObservations"
+                placeholder="Observaciones..."
+              ></textarea>
+
+            </div>
 
           </div>
 
 
-          <div class="grid2">
+          <!-- CODE PREVIEW -->
 
+          <div class="code-preview">
 
-            <div class="field">
-
-              <label>
-                Evidencia / Registro asociado
-              </label>
-
-              <input
-                id="evidence"
-                placeholder="Ej.: Registro de inspección">
-
+            <div class="code-preview-label">
+              Código generado
             </div>
 
-
-            <div class="field">
-
-              <label>
-                Norma asociada
-              </label>
-
-              <input
-                id="standard"
-                placeholder="Ej.: ISO 9001:2015 7.5">
-
+            <div
+              id="newCodePreview"
+              class="code-preview-value"
+            >
+              Complete los datos para generar el código
             </div>
-
 
           </div>
 
 
+          <div class="button-row">
+
+            <button
+              id="verifyCodeButton"
+              class="btn btn-secondary"
+              type="button"
+            >
+              Verificar código
+            </button>
+
+            <button
+              id="createDocumentButton"
+              class="btn btn-primary"
+              type="button"
+            >
+              Registrar documento
+            </button>
+
+          </div>
+
         </div>
 
+      </div>
 
-        <!-- DATOS GENERALES -->
+    </section>
 
-        <div class="section-label">
 
-          Información del documento
+    <!-- =====================================================
+         LISTADO MAESTRO
+         ===================================================== -->
+
+    <section
+      id="listadoSection"
+      class="app-section hidden"
+    >
+
+      <div class="topbar">
+
+        <div>
+
+          <h1 class="page-title">
+            Listado Maestro
+          </h1>
+
+          <div class="page-subtitle">
+            Control documental y versiones
+          </div>
 
         </div>
 
+      </div>
 
-        <div class="grid2">
 
+      <div class="card">
 
-          <div class="field">
+        <div class="card-body">
 
-            <label>
-              Fecha de emisión
-            </label>
+          <div class="table-toolbar">
 
             <input
-              id="issueDate"
-              type="date">
+              id="listadoSearch"
+              class="search-box"
+              type="text"
+              placeholder="Buscar código, documento, área..."
+            >
+
+            <button
+              id="refreshListado"
+              class="btn btn-secondary btn-small"
+            >
+              Actualizar
+            </button>
 
           </div>
 
 
-          <div class="field">
+          <div class="table-container">
 
-            <label>
-              Enlace al documento
-            </label>
+            <table>
+
+              <thead>
+
+                <tr>
+
+                  <th>Código</th>
+                  <th>Documento</th>
+                  <th>Proyecto</th>
+                  <th>Cliente</th>
+                  <th>N° Proy.</th>
+                  <th>Área</th>
+                  <th>Tipo</th>
+                  <th>Rev.</th>
+                  <th>Fecha</th>
+                  <th>Estado</th>
+                  <th>Acción</th>
+
+                </tr>
+
+              </thead>
+
+              <tbody id="listadoTableBody">
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         MATRIZ
+         ===================================================== -->
+
+    <section
+      id="matrizSection"
+      class="app-section hidden"
+    >
+
+      <div class="topbar">
+
+        <div>
+
+          <h1 class="page-title">
+            Matriz de Trazabilidad
+          </h1>
+
+          <div class="page-subtitle">
+            Trazabilidad de documentos del SGC
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="card-body">
+
+          <div class="table-toolbar">
 
             <input
-              id="docLink"
-              placeholder="https://... o -">
+              id="matrizSearch"
+              class="search-box"
+              type="text"
+              placeholder="Buscar código, documento, área..."
+            >
+
+            <button
+              id="refreshMatriz"
+              class="btn btn-secondary btn-small"
+            >
+              Actualizar
+            </button>
 
           </div>
 
 
-        </div>
+          <div class="table-container">
 
+            <table>
 
-        <div class="grid2">
+              <thead>
 
+                <tr>
 
-          <div class="field">
+                  <th>Código</th>
+                  <th>Documento</th>
+                  <th>Proyecto</th>
+                  <th>Cliente</th>
+                  <th>N° Proy.</th>
+                  <th>Área</th>
+                  <th>Tipo</th>
+                  <th>Rev.</th>
+                  <th>Fecha</th>
+                  <th>Estado</th>
+                  <th>Acción</th>
 
-            <label>
-              Medio de distribución
-            </label>
+                </tr>
 
-            <select id="distribution">
+              </thead>
 
-              <option>
-                Digital
-              </option>
+              <tbody id="matrizTableBody">
+              </tbody>
 
-              <option>
-                Físico-Digital
-              </option>
-
-              <option>
-                Físico
-              </option>
-
-            </select>
-
-          </div>
-
-
-          <div class="field">
-
-            <label>
-              Estado
-            </label>
-
-            <select id="state">
-
-              <option>
-                Vigente
-              </option>
-
-              <option>
-                En revisión
-              </option>
-
-              <option>
-                Obsoleto
-              </option>
-
-            </select>
-
-          </div>
-
-
-        </div>
-
-
-        <div class="field">
-
-          <label>
-            Observaciones
-          </label>
-
-          <textarea
-            id="observations"
-            placeholder="Observaciones del documento..."></textarea>
-
-        </div>
-
-
-        <!-- CÓDIGO -->
-
-        <div class="code-panel">
-
-
-          <div class="code-panel-title">
-
-            CÓDIGO PROPUESTO
-
-          </div>
-
-
-          <div
-            id="previewCode"
-            class="code-value">
-
-            AQ-QA-PROC-XX-Rev0
-
-          </div>
-
-
-          <div
-            id="previewStatus"
-            class="code-status warn">
-
-            Completa los datos para consultar la documentación.
-
-          </div>
-
-
-        </div>
-
-
-        <div class="buttons">
-
-
-          <button
-            id="clearBtn"
-            class="btn btn-secondary">
-
-            Limpiar
-
-          </button>
-
-
-          <button
-            id="checkBtn"
-            class="btn btn-primary">
-
-            🔎 Verificar código
-
-          </button>
-
-
-          <button
-            id="saveBtn"
-            class="btn btn-success"
-            disabled>
-
-            ✓ Registrar documento
-
-          </button>
-
-
-        </div>
-
-
-      </div>
-
-
-    </section>
-
-
-    <!-- =================================================
-    LISTADO
-    ================================================= -->
-
-    <section
-      id="page-listado"
-      class="page hidden">
-
-
-      <div class="card">
-
-
-        <div class="table-toolbar">
-
-          <div>
-
-            <h2 class="card-title">
-              Listado Maestro
-            </h2>
-
-            <p class="card-subtitle">
-              Control maestro de documentos.
-            </p>
-
-          </div>
-
-
-          <input
-            id="searchListado"
-            class="search"
-            placeholder="Buscar código, documento, área..."
-            style="
-              padding:11px 13px;
-              border:1px solid #cad9e1;
-              border-radius:9px;
-              font-size:14px;
-            ">
-
-        </div>
-
-
-        <div
-          id="listadoTable"
-          class="table-wrap">
-
-          <div
-            style="padding:20px;color:#71828c">
-
-            Cargando...
+            </table>
 
           </div>
 
         </div>
-
 
       </div>
 
     </section>
-
-
-    <!-- =================================================
-    MATRIZ
-    ================================================= -->
-
-    <section
-      id="page-matriz"
-      class="page hidden">
-
-
-      <div class="card">
-
-
-        <div class="table-toolbar">
-
-          <div>
-
-            <h2 class="card-title">
-              Matriz de Trazabilidad
-            </h2>
-
-            <p class="card-subtitle">
-              Seguimiento y trazabilidad documental.
-            </p>
-
-          </div>
-
-
-          <input
-            id="searchMatriz"
-            class="search"
-            placeholder="Buscar código, proyecto..."
-            style="
-              padding:11px 13px;
-              border:1px solid #cad9e1;
-              border-radius:9px;
-              font-size:14px;
-            ">
-
-        </div>
-
-
-        <div
-          id="matrizTable"
-          class="table-wrap">
-
-          <div
-            style="padding:20px;color:#71828c">
-
-            Cargando...
-
-          </div>
-
-        </div>
-
-
-      </div>
-
-    </section>
-
-
-    <!-- =================================================
-    CONFIG
-    ================================================= -->
-
-    <section
-      id="page-config"
-      class="page hidden">
-
-
-      <div class="card">
-
-        <h2 class="card-title">
-          Configuración del sistema
-        </h2>
-
-        <p class="card-subtitle">
-          Parámetros principales de codificación.
-        </p>
-
-
-        <div
-          style="
-            margin-top:25px;
-            display:grid;
-            grid-template-columns:1fr 1fr;
-            gap:15px;
-          ">
-
-
-          <div
-            style="
-              padding:18px;
-              background:#f5f9fb;
-              border-radius:10px;
-            ">
-
-            <b>
-              Documentación Interna
-            </b>
-
-            <p class="muted">
-
-              AQ + Área + Tipo +
-              Correlativo + Rev0
-
-            </p>
-
-          </div>
-
-
-          <div
-            style="
-              padding:18px;
-              background:#f5f9fb;
-              border-radius:10px;
-            ">
-
-            <b>
-              Proyecto
-            </b>
-
-            <p class="muted">
-
-              AQ + Cliente + N° Proyecto +
-              Área + Tipo + Correlativo +
-              Rev.B / Rev0 / Rev1...
-
-            </p>
-
-          </div>
-
-
-        </div>
-
-
-        <div class="status ok">
-
-          ✓ Firebase Authentication activo.
-
-        </div>
-
-
-        <div class="status ok">
-
-          ✓ Google Apps Script configurado.
-
-        </div>
-
-
-        <div class="status ok">
-
-          ✓ Listado Maestro + Matriz de Trazabilidad.
-
-        </div>
-
-
-      </div>
-
-    </section>
-
 
   </main>
 
 </div>
 
 
+<!-- =========================================================
+     EDIT MODAL
+     ========================================================= -->
 
-<!-- =====================================================
-FIREBASE
-===================================================== -->
+<div
+  id="editModal"
+  class="modal-overlay"
+>
+
+  <div class="modal">
+
+    <div class="modal-header">
+
+      <div class="modal-title">
+        Editar documento
+      </div>
+
+      <button
+        id="closeEditModal"
+        class="modal-close"
+        type="button"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div class="modal-body">
+
+      <input
+        id="editOriginalCode"
+        type="hidden"
+      >
+
+
+      <div class="form-grid">
+
+        <!-- MODO -->
+
+        <div class="form-group full">
+
+          <label>
+            Tipo de documentación
+          </label>
+
+          <div class="radio-group">
+
+            <label class="radio-option">
+
+              <input
+                type="radio"
+                name="editMode"
+                value="internal"
+              >
+
+              <span class="radio-label">
+                Documentación Interna
+              </span>
+
+            </label>
+
+            <label class="radio-option">
+
+              <input
+                type="radio"
+                name="editMode"
+                value="project"
+              >
+
+              <span class="radio-label">
+                Proyecto
+              </span>
+
+            </label>
+
+          </div>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Cliente
+          </label>
+
+          <input id="editClient">
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            N° proyecto / N° cliente
+          </label>
+
+          <input id="editProjectNo">
+
+        </div>
+
+
+        <div class="form-group span2">
+
+          <label>
+            Nombre del proyecto
+          </label>
+
+          <input id="editProjectName">
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Área / sistema
+          </label>
+
+          <select id="editArea">
+
+            <option value="AD">AD</option>
+            <option value="QA">QA</option>
+            <option value="QC">QC</option>
+            <option value="PR">PR</option>
+            <option value="ING">ING</option>
+            <option value="SEC">SEC</option>
+            <option value="ADQ">ADQ</option>
+            <option value="VEN">VEN</option>
+            <option value="RRHH">RRHH</option>
+            <option value="SSO">SSO</option>
+            <option value="MA">MA</option>
+            <option value="MANT">MANT</option>
+            <option value="SIG">SIG</option>
+
+          </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Tipo documento
+          </label>
+
+          <select id="editDocType">
+
+            <option value="PROC">PROC</option>
+            <option value="INS">INS</option>
+            <option value="REG">REG</option>
+            <option value="MAN">MAN</option>
+            <option value="PL">PL</option>
+            <option value="PROG">PROG</option>
+            <option value="ESQ">ESQ</option>
+            <option value="MAT">MAT</option>
+            <option value="PLN">PLN</option>
+            <option value="INF">INF</option>
+            <option value="PAC">PAC</option>
+            <option value="PROT">PROT</option>
+            <option value="PIE">PIE</option>
+            <option value="CHK">CHK</option>
+            <option value="ORG">ORG</option>
+
+          </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Revisión
+          </label>
+
+          <select id="editRevision">
+          </select>
+
+        </div>
+
+
+        <div class="form-group span2">
+
+          <label>
+            Nombre del documento
+          </label>
+
+          <input id="editName">
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Fecha emisión
+          </label>
+
+          <input
+            id="editIssueDate"
+            type="date"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Estado
+          </label>
+
+          <select id="editState">
+
+            <option value="Vigente">
+              Vigente
+            </option>
+
+            <option value="En revisión">
+              En revisión
+            </option>
+
+            <option value="Obsoleto">
+              Obsoleto
+            </option>
+
+            <option value="Borrador">
+              Borrador
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="form-group span2">
+
+          <label>
+            Enlace al documento
+          </label>
+
+          <input
+            id="editDocLink"
+            type="url"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Distribución
+          </label>
+
+          <input id="editDistribution">
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Documentos asociados
+          </label>
+
+          <input id="editAssociated">
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Difusión
+          </label>
+
+          <input id="editDiffusion">
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Evidencia / registro
+          </label>
+
+          <input id="editEvidence">
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Norma / requisito
+          </label>
+
+          <input id="editStandard">
+
+        </div>
+
+
+        <div class="form-group full">
+
+          <label>
+            Observaciones
+          </label>
+
+          <textarea id="editObservations"></textarea>
+
+        </div>
+
+      </div>
+
+
+      <div class="code-preview">
+
+        <div class="code-preview-label">
+          Nuevo código
+        </div>
+
+        <div
+          id="editCodePreview"
+          class="code-preview-value"
+        >
+          -
+        </div>
+
+      </div>
+
+
+      <div class="button-row">
+
+        <button
+          id="cancelEdit"
+          class="btn btn-secondary"
+        >
+          Cancelar
+        </button>
+
+        <button
+          id="saveEdit"
+          class="btn btn-primary"
+        >
+          Guardar cambios
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================================================
+     LOADING
+     ========================================================= -->
+
+<div id="loadingOverlay">
+
+  <div class="loading-box">
+
+    <div class="spinner"></div>
+
+    Procesando...
+
+  </div>
+
+</div>
+
+
+<!-- =========================================================
+     TOAST
+     ========================================================= -->
+
+<div id="toastContainer"></div>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+     ========================================================= -->
 
 <script type="module">
 
+  /* =========================================================
+     CONFIGURACIÓN
+     ========================================================= */
 
-import {
-  initializeApp
-}
-from
-"https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+  const BACKEND_URL =
+    "https://script.google.com/macros/s/AKfycbxyFbgc0RqkKuDpFK3m8uPAQXGs8_9USjR7gFNVH-PBkTAVujzvgK9OQTd4Snsx5SRk/exec";
 
 
-import {
-  getAuth,
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  sendPasswordResetEmail,
-  signOut
-}
-from
-"https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+  /* =========================================================
+     VARIABLES
+     ========================================================= */
 
+  let allListado = [];
+  let allMatriz = [];
 
-/* =====================================================
-FIREBASE CONFIG
-===================================================== */
+  let editingRecord = null;
 
-const firebaseConfig = {
 
-  apiKey:
-    "AIzaSyAgKLxc9Ui0YrrBCC8jIAvGWfwrtdUTmHs",
+  /* =========================================================
+     HELPERS
+     ========================================================= */
 
-  authDomain:
-    "plataforma-codificacion-aq.firebaseapp.com",
+  const $ = (id) =>
+    document.getElementById(id);
 
-  projectId:
-    "plataforma-codificacion-aq",
 
-  storageBucket:
-    "plataforma-codificacion-aq.firebasestorage.app",
+  function showLoading(show = true) {
 
-  messagingSenderId:
-    "970638544563",
+    $("loadingOverlay").style.display =
+      show ? "flex" : "none";
 
-  appId:
-    "1:970638544563:web:37f586952991faa593eac6"
+  }
 
-};
 
+  function toast(
+    message,
+    type = ""
+  ) {
 
-/* =====================================================
-APPS SCRIPT
-===================================================== */
+    const container =
+      $("toastContainer");
 
-const BACKEND_URL =
-"https://script.google.com/macros/s/AKfycbzcgSlgfcgQFVk9WJGJFNc3G6gPc5Cuu2Eqy96SgIU3LNNnqpmitU4SsM9rkto1pm1q/exec";
+    const item =
+      document.createElement("div");
 
+    item.className =
+      "toast " + type;
 
-const app =
-initializeApp(
-  firebaseConfig
-);
+    item.textContent =
+      message;
 
+    container.appendChild(item);
 
-const auth =
-getAuth(
-  app
-);
+    setTimeout(() => {
+      item.remove();
+    }, 4500);
+  }
 
 
-/* =====================================================
-ESTADO
-===================================================== */
+  function escapeHtml(value) {
 
-const state = {
-
-  preview:null,
-
-  listado:[],
-
-  matriz:[]
-
-};
-
-
-/* =====================================================
-SELECTORES
-===================================================== */
-
-const $ =
-id =>
-document.getElementById(
-  id
-);
-
-
-/* =====================================================
-ESCAPE HTML
-===================================================== */
-
-function esc(value){
-
-  return String(
-    value ?? ""
-  )
-  .replace(
-    /[&<>"']/g,
-    character => {
-
-      const map = {
-
-        "&":"&amp;",
-        "<":"&lt;",
-        ">":"&gt;",
-        '"':"&quot;",
-        "'":"&#39;"
-
-      };
-
-      return map[character];
-
-    }
-  );
-
-}
-
-
-/* =====================================================
-CATÁLOGOS
-===================================================== */
-
-const areas = {
-
-  AD:"Alta Dirección",
-  QA:"Aseguramiento de Calidad",
-  QC:"Control Calidad",
-  PR:"Producción y Operaciones",
-  ING:"Ingeniería y Proyectos",
-  SEC:"Secretaria",
-  ADQ:"Adquisiciones",
-  VEN:"Ventas y Cotizaciones",
-  RRHH:"Recursos Humanos",
-  SSO:"Salud y Seguridad Ocupacional",
-  MA:"Medio Ambiente",
-  MANT:"Mantenimiento Equipos",
-  SIG:"Gestión Integrada"
-
-};
-
-
-const docTypes = {
-
-  PROC:"Procedimiento",
-  INS:"Instructivo",
-  REG:"Registro",
-  MAN:"Manual",
-  PL:"Plan",
-  PROG:"Programa",
-  ESQ:"Esquema",
-  MAT:"Matriz",
-  PLN:"Plano",
-  INF:"Informe",
-  PAC:"Plan de Aseguramiento Calidad",
-  PROT:"Protocolo",
-  PIE:"Plan de Inspección Ensayo",
-  CHK:"Check List",
-  ORG:"Organigrama"
-
-};
-
-
-function fillSelect(
-  id,
-  object
-){
-
-  $(id).innerHTML =
-
-    Object.entries(
-      object
-    )
-    .map(
-      ([key,value]) =>
-
-      `<option value="${key}">
-        ${key} - ${value}
-      </option>`
-
-    )
-    .join("");
-
-}
-
-
-fillSelect(
-  "area",
-  areas
-);
-
-
-fillSelect(
-  "docType",
-  docTypes
-);
-
-
-$("issueDate").value =
-new Date()
-.toISOString()
-.slice(
-  0,
-  10
-);
-
-
-/* =====================================================
-MODO
-===================================================== */
-
-function mode(){
-
-  return document
-    .querySelector(
-      'input[name="mode"]:checked'
-    )
-    .value;
-
-}
-
-
-/* =====================================================
-REVISIONES
-===================================================== */
-
-function updateRevisionOptions(){
-
-  const project =
-    mode() === "project";
-
-
-  const revision =
-    $("revision");
-
-
-  const current =
-    revision.value;
-
-
-  if(project){
-
-    revision.innerHTML = `
-
-      <option value="REVB">
-        Rev.B - Origen / Revisión del cliente
-      </option>
-
-      <option value="REV0">
-        Rev0 - Aprobado por cliente / Original
-      </option>
-
-      <option value="REV1">
-        Rev1 - Primera modificación
-      </option>
-
-      <option value="REV2">
-        Rev2
-      </option>
-
-      <option value="REV3">
-        Rev3
-      </option>
-
-      <option value="REV4">
-        Rev4
-      </option>
-
-      <option value="REV5">
-        Rev5
-      </option>
-
-    `;
-
-
-    if(
-      [
-        "REVB",
-        "REV0",
-        "REV1",
-        "REV2",
-        "REV3",
-        "REV4",
-        "REV5"
-      ].includes(current)
-    ){
-
-      revision.value =
-        current;
-
-    }else{
-
-      revision.value =
-        "REVB";
-
+    if (
+      value === null ||
+      value === undefined
+    ) {
+      return "";
     }
 
-
-    $("revisionHelp").innerHTML =
-
-      `<span class="revision-origin">
-        Rev.B = origen / revisión del cliente
-      </span>`;
-
-  }else{
-
-    revision.innerHTML = `
-
-      <option value="REV0">
-        Rev0 - Original
-      </option>
-
-      <option value="REV1">
-        Rev1 - Primera modificación
-      </option>
-
-      <option value="REV2">
-        Rev2
-      </option>
-
-      <option value="REV3">
-        Rev3
-      </option>
-
-      <option value="REV4">
-        Rev4
-      </option>
-
-      <option value="REV5">
-        Rev5
-      </option>
-
-    `;
-
-
-    revision.value =
-      "REV0";
-
-
-    $("revisionHelp").textContent =
-
-      "La Documentación Interna comienza en Rev0.";
-
-  }
-
-}
-
-
-/* =====================================================
-FORMATO REVISION
-===================================================== */
-
-function displayRevision(
-  value
-){
-
-  if(
-    value === "REVB"
-  ){
-
-    return "Rev.B";
-
+    return String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
   }
 
 
-  if(
-    /^REV\d+$/.test(
-      value
-    )
-  ){
+  function normalizeRevision(revision) {
 
-    return "Rev" +
-      value.replace(
-        "REV",
-        ""
-      );
+    const value =
+      String(revision || "")
+        .trim()
+        .toUpperCase()
+        .replace(/\s+/g, "");
 
+    if (
+      value === "REVB" ||
+      value === "REV.B" ||
+      value === "B"
+    ) {
+      return "Rev.B";
+    }
+
+    if (
+      value === "REV0" ||
+      value === "0"
+    ) {
+      return "Rev0";
+    }
+
+    const match =
+      value.match(/^REV(\d+)$/);
+
+    if (match) {
+      return "Rev" + match[1];
+    }
+
+    return revision || "";
   }
 
 
-  return value;
-
-}
-
-
-/* =====================================================
-DATOS FORMULARIO
-===================================================== */
-
-function formData(){
-
-  return {
-
-    mode:
-      mode(),
-
-    area:
-      $("area").value,
-
-    docType:
-      $("docType").value,
-
-    client:
-      $("client")
-      .value
-      .trim()
-      .toUpperCase(),
-
-    projectNo:
-      $("projectNo")
-      .value
-      .trim(),
-
-    projectName:
-      $("projectName")
-      .value
-      .trim(),
-
-    revision:
-      $("revision").value,
-
-    docName:
-      $("docName")
-      .value
-      .trim(),
-
-    issueDate:
-      $("issueDate").value,
-
-    docLink:
-      $("docLink")
-      .value
-      .trim() ||
-      "-",
-
-    distribution:
-      $("distribution").value,
-
-    state:
-      $("state").value,
-
-    associated:
-      $("associated")
-      .value
-      .trim(),
-
-    diffusion:
-      $("diffusion")
-      .value
-      .trim(),
-
-    evidence:
-      $("evidence")
-      .value
-      .trim(),
-
-    standard:
-      $("standard")
-      .value
-      .trim(),
-
-    observations:
-      $("observations")
-      .value
-      .trim()
-
-  };
-
-}
-
-
-/* =====================================================
-VALIDACIÓN
-===================================================== */
-
-function validForm(){
-
-  const data =
-    formData();
-
-
-  if(
-    !data.area ||
-    !data.docType ||
-    !data.docName
-  ){
-
-    return false;
-
-  }
-
-
-  if(
-    data.mode === "project" &&
-    (
-      !data.client ||
-      !data.projectNo ||
-      !data.projectName
-    )
-  ){
-
-    return false;
-
-  }
-
-
-  return true;
-
-}
-
-
-/* =====================================================
-MENSAJE LOGIN
-===================================================== */
-
-function loginMsg(
-  text,
-  type="warn"
-){
-
-  $("loginMsg").innerHTML =
-
-    `<div class="status ${type}">
-      ${esc(text)}
-    </div>`;
-
-}
-
-
-/* =====================================================
-MENSAJE BACKEND
-===================================================== */
-
-function backendMsg(
-  text,
-  type="warn"
-){
-
-  $("backendNotice").className =
-    `status ${type}`;
-
-  $("backendNotice").textContent =
-    text;
-
-}
-
-
-/* =====================================================
-API
-===================================================== */
-
-async function api(
-  action,
-  payload={}
-){
-
-  if(
-    !auth.currentUser
-  ){
-
-    throw new Error(
-      "La sesión no está activa."
-    );
-
-  }
-
-
-  const token =
-    await auth.currentUser
-      .getIdToken(
-        true
-      );
-
-
-  const response =
-    await fetch(
-      BACKEND_URL,
-      {
-
-        method:"POST",
-
-        redirect:"follow",
-
-        headers:{
-          "Content-Type":
-            "text/plain;charset=utf-8"
+  function fillRevisionSelect(
+    select,
+    mode,
+    current = ""
+  ) {
+
+    select.innerHTML = "";
+
+    if (mode === "project") {
+
+      const revisions = [
+        {
+          value: "Rev.B",
+          text: "Rev.B - Origen / Revisión del cliente"
         },
+        {
+          value: "Rev0",
+          text: "Rev0 - Aprobado por cliente / Original"
+        },
+        {
+          value: "Rev1",
+          text: "Rev1 - Primera modificación"
+        },
+        {
+          value: "Rev2",
+          text: "Rev2 - Segunda modificación"
+        },
+        {
+          value: "Rev3",
+          text: "Rev3 - Tercera modificación"
+        },
+        {
+          value: "Rev4",
+          text: "Rev4 - Cuarta modificación"
+        },
+        {
+          value: "Rev5",
+          text: "Rev5 - Quinta modificación"
+        }
+      ];
 
-        body:
-          JSON.stringify({
+      revisions.forEach(item => {
 
-            action:
-              action,
+        const option =
+          document.createElement("option");
 
-            idToken:
-              token,
+        option.value =
+          item.value;
 
-            ...payload
+        option.textContent =
+          item.text;
 
-          })
+        select.appendChild(option);
 
-      }
-    );
+      });
+
+    } else {
+
+      const revisions = [
+        {
+          value: "Rev0",
+          text: "Rev0 - Original"
+        },
+        {
+          value: "Rev1",
+          text: "Rev1 - Primera modificación"
+        },
+        {
+          value: "Rev2",
+          text: "Rev2 - Segunda modificación"
+        },
+        {
+          value: "Rev3",
+          text: "Rev3 - Tercera modificación"
+        },
+        {
+          value: "Rev4",
+          text: "Rev4 - Cuarta modificación"
+        },
+        {
+          value: "Rev5",
+          text: "Rev5 - Quinta modificación"
+        }
+      ];
+
+      revisions.forEach(item => {
+
+        const option =
+          document.createElement("option");
+
+        option.value =
+          item.value;
+
+        option.textContent =
+          item.text;
+
+        select.appendChild(option);
+
+      });
+
+    }
+
+    const normalized =
+      normalizeRevision(current);
+
+    const exists =
+      [...select.options]
+        .some(
+          option =>
+            option.value === normalized
+        );
+
+    if (exists) {
+      select.value =
+        normalized;
+    }
+
+  }
 
 
-  const text =
-    await response.text();
+  /* =========================================================
+     FIREBASE API
+     ========================================================= */
+
+  async function getFirebaseToken() {
+
+    const user =
+      window.currentFirebaseUser;
+
+    if (!user) {
+      throw new Error(
+        "No existe una sesión de Firebase."
+      );
+    }
+
+    return await user.getIdToken(true);
+  }
 
 
-  let result;
+  async function api(
+    action,
+    payload = {}
+  ) {
 
+    const token =
+      await getFirebaseToken();
 
-  try{
+    const body = {
+      action,
+      token,
+      ...payload
+    };
 
-    result =
-      JSON.parse(
+    const response =
+      await fetch(
+        BACKEND_URL,
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "text/plain;charset=utf-8"
+          },
+
+          body:
+            JSON.stringify(body)
+        }
+      );
+
+    const text =
+      await response.text();
+
+    let result;
+
+    try {
+      result =
+        JSON.parse(text);
+    } catch (error) {
+
+      console.error(
+        "Respuesta no JSON:",
         text
       );
 
-  }catch{
-
-    throw new Error(
-      "El servidor no devolvió una respuesta válida."
-    );
-
-  }
-
-
-  if(
-    !result.ok
-  ){
-
-    throw new Error(
-      result.error ||
-      "Error del servidor."
-    );
-
-  }
-
-
-  return result;
-
-}
-
-
-/* =====================================================
-ACTUALIZAR MODO
-===================================================== */
-
-function updateModeUI(){
-
-  const project =
-    mode() ===
-    "project";
-
-
-  $("projectFields")
-    .classList
-    .toggle(
-      "hidden",
-      !project
-    );
-
-
-  $("projectExtra")
-    .classList
-    .toggle(
-      "hidden",
-      !project
-    );
-
-
-  $("radioInternal")
-    .classList
-    .toggle(
-      "selected",
-      !project
-    );
-
-
-  $("radioProject")
-    .classList
-    .toggle(
-      "selected",
-      project
-    );
-
-
-  updateRevisionOptions();
-
-
-  checkPreview(
-    false
-  );
-
-}
-
-
-document
-  .querySelectorAll(
-    'input[name="mode"]'
-  )
-  .forEach(
-    radio =>
-    radio.addEventListener(
-      "change",
-      updateModeUI
-    )
-  );
-
-
-updateRevisionOptions();
-
-
-/* =====================================================
-VERIFICAR
-===================================================== */
-
-async function checkPreview(){
-
-  $("saveBtn")
-    .disabled =
-    true;
-
-
-  if(
-    !validForm()
-  ){
-
-    $("previewCode")
-      .textContent =
-
-      mode() ===
-      "project"
-
-      ?
-
-      "AQ-CLIENTE-N°-QA-PROT-XX-Rev.B"
-
-      :
-
-      "AQ-QA-PROC-XX-Rev0";
-
-
-    $("previewStatus")
-      .className =
-      "code-status warn";
-
-
-    $("previewStatus")
-      .textContent =
-
-      "Completa los campos requeridos para consultar la documentación.";
-
-    return;
-
-  }
-
-
-  $("previewStatus")
-    .className =
-    "code-status warn";
-
-
-  $("previewStatus")
-    .innerHTML =
-
-    '<span class="loader"></span> Revisando Listado Maestro y Matriz...';
-
-
-  try{
-
-    const data =
-      formData();
-
-
-    const result =
-      await api(
-        "previewCode",
-        data
+      throw new Error(
+        "El servidor no devolvió una respuesta válida."
       );
+    }
 
+    if (!result.ok) {
 
-    state.preview =
-      result;
-
-
-    let displayCode =
-      result.code;
-
-
-    /*
-      Si Apps Script devuelve REVB,
-      lo mostramos como Rev.B.
-    */
-
-    displayCode =
-      displayCode.replace(
-        /-REVB$/i,
-        "-Rev.B"
+      throw new Error(
+        result.error ||
+        "Error en el servidor."
       );
-
-
-    $("previewCode")
-      .textContent =
-      displayCode;
-
-
-    if(
-      result.existsExact
-    ){
-
-      $("previewStatus")
-        .className =
-        "code-status danger";
-
-
-      $("previewStatus")
-        .textContent =
-
-        "⚠️ ESTE CÓDIGO YA EXISTE: " +
-        displayCode;
-
-
-      $("saveBtn")
-        .disabled =
-        true;
-
-
-      return;
 
     }
 
-
-    /*
-      REGLA DE REVISION
-    */
-
-    if(
-      data.mode === "internal" &&
-      data.revision !== "REV0"
-    ){
-
-      $("previewStatus")
-        .className =
-        "code-status warn";
+    return result;
+  }
 
 
-      $("previewStatus")
-        .textContent =
+  /* =========================================================
+     LOAD DATA
+     ========================================================= */
 
-        "La Documentación Interna debe comenzar en Rev0.";
+  async function loadDataFromBackend() {
 
+    try {
 
-      return;
+      showLoading(true);
+
+      const result =
+        await api("getData");
+
+      allListado =
+        Array.isArray(result.listado)
+          ? result.listado
+          : [];
+
+      allMatriz =
+        Array.isArray(result.matriz)
+          ? result.matriz
+          : [];
+
+      renderDashboard();
+
+      renderListado(
+        allListado
+      );
+
+      renderMatriz(
+        allMatriz
+      );
+
+    } catch (error) {
+
+      console.error(error);
+
+      toast(
+        error.message ||
+        "No fue posible cargar los datos.",
+        "error"
+      );
+
+    } finally {
+
+      showLoading(false);
 
     }
 
-
-    if(
-      data.mode === "project" &&
-      data.revision !== "REVB" &&
-      data.revision !== "REV0"
-    ){
-
-      $("previewStatus")
-        .className =
-        "code-status warn";
-
-
-      $("previewStatus")
-        .textContent =
-
-        "Un Proyecto nuevo debe estar en Rev.B o Rev0 si ya fue aprobado por el cliente.";
-
-
-      return;
-
-    }
-
-
-    $("previewStatus")
-      .className =
-      "code-status ok";
-
-
-    if(
-      data.mode === "project" &&
-      data.revision === "REVB"
-    ){
-
-      $("previewStatus")
-        .textContent =
-
-        "✓ CÓDIGO DISPONIBLE. Rev.B corresponde al documento de origen / revisión del cliente. Correlativo: " +
-        String(
-          result.correlative
-        ).padStart(
-          2,
-          "0"
-        );
-
-    }else if(
-      data.mode === "project" &&
-      data.revision === "REV0"
-    ){
-
-      $("previewStatus")
-        .textContent =
-
-        "✓ CÓDIGO DISPONIBLE. Rev0 corresponde al documento aprobado por el cliente. Correlativo: " +
-        String(
-          result.correlative
-        ).padStart(
-          2,
-          "0"
-        );
-
-    }else{
-
-      $("previewStatus")
-        .textContent =
-
-        "✓ CÓDIGO DISPONIBLE. Correlativo: " +
-        String(
-          result.correlative
-        ).padStart(
-          2,
-          "0"
-        );
-
-    }
-
-
-    $("saveBtn")
-      .disabled =
-      false;
-
-
-  }catch(error){
-
-    state.preview =
-      null;
-
-
-    $("previewStatus")
-      .className =
-      "code-status danger";
-
-
-    $("previewStatus")
-      .textContent =
-      error.message;
-
   }
 
-}
+  window.loadDataFromBackend =
+    loadDataFromBackend;
 
 
-/* =====================================================
-REGISTRAR
-===================================================== */
+  /* =========================================================
+     DASHBOARD
+     ========================================================= */
 
-async function saveDocument(){
+  function renderDashboard() {
 
-  if(
-    !state.preview
-  ){
-
-    return;
-
-  }
-
-
-  const data =
-    formData();
-
-
-  $("saveBtn")
-    .disabled =
-    true;
-
-
-  $("saveBtn")
-    .innerHTML =
-
-    '<span class="loader"></span> Registrando...';
-
-
-  try{
-
-    const result =
-      await api(
-
-        "createDocument",
-
-        {
-
-          ...data,
-
-          expectedCode:
-            state.preview.code
-
-        }
-
-      );
-
-
-    let displayCode =
-      result.code;
-
-
-    displayCode =
-      displayCode.replace(
-        /-REVB$/i,
-        "-Rev.B"
-      );
-
-
-    $("previewCode")
-      .textContent =
-      displayCode;
-
-
-    $("previewStatus")
-      .className =
-      "code-status ok";
-
-
-    $("previewStatus")
-      .textContent =
-
-      "✓ DOCUMENTO REGISTRADO: " +
-      displayCode;
-
-
-    alert(
-
-      "Documento registrado correctamente.\n\n" +
-      "Código: " +
-      displayCode +
-      "\n\n" +
-      "Se actualizó el Listado Maestro y la Matriz de Trazabilidad."
-
-    );
-
-
-    await loadData();
-
-
-    clearForm();
-
-
-  }catch(error){
-
-    $("previewStatus")
-      .className =
-      "code-status danger";
-
-
-    $("previewStatus")
-      .textContent =
-      error.message;
-
-
-    await checkPreview();
-
-
-  }finally{
-
-    $("saveBtn")
-      .innerHTML =
-      "✓ Registrar documento";
-
-  }
-
-}
-
-
-/* =====================================================
-LIMPIAR
-===================================================== */
-
-function clearForm(){
-
-  [
-
-    "client",
-    "projectNo",
-    "projectName",
-    "docName",
-    "docLink",
-    "associated",
-    "diffusion",
-    "evidence",
-    "standard",
-    "observations"
-
-  ]
-  .forEach(
-    id =>
-    $(id).value =
-    ""
-  );
-
-
-  $("revision").value =
-    mode() === "project"
-    ? "REVB"
-    : "REV0";
-
-
-  $("distribution").value =
-    "Digital";
-
-
-  $("state").value =
-    "Vigente";
-
-
-  $("issueDate").value =
-    new Date()
-    .toISOString()
-    .slice(
-      0,
-      10
-    );
-
-
-  state.preview =
-    null;
-
-
-  $("previewCode")
-    .textContent =
-
-    mode() ===
-    "project"
-
-    ?
-
-    "AQ-CLIENTE-N°-QA-PROT-XX-Rev.B"
-
-    :
-
-    "AQ-QA-PROC-XX-Rev0";
-
-
-  $("previewStatus")
-    .className =
-    "code-status warn";
-
-
-  $("previewStatus")
-    .textContent =
-
-    "Completa los datos para consultar la documentación.";
-
-
-  $("saveBtn")
-    .disabled =
-    true;
-
-}
-
-
-/* =====================================================
-BOTONES
-===================================================== */
-
-$("checkBtn")
-  .addEventListener(
-    "click",
-    checkPreview
-  );
-
-
-$("saveBtn")
-  .addEventListener(
-    "click",
-    saveDocument
-  );
-
-
-$("clearBtn")
-  .addEventListener(
-    "click",
-    clearForm
-  );
-
-
-/* =====================================================
-ACTUALIZACIÓN AUTOMÁTICA
-===================================================== */
-
-[
-
-  "area",
-  "docType",
-  "client",
-  "projectNo",
-  "projectName",
-  "revision",
-  "docName",
-  "issueDate"
-
-]
-.forEach(
-  id => {
-
-    $(id)
-      .addEventListener(
-        "change",
-        () =>
-        checkPreview()
-      );
-
-
-    $(id)
-      .addEventListener(
-        "input",
-        () => {
-
-          clearTimeout(
-            window.__previewTimer
-          );
-
-
-          window.__previewTimer =
-            setTimeout(
-              checkPreview,
-              600
-            );
-
-        }
-      );
-
-  }
-);
-
-
-/* =====================================================
-CARGAR DATOS
-===================================================== */
-
-async function loadData(){
-
-  try{
-
-    const result =
-      await api(
-        "getData"
-      );
-
-
-    state.listado =
-      result.listado ||
-      [];
-
-
-    state.matriz =
-      result.matriz ||
-      [];
-
-
-    const docs =
+    const maxDocs =
       Math.max(
-        state.listado.length,
-        state.matriz.length
+        allListado.length,
+        allMatriz.length
       );
 
-
-    $("statDocs")
-      .textContent =
-      docs;
-
-
-    $("statChecked")
-      .textContent =
-
-      result.totalUniqueCodes ||
-      0;
-
-
-    $("statListado")
-      .textContent =
-
-      state.listado.length;
-
-
-    $("statMatriz")
-      .textContent =
-
-      state.matriz.length;
-
-
-    backendMsg(
-
-      "✓ Conectado correctamente al Listado Maestro y Matriz de Trazabilidad.",
-
-      "ok"
-
-    );
-
-
-    renderTable(
-      "listado"
-    );
-
-
-    renderTable(
-      "matriz"
-    );
-
-
-  }catch(error){
-
-    $("statDocs")
-      .textContent =
-      "—";
-
-
-    $("statChecked")
-      .textContent =
-      "—";
-
-
-    $("statListado")
-      .textContent =
-      "—";
-
-
-    $("statMatriz")
-      .textContent =
-      "—";
-
-
-    backendMsg(
-      "Error de conexión: " +
-      error.message,
-      "danger"
-    );
-
-  }
-
-}
-
-
-/* =====================================================
-TABLAS
-===================================================== */
-
-function renderTable(
-  type
-){
-
-  const rows =
-    state[type];
-
-
-  const target =
-
-    type === "listado"
-
-    ?
-
-    $("listadoTable")
-
-    :
-
-    $("matrizTable");
-
-
-  const search =
-
-    (
-
-      type === "listado"
-
-      ?
-
-      $("searchListado")
-
-      :
-
-      $("searchMatriz")
-
-    )
-    .value
-    .toLowerCase();
-
-
-  const filtered =
-    rows.filter(
-
-      row =>
-
-      row.some(
-
-        value =>
-
-        String(
-          value ??
-          ""
-        )
-        .toLowerCase()
-        .includes(
-          search
-        )
-
-      )
-
-    );
-
-
-  if(
-    !filtered.length
-  ){
-
-    target.innerHTML =
-
-      `<div style="
-        padding:20px;
-        color:#70818c;
-      ">
-        No hay registros para mostrar.
-      </div>`;
-
-    return;
-
-  }
-
-
-  const headers =
-
-    type === "listado"
-
-    ?
-
-    [
-
-      "N°",
-      "Código",
-      "Nombre",
-      "Proyecto",
-      "Tipo",
-      "Área",
-      "Revisión",
-      "Fecha",
-      "Enlace",
-      "Distribución",
-      "Estado",
-      "Observaciones"
-
+    const allCodes = [
+      ...allListado,
+      ...allMatriz
     ]
+      .map(item => item.code)
+      .filter(Boolean);
 
-    :
+    const uniqueCodes =
+      new Set(
+        allCodes
+      ).size;
 
-    [
+    $("statDocs").textContent =
+      maxDocs;
 
-      "N°",
-      "Código",
-      "Nombre",
-      "Proyecto",
-      "Tipo",
-      "Documento asociado",
-      "Área",
-      "Difusión",
-      "Evidencia",
-      "Norma",
-      "Observaciones"
+    $("statUnique").textContent =
+      uniqueCodes;
 
-    ];
+    $("statListado").textContent =
+      allListado.length;
+
+    $("statMatriz").textContent =
+      allMatriz.length;
+  }
 
 
-  target.innerHTML = `
+  /* =========================================================
+     TABLE RENDER
+     ========================================================= */
 
-    <table class="table">
+  function renderTable(
+    data,
+    tbodyId
+  ) {
 
-      <thead>
+    const tbody =
+      $(tbodyId);
 
+    tbody.innerHTML = "";
+
+    if (!data.length) {
+
+      tbody.innerHTML = `
         <tr>
-
-          ${
-            headers
-            .map(
-              h =>
-              `<th>${h}</th>`
-            )
-            .join("")
-          }
-
+          <td
+            colspan="11"
+            style="
+              text-align:center;
+              padding:25px;
+              color:#74818a;
+            "
+          >
+            No hay registros.
+          </td>
         </tr>
+      `;
 
-      </thead>
-
-
-      <tbody>
-
-        ${
-          filtered
-          .map(
-            row =>
-
-            `
-
-            <tr>
-
-              ${
-                headers
-                .map(
-                  (_,index) =>
-
-                  `<td>
-                    ${esc(row[index])}
-                  </td>`
-
-                )
-                .join("")
-              }
-
-            </tr>
-
-            `
-          )
-          .join("")
-        }
-
-      </tbody>
-
-    </table>
-
-  `;
-
-}
+      return;
+    }
 
 
-$("searchListado")
-  .addEventListener(
-    "input",
-    () =>
-    renderTable(
-      "listado"
-    )
-  );
+    data.forEach(record => {
+
+      const tr =
+        document.createElement("tr");
 
 
-$("searchMatriz")
-  .addEventListener(
-    "input",
-    () =>
-    renderTable(
-      "matriz"
-    )
-  );
+      const state =
+        String(
+          record.state || ""
+        ).toLowerCase();
 
 
-/* =====================================================
-LOGIN
-===================================================== */
+      let badgeClass =
+        "badge-gray";
 
-$("loginBtn")
-  .addEventListener(
-
-    "click",
-
-    async () => {
-
-      try{
-
-        $("loginBtn")
-          .disabled =
-          true;
-
-
-        await signInWithEmailAndPassword(
-
-          auth,
-
-          $("email")
-            .value
-            .trim(),
-
-          $("password")
-            .value
-
-        );
-
-
-      }catch(error){
-
-        loginMsg(
-          "Correo o contraseña incorrectos.",
-          "danger"
-        );
-
-      }finally{
-
-        $("loginBtn")
-          .disabled =
-          false;
-
+      if (
+        state.includes("vigente")
+      ) {
+        badgeClass =
+          "badge-green";
       }
 
+      if (
+        state.includes("revisión")
+      ) {
+        badgeClass =
+          "badge-orange";
+      }
+
+
+      tr.innerHTML = `
+
+        <td
+          class="code-cell"
+          title="${escapeHtml(record.code)}"
+        >
+          ${escapeHtml(record.code)}
+        </td>
+
+        <td
+          title="${escapeHtml(record.name)}"
+        >
+          ${escapeHtml(record.name)}
+        </td>
+
+        <td
+          title="${escapeHtml(record.projectName)}"
+        >
+          ${escapeHtml(record.projectName)}
+        </td>
+
+        <td>
+          ${escapeHtml(record.client)}
+        </td>
+
+        <td>
+          ${escapeHtml(record.projectNo)}
+        </td>
+
+        <td>
+          ${escapeHtml(record.area)}
+        </td>
+
+        <td>
+          ${escapeHtml(record.docType)}
+        </td>
+
+        <td>
+          ${escapeHtml(
+            normalizeRevision(
+              record.revision
+            )
+          )}
+        </td>
+
+        <td>
+          ${escapeHtml(
+            record.issueDate
+          )}
+        </td>
+
+        <td>
+          <span
+            class="badge ${badgeClass}"
+          >
+            ${escapeHtml(
+              record.state
+            )}
+          </span>
+        </td>
+
+        <td>
+
+          <button
+            class="btn btn-secondary btn-small edit-button"
+            type="button"
+          >
+            Editar
+          </button>
+
+        </td>
+
+      `;
+
+
+      const editButton =
+        tr.querySelector(
+          ".edit-button"
+        );
+
+
+      editButton.addEventListener(
+        "click",
+        () => {
+
+          openEditModal(
+            record
+          );
+
+        }
+      );
+
+
+      tbody.appendChild(tr);
+
+    });
+
+  }
+
+
+  function renderListado(data) {
+
+    renderTable(
+      data,
+      "listadoTableBody"
+    );
+
+  }
+
+
+  function renderMatriz(data) {
+
+    renderTable(
+      data,
+      "matrizTableBody"
+    );
+
+  }
+
+
+  /* =========================================================
+     FILTER
+     ========================================================= */
+
+  function filterRecords(
+    records,
+    query
+  ) {
+
+    const q =
+      String(query || "")
+        .trim()
+        .toLowerCase();
+
+    if (!q) {
+      return records;
     }
 
-  );
+    return records.filter(
+      record => {
+
+        const values = [
+          record.code,
+          record.name,
+          record.projectName,
+          record.client,
+          record.projectNo,
+          record.area,
+          record.docType,
+          record.revision,
+          record.issueDate,
+          record.state
+        ];
+
+        return values.some(
+          value =>
+            String(value || "")
+              .toLowerCase()
+              .includes(q)
+        );
+
+      }
+    );
+
+  }
 
 
-/* =====================================================
-RECUPERAR CONTRASEÑA
-===================================================== */
+  /* =========================================================
+     CODE PREVIEW
+     ========================================================= */
 
-$("resetBtn")
-  .addEventListener(
+  async function previewNewCode() {
 
-    "click",
+    const mode =
+      document.querySelector(
+        'input[name="newMode"]:checked'
+      )?.value || "internal";
 
-    async () => {
+    const area =
+      $("newArea").value.trim();
 
-      const email =
-        $("email")
-        .value
+    const docType =
+      $("newDocType").value.trim();
+
+    const revision =
+      $("newRevision").value.trim();
+
+    const client =
+      $("newClient").value.trim();
+
+    const projectNo =
+      $("newProjectNo").value.trim();
+
+    if (
+      !area ||
+      !docType ||
+      !revision
+    ) {
+
+      $("newCodePreview").textContent =
+        "Complete Área, Tipo y Revisión";
+
+      return;
+
+    }
+
+
+    if (
+      mode === "project" &&
+      (
+        !client ||
+        !projectNo
+      )
+    ) {
+
+      $("newCodePreview").textContent =
+        "Complete Cliente y N° de proyecto";
+
+      return;
+
+    }
+
+
+    try {
+
+      const result =
+        await api(
+          "previewCode",
+          {
+            mode,
+            client,
+            projectNo,
+            area,
+            docType,
+            revision
+          }
+        );
+
+      $("newCodePreview").textContent =
+        result.code ||
+        "No disponible";
+
+    } catch (error) {
+
+      $("newCodePreview").textContent =
+        "No se pudo generar";
+
+    }
+
+  }
+
+
+  /* =========================================================
+     CREATE DOCUMENT
+     ========================================================= */
+
+  async function createDocument() {
+
+    const mode =
+      document.querySelector(
+        'input[name="newMode"]:checked'
+      )?.value || "internal";
+
+    const data = {
+
+      mode,
+
+      client:
+        $("newClient").value.trim(),
+
+      projectNo:
+        $("newProjectNo").value.trim(),
+
+      projectName:
+        $("newProjectName").value.trim(),
+
+      area:
+        $("newArea").value.trim(),
+
+      docType:
+        $("newDocType").value.trim(),
+
+      revision:
+        $("newRevision").value.trim(),
+
+      name:
+        $("newName").value.trim(),
+
+      issueDate:
+        $("newIssueDate").value,
+
+      docLink:
+        $("newDocLink").value.trim(),
+
+      distribution:
+        $("newDistribution").value.trim(),
+
+      state:
+        $("newState").value.trim(),
+
+      associated:
+        $("newAssociated").value.trim(),
+
+      diffusion:
+        $("newDiffusion").value.trim(),
+
+      evidence:
+        $("newEvidence").value.trim(),
+
+      standard:
+        $("newStandard").value.trim(),
+
+      observations:
+        $("newObservations").value.trim()
+
+    };
+
+
+    if (!data.area) {
+
+      toast(
+        "Seleccione el área.",
+        "warning"
+      );
+
+      return;
+
+    }
+
+
+    if (!data.docType) {
+
+      toast(
+        "Seleccione el tipo de documento.",
+        "warning"
+      );
+
+      return;
+
+    }
+
+
+    if (!data.name) {
+
+      toast(
+        "Ingrese el nombre del documento.",
+        "warning"
+      );
+
+      return;
+
+    }
+
+
+    if (
+      mode === "project" &&
+      (
+        !data.client ||
+        !data.projectNo
+      )
+    ) {
+
+      toast(
+        "Para un proyecto debe ingresar Cliente y N° de proyecto.",
+        "warning"
+      );
+
+      return;
+
+    }
+
+
+    try {
+
+      showLoading(true);
+
+      const result =
+        await api(
+          "createDocument",
+          {
+            document: data
+          }
+        );
+
+
+      toast(
+        "Documento registrado correctamente: " +
+        result.code,
+        "success"
+      );
+
+
+      $("newCodePreview").textContent =
+        result.code;
+
+
+      clearNewDocumentForm();
+
+      await loadDataFromBackend();
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      toast(
+        error.message ||
+        "No fue posible registrar el documento.",
+        "error"
+      );
+
+    } finally {
+
+      showLoading(false);
+
+    }
+
+  }
+
+
+  /* =========================================================
+     CLEAR NEW FORM
+     ========================================================= */
+
+  function clearNewDocumentForm() {
+
+    $("newClient").value = "";
+    $("newProjectNo").value = "";
+    $("newProjectName").value = "";
+    $("newArea").value = "";
+    $("newDocType").value = "";
+    $("newName").value = "";
+    $("newIssueDate").value = "";
+    $("newDocLink").value = "";
+    $("newDistribution").value = "";
+    $("newState").value = "Vigente";
+    $("newAssociated").value = "";
+    $("newDiffusion").value = "";
+    $("newEvidence").value = "";
+    $("newStandard").value = "";
+    $("newObservations").value = "";
+
+    fillRevisionSelect(
+      $("newRevision"),
+      "internal",
+      "Rev0"
+    );
+
+    document.querySelector(
+      'input[name="newMode"][value="internal"]'
+    ).checked = true;
+
+    updateNewModeVisibility();
+
+    $("newCodePreview").textContent =
+      "Complete los datos para generar el código";
+
+  }
+
+
+  /* =========================================================
+     NEW MODE
+     ========================================================= */
+
+  function updateNewModeVisibility() {
+
+    const mode =
+      document.querySelector(
+        'input[name="newMode"]:checked'
+      )?.value || "internal";
+
+
+    const isProject =
+      mode === "project";
+
+
+    $("newClientGroup")
+      .classList.toggle(
+        "hidden",
+        !isProject
+      );
+
+    $("newProjectNoGroup")
+      .classList.toggle(
+        "hidden",
+        !isProject
+      );
+
+    $("newProjectNameGroup")
+      .classList.toggle(
+        "hidden",
+        !isProject
+      );
+
+
+    fillRevisionSelect(
+      $("newRevision"),
+      mode,
+      isProject
+        ? "Rev.B"
+        : "Rev0"
+    );
+
+
+    previewNewCode();
+
+  }
+
+
+  /* =========================================================
+     EDIT MODAL
+     ========================================================= */
+
+  function openEditModal(record) {
+
+    editingRecord =
+      record;
+
+
+    $("editOriginalCode").value =
+      record.code || "";
+
+
+    const mode =
+      record.mode ||
+      inferModeFromCode(
+        record.code
+      );
+
+
+    document.querySelector(
+      `input[name="editMode"][value="${mode}"]`
+    ).checked = true;
+
+
+    $("editClient").value =
+      record.client || "";
+
+    $("editProjectNo").value =
+      record.projectNo || "";
+
+    $("editProjectName").value =
+      record.projectName || "";
+
+    $("editArea").value =
+      record.area || "";
+
+    $("editDocType").value =
+      record.docType || "";
+
+    $("editName").value =
+      record.name || "";
+
+    $("editIssueDate").value =
+      formatDateForInput(
+        record.issueDate
+      );
+
+    $("editDocLink").value =
+      record.docLink || "";
+
+    $("editDistribution").value =
+      record.distribution || "";
+
+    $("editState").value =
+      record.state || "Vigente";
+
+    $("editAssociated").value =
+      record.associated || "";
+
+    $("editDiffusion").value =
+      record.diffusion || "";
+
+    $("editEvidence").value =
+      record.evidence || "";
+
+    $("editStandard").value =
+      record.standard || "";
+
+    $("editObservations").value =
+      record.observations || "";
+
+
+    fillRevisionSelect(
+      $("editRevision"),
+      mode,
+      record.revision
+    );
+
+
+    updateEditModeVisibility();
+
+
+    $("editModal").style.display =
+      "flex";
+
+
+    previewEditCode();
+
+  }
+
+
+  function closeEditModal() {
+
+    editingRecord =
+      null;
+
+    $("editModal").style.display =
+      "none";
+
+  }
+
+
+  function inferModeFromCode(code) {
+
+    const value =
+      String(code || "")
+        .trim()
+        .toUpperCase();
+
+    /*
+      Proyecto:
+      AQ-AN-04-QA-PROC-01-Rev.B
+
+      Interno:
+      AQ-QA-PROC-01-Rev0
+    */
+
+    const parts =
+      value.split("-");
+
+    if (
+      parts.length >= 6
+    ) {
+      return "project";
+    }
+
+    return "internal";
+
+  }
+
+
+  function formatDateForInput(value) {
+
+    if (!value) {
+      return "";
+    }
+
+    const text =
+      String(value)
         .trim();
 
+    if (
+      /^\d{4}-\d{2}-\d{2}$/.test(text)
+    ) {
+      return text;
+    }
 
-      if(
-        !email
-      ){
+    const date =
+      new Date(text);
 
-        loginMsg(
-          "Escribe primero tu correo.",
-          "warn"
+    if (
+      Number.isNaN(
+        date.getTime()
+      )
+    ) {
+      return "";
+    }
+
+    const year =
+      date.getFullYear();
+
+    const month =
+      String(
+        date.getMonth() + 1
+      ).padStart(2, "0");
+
+    const day =
+      String(
+        date.getDate()
+      ).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+
+  }
+
+
+  function updateEditModeVisibility() {
+
+    const mode =
+      document.querySelector(
+        'input[name="editMode"]:checked'
+      )?.value || "internal";
+
+
+    const isProject =
+      mode === "project";
+
+
+    /*
+      En edición mantenemos visibles
+      Cliente y proyecto para poder
+      transformar correctamente el código.
+    */
+
+    $("editClient")
+      .parentElement
+      .classList.toggle(
+        "hidden",
+        !isProject
+      );
+
+    $("editProjectNo")
+      .parentElement
+      .classList.toggle(
+        "hidden",
+        !isProject
+      );
+
+    $("editProjectName")
+      .parentElement
+      .classList.toggle(
+        "hidden",
+        !isProject
+      );
+
+
+    fillRevisionSelect(
+      $("editRevision"),
+      mode,
+      $("editRevision").value
+    );
+
+
+    previewEditCode();
+
+  }
+
+
+  async function previewEditCode() {
+
+    if (!editingRecord) {
+      return;
+    }
+
+
+    const mode =
+      document.querySelector(
+        'input[name="editMode"]:checked'
+      )?.value || "internal";
+
+
+    const data = {
+
+      mode,
+
+      client:
+        $("editClient").value.trim(),
+
+      projectNo:
+        $("editProjectNo").value.trim(),
+
+      area:
+        $("editArea").value.trim(),
+
+      docType:
+        $("editDocType").value.trim(),
+
+      revision:
+        $("editRevision").value.trim(),
+
+      originalCode:
+        $("editOriginalCode").value.trim()
+
+    };
+
+
+    if (
+      !data.area ||
+      !data.docType ||
+      !data.revision
+    ) {
+
+      $("editCodePreview").textContent =
+        "Complete los datos";
+
+      return;
+
+    }
+
+
+    if (
+      mode === "project" &&
+      (
+        !data.client ||
+        !data.projectNo
+      )
+    ) {
+
+      $("editCodePreview").textContent =
+        "Complete Cliente y N° proyecto";
+
+      return;
+
+    }
+
+
+    try {
+
+      const result =
+        await api(
+          "previewCode",
+          data
+        );
+
+      $("editCodePreview").textContent =
+        result.code ||
+        "-";
+
+    } catch (error) {
+
+      $("editCodePreview").textContent =
+        "No se pudo generar";
+
+    }
+
+  }
+
+
+  /* =========================================================
+     SAVE EDIT
+     ========================================================= */
+
+  async function saveEdit() {
+
+    if (!editingRecord) {
+      return;
+    }
+
+
+    const mode =
+      document.querySelector(
+        'input[name="editMode"]:checked'
+      )?.value || "internal";
+
+
+    const data = {
+
+      originalCode:
+        $("editOriginalCode").value.trim(),
+
+      mode,
+
+      client:
+        $("editClient").value.trim(),
+
+      projectNo:
+        $("editProjectNo").value.trim(),
+
+      projectName:
+        $("editProjectName").value.trim(),
+
+      area:
+        $("editArea").value.trim(),
+
+      docType:
+        $("editDocType").value.trim(),
+
+      revision:
+        $("editRevision").value.trim(),
+
+      name:
+        $("editName").value.trim(),
+
+      issueDate:
+        $("editIssueDate").value,
+
+      docLink:
+        $("editDocLink").value.trim(),
+
+      distribution:
+        $("editDistribution").value.trim(),
+
+      state:
+        $("editState").value.trim(),
+
+      associated:
+        $("editAssociated").value.trim(),
+
+      diffusion:
+        $("editDiffusion").value.trim(),
+
+      evidence:
+        $("editEvidence").value.trim(),
+
+      standard:
+        $("editStandard").value.trim(),
+
+      observations:
+        $("editObservations").value.trim()
+
+    };
+
+
+    if (!data.name) {
+
+      toast(
+        "Ingrese el nombre del documento.",
+        "warning"
+      );
+
+      return;
+
+    }
+
+
+    if (
+      mode === "project" &&
+      (
+        !data.client ||
+        !data.projectNo
+      )
+    ) {
+
+      toast(
+        "Para un proyecto debe ingresar Cliente y N° de proyecto.",
+        "warning"
+      );
+
+      return;
+
+    }
+
+
+    try {
+
+      showLoading(true);
+
+      const result =
+        await api(
+          "updateDocument",
+          {
+            document: data
+          }
+        );
+
+
+      toast(
+        "Documento actualizado correctamente: " +
+        result.code,
+        "success"
+      );
+
+
+      closeEditModal();
+
+      await loadDataFromBackend();
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      toast(
+        error.message ||
+        "No fue posible actualizar el documento.",
+        "error"
+      );
+
+    } finally {
+
+      showLoading(false);
+
+    }
+
+  }
+
+
+  /* =========================================================
+     VERIFY CODE
+     ========================================================= */
+
+  async function verifyNewCode() {
+
+    try {
+
+      showLoading(true);
+
+      await previewNewCode();
+
+      const code =
+        $("newCodePreview")
+          .textContent
+          .trim();
+
+
+      if (
+        !code ||
+        code.startsWith("Complete") ||
+        code.startsWith("No se")
+      ) {
+
+        toast(
+          "Complete los datos necesarios para verificar.",
+          "warning"
         );
 
         return;
@@ -3767,254 +3862,553 @@ $("resetBtn")
       }
 
 
-      try{
+      const result =
+        await api(
+          "previewCode",
+          {
 
-        await sendPasswordResetEmail(
-          auth,
-          email
+            mode:
+              document.querySelector(
+                'input[name="newMode"]:checked'
+              )?.value || "internal",
+
+            client:
+              $("newClient").value.trim(),
+
+            projectNo:
+              $("newProjectNo").value.trim(),
+
+            area:
+              $("newArea").value.trim(),
+
+            docType:
+              $("newDocType").value.trim(),
+
+            revision:
+              $("newRevision").value.trim()
+
+          }
         );
 
 
-        loginMsg(
-          "Se envió el enlace para restablecer la contraseña.",
-          "ok"
+      if (
+        result.exists
+      ) {
+
+        toast(
+          "El código ya existe: " +
+          result.code,
+          "error"
         );
 
+      } else {
 
-      }catch(error){
-
-        loginMsg(
-          "No fue posible enviar el enlace.",
-          "danger"
+        toast(
+          "Código disponible: " +
+          result.code,
+          "success"
         );
 
       }
 
-    }
 
-  );
+    } catch (error) {
 
-
-/* =====================================================
-CERRAR SESIÓN
-===================================================== */
-
-$("logoutBtn")
-  .addEventListener(
-
-    "click",
-
-    () =>
-    signOut(
-      auth
-    )
-
-  );
-
-
-/* =====================================================
-AUTENTICACIÓN
-===================================================== */
-
-onAuthStateChanged(
-
-  auth,
-
-  async user => {
-
-    if(user){
-
-      $("loginView")
-        .classList
-        .add(
-          "hidden"
-        );
-
-
-      $("appView")
-        .classList
-        .remove(
-          "hidden"
-        );
-
-
-      $("userEmail")
-        .textContent =
-        user.email ||
-        "";
-
-
-      const initials =
-        (user.email || "AQ")
-        .substring(
-          0,
-          2
-        )
-        .toUpperCase();
-
-
-      $("userAvatar")
-        .textContent =
-        initials;
-
-
-      setPage(
-        "dashboard"
+      toast(
+        error.message ||
+        "No fue posible verificar el código.",
+        "error"
       );
 
+    } finally {
 
-      await loadData();
-
-
-    }else{
-
-      $("appView")
-        .classList
-        .add(
-          "hidden"
-        );
-
-
-      $("loginView")
-        .classList
-        .remove(
-          "hidden"
-        );
+      showLoading(false);
 
     }
 
   }
 
-);
+
+  /* =========================================================
+     NAVIGATION
+     ========================================================= */
+
+  function showSection(
+    sectionId
+  ) {
+
+    document
+      .querySelectorAll(".app-section")
+      .forEach(
+        section => {
+          section.classList.add(
+            "hidden"
+          );
+        }
+      );
 
 
-/* =====================================================
-NAVEGACIÓN
-===================================================== */
-
-const titles = {
-
-  dashboard:
-    "Dashboard",
-
-  new:
-    "Nuevo documento",
-
-  listado:
-    "Listado Maestro",
-
-  matriz:
-    "Matriz de Trazabilidad",
-
-  config:
-    "Configuración"
-
-};
-
-
-function setPage(
-  page
-){
-
-  document
-    .querySelectorAll(
-      ".page"
-    )
-    .forEach(
-      element =>
-      element
-      .classList
-      .add(
+    $(sectionId)
+      .classList.remove(
         "hidden"
-      )
-    );
+      );
 
 
-  const selected =
-    $(
-      "page-" +
-      page
-    );
+    document
+      .querySelectorAll(".menu-button")
+      .forEach(
+        button => {
 
+          button.classList.toggle(
+            "active",
+            button.dataset.section ===
+              sectionId
+          );
 
-  if(selected){
-
-    selected
-      .classList
-      .remove(
-        "hidden"
+        }
       );
 
   }
 
 
-  $("pageTitle")
-    .textContent =
-    titles[page] ||
-    "Sistema";
+  /* =========================================================
+     EVENT LISTENERS
+     ========================================================= */
 
+  document
+    .querySelectorAll(".menu-button")
+    .forEach(
+      button => {
+
+        button.addEventListener(
+          "click",
+          () => {
+
+            showSection(
+              button.dataset.section
+            );
+
+          }
+        );
+
+      }
+    );
+
+
+  /* =========================================================
+     LOGIN
+     ========================================================= */
+
+  $("loginButton")
+    .addEventListener(
+      "click",
+      async () => {
+
+        const email =
+          $("loginEmail")
+            .value
+            .trim();
+
+        const password =
+          $("loginPassword")
+            .value;
+
+
+        $("loginError")
+          .style.display =
+          "none";
+
+
+        if (
+          !email ||
+          !password
+        ) {
+
+          $("loginError")
+            .textContent =
+            "Ingrese correo y contraseña.";
+
+          $("loginError")
+            .style.display =
+            "block";
+
+          return;
+
+        }
+
+
+        try {
+
+          await window.firebaseFunctions
+            .signInWithEmailAndPassword(
+              window.firebaseAuth,
+              email,
+              password
+            );
+
+        } catch (error) {
+
+          console.error(error);
+
+          let message =
+            "No fue posible iniciar sesión.";
+
+          if (
+            error.code ===
+            "auth/invalid-credential"
+          ) {
+            message =
+              "Correo o contraseña incorrectos.";
+          }
+
+          if (
+            error.code ===
+            "auth/user-not-found"
+          ) {
+            message =
+              "El usuario no existe.";
+          }
+
+          if (
+            error.code ===
+            "auth/wrong-password"
+          ) {
+            message =
+              "Contraseña incorrecta.";
+          }
+
+          if (
+            error.code ===
+            "auth/too-many-requests"
+          ) {
+            message =
+              "Demasiados intentos. Espere un momento.";
+          }
+
+
+          $("loginError")
+            .textContent =
+            message;
+
+          $("loginError")
+            .style.display =
+            "block";
+
+        }
+
+      }
+    );
+
+
+  /* =========================================================
+     PASSWORD RESET
+     ========================================================= */
+
+  $("forgotPassword")
+    .addEventListener(
+      "click",
+      async () => {
+
+        const email =
+          $("loginEmail")
+            .value
+            .trim();
+
+
+        if (!email) {
+
+          $("loginError")
+            .textContent =
+            "Ingrese primero su correo electrónico.";
+
+          $("loginError")
+            .style.display =
+            "block";
+
+          return;
+
+        }
+
+
+        try {
+
+          await window.firebaseFunctions
+            .sendPasswordResetEmail(
+              window.firebaseAuth,
+              email
+            );
+
+
+          toast(
+            "Se envió el correo para restablecer la contraseña.",
+            "success"
+          );
+
+
+        } catch (error) {
+
+          console.error(error);
+
+          toast(
+            "No fue posible enviar el correo de recuperación.",
+            "error"
+          );
+
+        }
+
+      }
+    );
+
+
+  /* =========================================================
+     LOGOUT
+     ========================================================= */
+
+  $("logoutButton")
+    .addEventListener(
+      "click",
+      async () => {
+
+        try {
+
+          await window.firebaseFunctions
+            .signOut(
+              window.firebaseAuth
+            );
+
+        } catch (error) {
+
+          console.error(error);
+
+          toast(
+            "No fue posible cerrar sesión.",
+            "error"
+          );
+
+        }
+
+      }
+    );
+
+
+  /* =========================================================
+     NEW DOCUMENT EVENTS
+     ========================================================= */
 
   document
     .querySelectorAll(
-      ".nav button[data-page]"
+      'input[name="newMode"]'
     )
     .forEach(
-      button =>
-      button
-      .classList
-      .toggle(
-        "active",
-        button.dataset.page ===
-        page
-      )
+      radio => {
+
+        radio.addEventListener(
+          "change",
+          updateNewModeVisibility
+        );
+
+      }
     );
 
 
-  if(
-    page === "listado"
-  ){
-
-    renderTable(
-      "listado"
-    );
-
-  }
-
-
-  if(
-    page === "matriz"
-  ){
-
-    renderTable(
-      "matriz"
-    );
-
-  }
-
-}
-
-
-document
-  .querySelectorAll(
-    ".nav button[data-page]"
-  )
+  [
+    "newArea",
+    "newDocType",
+    "newRevision",
+    "newClient",
+    "newProjectNo"
+  ]
   .forEach(
-    button => {
+    id => {
 
-      button.addEventListener(
-        "click",
-        () =>
-        setPage(
-          button.dataset.page
-        )
-      );
+      $(id)
+        .addEventListener(
+          "change",
+          previewNewCode
+        );
+
+      $(id)
+        .addEventListener(
+          "input",
+          previewNewCode
+        );
 
     }
   );
 
+
+  $("verifyCodeButton")
+    .addEventListener(
+      "click",
+      verifyNewCode
+    );
+
+
+  $("createDocumentButton")
+    .addEventListener(
+      "click",
+      createDocument
+    );
+
+
+  /* =========================================================
+     SEARCH
+     ========================================================= */
+
+  $("listadoSearch")
+    .addEventListener(
+      "input",
+      event => {
+
+        renderListado(
+          filterRecords(
+            allListado,
+            event.target.value
+          )
+        );
+
+      }
+    );
+
+
+  $("matrizSearch")
+    .addEventListener(
+      "input",
+      event => {
+
+        renderMatriz(
+          filterRecords(
+            allMatriz,
+            event.target.value
+          )
+        );
+
+      }
+    );
+
+
+  /* =========================================================
+     REFRESH
+     ========================================================= */
+
+  $("refreshListado")
+    .addEventListener(
+      "click",
+      loadDataFromBackend
+    );
+
+
+  $("refreshMatriz")
+    .addEventListener(
+      "click",
+      loadDataFromBackend
+    );
+
+
+  /* =========================================================
+     EDIT EVENTS
+     ========================================================= */
+
+  document
+    .querySelectorAll(
+      'input[name="editMode"]'
+    )
+    .forEach(
+      radio => {
+
+        radio.addEventListener(
+          "change",
+          updateEditModeVisibility
+        );
+
+      }
+    );
+
+
+  [
+    "editClient",
+    "editProjectNo",
+    "editArea",
+    "editDocType",
+    "editRevision"
+  ]
+  .forEach(
+    id => {
+
+      $(id)
+        .addEventListener(
+          "input",
+          previewEditCode
+        );
+
+      $(id)
+        .addEventListener(
+          "change",
+          previewEditCode
+        );
+
+    }
+  );
+
+
+  $("saveEdit")
+    .addEventListener(
+      "click",
+      saveEdit
+    );
+
+
+  $("cancelEdit")
+    .addEventListener(
+      "click",
+      closeEditModal
+    );
+
+
+  $("closeEditModal")
+    .addEventListener(
+      "click",
+      closeEditModal
+    );
+
+
+  $("editModal")
+    .addEventListener(
+      "click",
+      event => {
+
+        if (
+          event.target ===
+          $("editModal")
+        ) {
+
+          closeEditModal();
+
+        }
+
+      }
+    );
+
+
+  /* =========================================================
+     INITIALIZE
+     ========================================================= */
+
+  fillRevisionSelect(
+    $("newRevision"),
+    "internal",
+    "Rev0"
+  );
+
+  fillRevisionSelect(
+    $("editRevision"),
+    "internal",
+    "Rev0"
+  );
+
+  updateNewModeVisibility();
 
 </script>
 
 </body>
-
 </html>
