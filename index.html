@@ -3054,13 +3054,28 @@ function populateDocumentTypeSelects(){
 async function loadDocumentTypes(){
   try{
 
-    const snap =
-      await getDocs(
-        collection(
-          db,
-          "documentTypes"
-        )
-      );
+    /*
+     * Firestore NO bloquea el inicio de la plataforma.
+     * Si tarda demasiado, se mantienen los tipos base.
+     */
+    const timeout = new Promise((_, reject) =>
+      setTimeout(
+        () => reject(new Error("TIMEOUT_FIRESTORE")),
+        8000
+      )
+    );
+
+    const request = getDocs(
+      collection(
+        db,
+        "documentTypes"
+      )
+    );
+
+    const snap = await Promise.race([
+      request,
+      timeout
+    ]);
 
     const remoteTypes = [];
 
@@ -3220,7 +3235,12 @@ async function saveDocumentType(){
 
     loading(true);
 
-    await addDoc(
+    /*
+     * El catálogo se configura UNA SOLA VEZ en Firebase.
+     * Después, los usuarios agregan tipos desde esta pantalla.
+     * El timeout evita que el botón quede cargando indefinidamente.
+     */
+    const saveRequest = addDoc(
       collection(
         db,
         "documentTypes"
@@ -3235,6 +3255,16 @@ async function saveDocumentType(){
           serverTimestamp()
       }
     );
+
+    await Promise.race([
+      saveRequest,
+      new Promise((_, reject) =>
+        setTimeout(
+          () => reject(new Error("TIMEOUT_FIRESTORE_SAVE")),
+          8000
+        )
+      )
+    ]);
 
     documentTypes.push({
       code,
@@ -3259,8 +3289,13 @@ async function saveDocumentType(){
 
     console.error(e);
 
+    const message =
+      e?.message === "TIMEOUT_FIRESTORE_SAVE"
+        ? "Firebase no respondió dentro de 8 segundos. Revise la conexión o las reglas de Firestore."
+        : "No fue posible guardar el tipo documental. Revise las reglas de Firestore.";
+
     toast(
-      "No fue posible guardar el tipo documental. Verifique las reglas de Firestore.",
+      message,
       "error"
     );
 
@@ -3355,7 +3390,11 @@ async function loadData(){
       : [];
 
 
-  await loadDocumentTypes();
+  /*
+   * Firestore se carga en segundo plano.
+   * La plataforma no espera a Firebase para mostrar la interfaz.
+   */
+  loadDocumentTypes();
 
 
   renderAll();
