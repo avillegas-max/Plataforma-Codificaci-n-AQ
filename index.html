@@ -1,2330 +1,3650 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
 
-  <title>Plataforma de Codificación | Aqua Service</title>
+  <title>Plataforma de Codificación AQ</title>
 
-  <!-- =========================================================
+  <!-- =====================================================
        FIREBASE
-       ========================================================= -->
+       ===================================================== -->
+
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+
     import {
       getAuth,
       onAuthStateChanged,
       signInWithEmailAndPassword,
+      createUserWithEmailAndPassword,
       sendPasswordResetEmail,
       signOut
     } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
+
     const firebaseConfig = {
-      apiKey: "AIzaSyAgKLxc9Ui0YrrBCC8jIAvGWfwrtdUTmHs",
-      authDomain: "plataforma-codificacion-aq.firebaseapp.com",
-      projectId: "plataforma-codificacion-aq",
-      storageBucket: "plataforma-codificacion-aq.firebasestorage.app",
-      messagingSenderId: "970638544563",
-      appId: "1:970638544563:web:37f586952991faa593eac6"
+
+      apiKey:
+        "AIzaSyAgKLxc9Ui0YrrBCC8jIAvGWfwrtdUTmHs",
+
+      authDomain:
+        "plataforma-codificacion-aq.firebaseapp.com",
+
+      projectId:
+        "plataforma-codificacion-aq",
+
+      storageBucket:
+        "plataforma-codificacion-aq.firebasestorage.app",
+
+      messagingSenderId:
+        "970638544563",
+
+      appId:
+        "1:970638544563:web:37f586952991faa593eac6"
+
     };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
 
-    window.firebaseAuth = auth;
-    window.firebaseFunctions = {
-      signInWithEmailAndPassword,
-      sendPasswordResetEmail,
-      signOut
-    };
+    const app =
+      initializeApp(
+        firebaseConfig
+      );
 
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        window.currentFirebaseUser = user;
 
-        document.getElementById("loginScreen").style.display = "none";
-        document.getElementById("appScreen").style.display = "flex";
+    const auth =
+      getAuth(app);
 
-        document.getElementById("userEmail").textContent =
-          user.email || "Usuario";
 
-        await window.loadDataFromBackend();
-      } else {
-        window.currentFirebaseUser = null;
+    /*
+     * Exponer Firebase para el resto
+     * de la aplicación.
+     */
 
-        document.getElementById("loginScreen").style.display = "flex";
-        document.getElementById("appScreen").style.display = "none";
+    window.firebaseAuth =
+      auth;
+
+
+    window.firebaseLogin =
+      signInWithEmailAndPassword;
+
+
+    window.firebaseCreateUser =
+      createUserWithEmailAndPassword;
+
+
+    window.firebaseResetPassword =
+      sendPasswordResetEmail;
+
+
+    window.firebaseLogout =
+      signOut;
+
+
+    /*
+     * Mantener el usuario actual
+     * disponible para api().
+     */
+
+    onAuthStateChanged(
+      auth,
+      async (user) => {
+
+        window.currentFirebaseUser =
+          user || null;
+
+
+        if (user) {
+
+          await window.handleLoggedIn(
+            user
+          );
+
+        } else {
+
+          window.handleLoggedOut();
+
+        }
+
       }
-    });
+    );
+
   </script>
 
+
+  <!-- =====================================================
+       ESTILOS
+       ===================================================== -->
+
   <style>
-    /* =========================================================
-       VARIABLES
-       ========================================================= */
-
-    :root {
-      --blue-dark: #082c4c;
-      --blue: #0b4f7c;
-      --blue-light: #1b6fa8;
-      --cyan: #00a9d6;
-
-      --bg: #f3f6f9;
-      --card: #ffffff;
-      --border: #dce3e9;
-
-      --text: #17212b;
-      --muted: #687782;
-
-      --green: #198754;
-      --orange: #e58b1a;
-      --red: #c0392b;
-
-      --shadow:
-        0 4px 18px rgba(8, 44, 76, 0.08);
-
-      --radius: 10px;
-    }
 
     * {
       box-sizing: border-box;
     }
 
-    html,
+
+    :root {
+
+      --blue:
+        #063b66;
+
+      --blue-dark:
+        #032b4b;
+
+      --blue-light:
+        #0b5d91;
+
+      --cyan:
+        #16a8d8;
+
+      --background:
+        #f4f7fa;
+
+      --white:
+        #ffffff;
+
+      --text:
+        #1f2937;
+
+      --muted:
+        #6b7280;
+
+      --border:
+        #dbe2e8;
+
+      --success:
+        #16834b;
+
+      --danger:
+        #c62828;
+
+      --warning:
+        #b7791f;
+
+      --shadow:
+        0 8px 25px rgba(
+          0,
+          0,
+          0,
+          0.08
+        );
+
+    }
+
+
     body {
+
       margin: 0;
-      padding: 0;
-      width: 100%;
-      min-height: 100%;
+
       font-family:
         Arial,
         Helvetica,
         sans-serif;
-      background: var(--bg);
-      color: var(--text);
+
+      background:
+        var(--background);
+
+      color:
+        var(--text);
+
     }
+
 
     button,
     input,
     select,
     textarea {
-      font-family: inherit;
+
+      font-family:
+        inherit;
+
     }
 
-    /* =========================================================
-       LOGIN
-       ========================================================= */
-
-    #loginScreen {
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background:
-        linear-gradient(
-          135deg,
-          #062641 0%,
-          #0b4f7c 55%,
-          #0d739b 100%
-        );
-      padding: 20px;
-    }
-
-    .login-card {
-      width: 100%;
-      max-width: 420px;
-      background: white;
-      border-radius: 18px;
-      padding: 35px;
-      box-shadow:
-        0 20px 60px rgba(0, 0, 0, 0.25);
-    }
-
-    .login-logo {
-      width: 72px;
-      height: 72px;
-      border-radius: 16px;
-      margin: 0 auto 18px;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      background: var(--blue-dark);
-      color: white;
-
-      font-size: 26px;
-      font-weight: 800;
-      letter-spacing: -1px;
-    }
-
-    .login-title {
-      text-align: center;
-      font-size: 24px;
-      font-weight: 800;
-      color: var(--blue-dark);
-      margin-bottom: 5px;
-    }
-
-    .login-subtitle {
-      text-align: center;
-      color: var(--muted);
-      font-size: 13px;
-      margin-bottom: 25px;
-    }
-
-    .login-label {
-      display: block;
-      font-size: 12px;
-      font-weight: 700;
-      margin-bottom: 6px;
-      color: #34434f;
-    }
-
-    .login-input {
-      width: 100%;
-      padding: 12px 13px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      margin-bottom: 15px;
-      outline: none;
-      font-size: 14px;
-    }
-
-    .login-input:focus {
-      border-color: var(--cyan);
-      box-shadow:
-        0 0 0 3px rgba(0, 169, 214, 0.1);
-    }
-
-    .login-button {
-      width: 100%;
-      border: none;
-      border-radius: 8px;
-      padding: 13px;
-      background: var(--blue-dark);
-      color: white;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .login-button:hover {
-      background: var(--blue);
-    }
-
-    .forgot-password {
-      text-align: center;
-      margin-top: 15px;
-      color: var(--blue-light);
-      font-size: 12px;
-      cursor: pointer;
-    }
-
-    .login-error {
-      display: none;
-      background: #fff0ef;
-      color: var(--red);
-      border: 1px solid #f3c3be;
-      border-radius: 8px;
-      padding: 10px;
-      margin-bottom: 15px;
-      font-size: 12px;
-    }
-
-    /* =========================================================
-       APP LAYOUT
-       ========================================================= */
-
-    #appScreen {
-      display: none;
-      min-height: 100vh;
-      width: 100%;
-    }
-
-    .sidebar {
-      width: 240px;
-      min-width: 240px;
-      min-height: 100vh;
-
-      background: var(--blue-dark);
-      color: white;
-
-      display: flex;
-      flex-direction: column;
-    }
-
-    .brand {
-      padding: 22px 18px;
-      border-bottom: 1px solid rgba(255,255,255,0.12);
-    }
-
-    .brand-title {
-      font-size: 18px;
-      font-weight: 800;
-      letter-spacing: -0.3px;
-    }
-
-    .brand-subtitle {
-      font-size: 11px;
-      color: rgba(255,255,255,0.65);
-      margin-top: 4px;
-    }
-
-    .menu {
-      padding: 15px 10px;
-    }
-
-    .menu-button {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-
-      padding: 11px 12px;
-
-      border: none;
-      background: transparent;
-      color: rgba(255,255,255,0.78);
-
-      border-radius: 8px;
-
-      text-align: left;
-      cursor: pointer;
-      font-size: 13px;
-    }
-
-    .menu-button:hover,
-    .menu-button.active {
-      background: rgba(255,255,255,0.12);
-      color: white;
-    }
-
-    .menu-icon {
-      width: 22px;
-      text-align: center;
-    }
-
-    .sidebar-footer {
-      margin-top: auto;
-      padding: 15px;
-      border-top: 1px solid rgba(255,255,255,0.12);
-    }
-
-    .user-email {
-      font-size: 10px;
-      color: rgba(255,255,255,0.65);
-      overflow-wrap: anywhere;
-      margin-bottom: 10px;
-    }
-
-    .logout-button {
-      width: 100%;
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 7px;
-      padding: 8px;
-      background: transparent;
-      color: white;
-      cursor: pointer;
-      font-size: 11px;
-    }
-
-    .logout-button:hover {
-      background: rgba(255,255,255,0.1);
-    }
-
-    .main {
-      flex: 1;
-      min-width: 0;
-      padding: 22px;
-      overflow-x: hidden;
-    }
-
-    /* =========================================================
-       HEADER
-       ========================================================= */
-
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-
-    .page-title {
-      font-size: 23px;
-      font-weight: 800;
-      color: var(--blue-dark);
-      margin: 0;
-    }
-
-    .page-subtitle {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 4px;
-    }
-
-    .status-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-
-      padding: 7px 10px;
-
-      border-radius: 20px;
-
-      background: #eaf7ef;
-      color: var(--green);
-
-      font-size: 11px;
-      font-weight: 700;
-    }
-
-    .status-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--green);
-    }
-
-    /* =========================================================
-       CARDS
-       ========================================================= */
-
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-    }
-
-    .card-header {
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
-
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
-
-    .card-title {
-      font-size: 14px;
-      font-weight: 800;
-      color: var(--blue-dark);
-    }
-
-    .card-body {
-      padding: 16px;
-    }
-
-    /* =========================================================
-       DASHBOARD
-       ========================================================= */
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns:
-        repeat(4, minmax(0, 1fr));
-      gap: 12px;
-      margin-bottom: 18px;
-    }
-
-    .stat-card {
-      padding: 15px;
-    }
-
-    .stat-label {
-      font-size: 11px;
-      color: var(--muted);
-      margin-bottom: 8px;
-    }
-
-    .stat-value {
-      font-size: 25px;
-      font-weight: 800;
-      color: var(--blue-dark);
-    }
-
-    .stat-small {
-      font-size: 10px;
-      color: var(--muted);
-      margin-top: 3px;
-    }
-
-    /* =========================================================
-       FORMS
-       ========================================================= */
-
-    .form-grid {
-      display: grid;
-      grid-template-columns:
-        repeat(4, minmax(0, 1fr));
-      gap: 11px;
-    }
-
-    .form-group {
-      min-width: 0;
-    }
-
-    .form-group.full {
-      grid-column: 1 / -1;
-    }
-
-    .form-group.span2 {
-      grid-column: span 2;
-    }
-
-    label {
-      display: block;
-      font-size: 10px;
-      font-weight: 800;
-      color: #40505b;
-      margin-bottom: 5px;
-      text-transform: uppercase;
-      letter-spacing: 0.2px;
-    }
-
-    input,
-    select,
-    textarea {
-      width: 100%;
-      border: 1px solid #d4dde4;
-      background: white;
-      color: var(--text);
-
-      border-radius: 7px;
-      padding: 9px 10px;
-
-      font-size: 12px;
-      outline: none;
-    }
-
-    input:focus,
-    select:focus,
-    textarea:focus {
-      border-color: var(--cyan);
-      box-shadow:
-        0 0 0 3px rgba(0,169,214,0.08);
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 70px;
-    }
-
-    .radio-group {
-      display: flex;
-      gap: 8px;
-    }
-
-    .radio-option {
-      flex: 1;
-      cursor: pointer;
-    }
-
-    .radio-option input {
-      display: none;
-    }
-
-    .radio-label {
-      display: block;
-      text-align: center;
-      padding: 9px 8px;
-
-      border: 1px solid #d4dde4;
-      border-radius: 7px;
-
-      font-size: 11px;
-      font-weight: 700;
-
-      color: #52616c;
-      background: white;
-    }
-
-    .radio-option input:checked + .radio-label {
-      border-color: var(--blue-light);
-      background: #edf6fb;
-      color: var(--blue-dark);
-    }
 
     .hidden {
       display: none !important;
     }
 
-    /* =========================================================
-       CODE PREVIEW
-       ========================================================= */
 
-    .code-preview {
-      background: #f5f8fa;
-      border: 1px dashed #aebec9;
-      border-radius: 8px;
+    /* =====================================================
+       LOGIN
+       ===================================================== */
 
-      padding: 12px;
+    #loginScreen {
 
-      margin-top: 14px;
+      min-height:
+        100vh;
+
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        center;
+
+      background:
+        linear-gradient(
+          135deg,
+          #032b4b,
+          #075985
+        );
+
+      padding:
+        20px;
+
     }
 
-    .code-preview-label {
-      font-size: 10px;
-      color: var(--muted);
-      font-weight: 800;
-      text-transform: uppercase;
-      margin-bottom: 5px;
+
+    .login-card {
+
+      width:
+        min(430px, 100%);
+
+      background:
+        white;
+
+      border-radius:
+        18px;
+
+      padding:
+        35px;
+
+      box-shadow:
+        0 20px 50px
+        rgba(
+          0,
+          0,
+          0,
+          0.25
+        );
+
     }
 
-    .code-preview-value {
-      font-family:
-        Consolas,
-        "Courier New",
-        monospace;
 
-      font-size: 18px;
-      font-weight: 800;
-      color: var(--blue-dark);
+    .login-logo {
 
-      word-break: break-all;
+      text-align:
+        center;
+
+      margin-bottom:
+        25px;
+
     }
 
-    /* =========================================================
-       BUTTONS
-       ========================================================= */
 
-    .button-row {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-      gap: 8px;
-      margin-top: 15px;
+    .login-logo .logo-box {
+
+      width:
+        75px;
+
+      height:
+        75px;
+
+      margin:
+        0 auto 15px;
+
+      border-radius:
+        16px;
+
+      background:
+        var(--blue);
+
+      color:
+        white;
+
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        center;
+
+      font-size:
+        28px;
+
+      font-weight:
+        bold;
+
     }
+
+
+    .login-logo h1 {
+
+      margin:
+        0;
+
+      color:
+        var(--blue);
+
+      font-size:
+        24px;
+
+    }
+
+
+    .login-logo p {
+
+      margin:
+        7px 0 0;
+
+      color:
+        var(--muted);
+
+      font-size:
+        13px;
+
+    }
+
+
+    .form-group {
+
+      margin-bottom:
+        16px;
+
+    }
+
+
+    .form-group label {
+
+      display:
+        block;
+
+      font-size:
+        12px;
+
+      font-weight:
+        700;
+
+      margin-bottom:
+        6px;
+
+      color:
+        #374151;
+
+    }
+
+
+    .form-control {
+
+      width:
+        100%;
+
+      border:
+        1px solid var(--border);
+
+      border-radius:
+        8px;
+
+      padding:
+        11px 12px;
+
+      font-size:
+        14px;
+
+      outline:
+        none;
+
+      background:
+        white;
+
+      transition:
+        .2s;
+
+    }
+
+
+    .form-control:focus {
+
+      border-color:
+        var(--cyan);
+
+      box-shadow:
+        0 0 0 3px
+        rgba(
+          22,
+          168,
+          216,
+          .12
+        );
+
+    }
+
 
     .btn {
-      border: none;
-      border-radius: 7px;
-      padding: 9px 13px;
 
-      font-size: 11px;
-      font-weight: 800;
+      border:
+        none;
 
-      cursor: pointer;
+      border-radius:
+        8px;
+
+      padding:
+        10px 15px;
+
+      cursor:
+        pointer;
+
+      font-size:
+        13px;
+
+      font-weight:
+        700;
+
+      transition:
+        .2s;
+
     }
+
 
     .btn-primary {
-      background: var(--blue-dark);
-      color: white;
+
+      background:
+        var(--blue);
+
+      color:
+        white;
+
     }
+
 
     .btn-primary:hover {
-      background: var(--blue);
+
+      background:
+        var(--blue-light);
+
     }
+
 
     .btn-secondary {
-      background: #eef2f5;
-      color: #33424d;
+
+      background:
+        #eef2f6;
+
+      color:
+        #374151;
+
     }
 
-    .btn-secondary:hover {
-      background: #e2e8ed;
-    }
 
     .btn-success {
-      background: var(--green);
-      color: white;
+
+      background:
+        var(--success);
+
+      color:
+        white;
+
     }
 
-    .btn-warning {
-      background: var(--orange);
-      color: white;
-    }
 
     .btn-danger {
-      background: var(--red);
-      color: white;
+
+      background:
+        var(--danger);
+
+      color:
+        white;
+
     }
 
-    .btn-small {
-      padding: 5px 8px;
-      font-size: 9px;
+
+    .btn-block {
+
+      width:
+        100%;
+
     }
 
-    /* =========================================================
-       TABLES
-       ========================================================= */
 
-    .table-toolbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
+    .login-links {
 
-      margin-bottom: 10px;
+      text-align:
+        center;
+
+      margin-top:
+        16px;
+
     }
 
-    .search-box {
-      max-width: 320px;
+
+    .login-links button {
+
+      border:
+        none;
+
+      background:
+        transparent;
+
+      color:
+        var(--blue-light);
+
+      cursor:
+        pointer;
+
+      font-size:
+        12px;
+
     }
 
-    .table-container {
-      width: 100%;
-      overflow-x: auto;
 
-      border: 1px solid var(--border);
-      border-radius: 8px;
+    .login-error {
+
+      background:
+        #fdecec;
+
+      color:
+        #a51d1d;
+
+      border:
+        1px solid #f3b8b8;
+
+      border-radius:
+        8px;
+
+      padding:
+        10px;
+
+      font-size:
+        12px;
+
+      margin-bottom:
+        15px;
+
+      display:
+        none;
+
     }
 
-    table {
-      width: 100%;
-      min-width: 1100px;
 
-      border-collapse: collapse;
-      background: white;
+    /* =====================================================
+       APP
+       ===================================================== */
+
+    #appScreen {
+
+      min-height:
+        100vh;
+
+      display:
+        flex;
+
     }
 
-    th {
-      position: sticky;
-      top: 0;
-      z-index: 2;
 
-      background: var(--blue-dark);
-      color: white;
+    .sidebar {
 
-      font-size: 9px;
-      text-transform: uppercase;
-      letter-spacing: 0.2px;
+      width:
+        235px;
 
-      padding: 8px 7px;
-      text-align: left;
+      background:
+        var(--blue-dark);
 
-      white-space: nowrap;
+      color:
+        white;
+
+      position:
+        fixed;
+
+      left:
+        0;
+
+      top:
+        0;
+
+      bottom:
+        0;
+
+      display:
+        flex;
+
+      flex-direction:
+        column;
+
+      z-index:
+        50;
+
     }
 
-    td {
-      font-size: 10px;
-      padding: 7px;
-      border-bottom: 1px solid #edf0f2;
 
-      white-space: nowrap;
-      max-width: 220px;
-      overflow: hidden;
-      text-overflow: ellipsis;
+    .brand {
+
+      padding:
+        22px 18px;
+
+      border-bottom:
+        1px solid
+        rgba(
+          255,
+          255,
+          255,
+          .12
+        );
+
     }
 
-    tr:hover td {
-      background: #f7fafc;
+
+    .brand-title {
+
+      font-size:
+        18px;
+
+      font-weight:
+        800;
+
     }
 
-    .code-cell {
+
+    .brand-subtitle {
+
+      font-size:
+        11px;
+
+      opacity:
+        .7;
+
+      margin-top:
+        4px;
+
+    }
+
+
+    .sidebar-menu {
+
+      padding:
+        18px 10px;
+
+      flex:
+        1;
+
+    }
+
+
+    .menu-item {
+
+      width:
+        100%;
+
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      gap:
+        10px;
+
+      padding:
+        11px 12px;
+
+      border:
+        none;
+
+      background:
+        transparent;
+
+      color:
+        rgba(
+          255,
+          255,
+          255,
+          .78
+        );
+
+      cursor:
+        pointer;
+
+      border-radius:
+        7px;
+
+      text-align:
+        left;
+
+      font-size:
+        13px;
+
+      margin-bottom:
+        4px;
+
+    }
+
+
+    .menu-item:hover,
+    .menu-item.active {
+
+      background:
+        rgba(
+          255,
+          255,
+          255,
+          .12
+        );
+
+      color:
+        white;
+
+    }
+
+
+    .sidebar-user {
+
+      padding:
+        15px;
+
+      border-top:
+        1px solid
+        rgba(
+          255,
+          255,
+          255,
+          .12
+        );
+
+      font-size:
+        11px;
+
+    }
+
+
+    .sidebar-user-email {
+
+      overflow:
+        hidden;
+
+      text-overflow:
+        ellipsis;
+
+      white-space:
+        nowrap;
+
+      margin-bottom:
+        9px;
+
+      opacity:
+        .8;
+
+    }
+
+
+    .main {
+
+      margin-left:
+        235px;
+
+      flex:
+        1;
+
+      min-width:
+        0;
+
+    }
+
+
+    .topbar {
+
+      height:
+        64px;
+
+      background:
+        white;
+
+      border-bottom:
+        1px solid
+        var(--border);
+
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        space-between;
+
+      padding:
+        0 25px;
+
+      position:
+        sticky;
+
+      top:
+        0;
+
+      z-index:
+        20;
+
+    }
+
+
+    .topbar-title {
+
+      font-size:
+        18px;
+
+      font-weight:
+        800;
+
+      color:
+        var(--blue);
+
+    }
+
+
+    .topbar-user {
+
+      font-size:
+        12px;
+
+      color:
+        var(--muted);
+
+    }
+
+
+    .content {
+
+      padding:
+        22px;
+
+      max-width:
+        1700px;
+
+      margin:
+        0 auto;
+
+    }
+
+
+    /* =====================================================
+       CARDS
+       ===================================================== */
+
+    .stats {
+
+      display:
+        grid;
+
+      grid-template-columns:
+        repeat(
+          4,
+          minmax(
+            150px,
+            1fr
+          )
+        );
+
+      gap:
+        14px;
+
+      margin-bottom:
+        20px;
+
+    }
+
+
+    .stat-card {
+
+      background:
+        white;
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius:
+        10px;
+
+      padding:
+        17px;
+
+      box-shadow:
+        var(--shadow);
+
+    }
+
+
+    .stat-label {
+
+      font-size:
+        11px;
+
+      text-transform:
+        uppercase;
+
+      color:
+        var(--muted);
+
+      font-weight:
+        700;
+
+    }
+
+
+    .stat-number {
+
+      font-size:
+        27px;
+
+      font-weight:
+        800;
+
+      color:
+        var(--blue);
+
+      margin-top:
+        6px;
+
+    }
+
+
+    /* =====================================================
+       SECTIONS
+       ===================================================== */
+
+    .section {
+
+      background:
+        white;
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius:
+        10px;
+
+      box-shadow:
+        var(--shadow);
+
+      margin-bottom:
+        20px;
+
+    }
+
+
+    .section-header {
+
+      padding:
+        15px 18px;
+
+      border-bottom:
+        1px solid
+        var(--border);
+
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        space-between;
+
+      gap:
+        15px;
+
+    }
+
+
+    .section-title {
+
+      color:
+        var(--blue);
+
+      font-weight:
+        800;
+
+      font-size:
+        15px;
+
+    }
+
+
+    .section-body {
+
+      padding:
+        18px;
+
+    }
+
+
+    /* =====================================================
+       FORMULARIO
+       ===================================================== */
+
+    .form-grid {
+
+      display:
+        grid;
+
+      grid-template-columns:
+        repeat(
+          4,
+          minmax(
+            150px,
+            1fr
+          )
+        );
+
+      gap:
+        13px;
+
+    }
+
+
+    .span-2 {
+
+      grid-column:
+        span 2;
+
+    }
+
+
+    .span-4 {
+
+      grid-column:
+        span 4;
+
+    }
+
+
+    textarea.form-control {
+
+      min-height:
+        75px;
+
+      resize:
+        vertical;
+
+    }
+
+
+    .radio-group {
+
+      display:
+        flex;
+
+      gap:
+        18px;
+
+      align-items:
+        center;
+
+      height:
+        40px;
+
+    }
+
+
+    .radio-option {
+
+      display:
+        flex;
+
+      gap:
+        6px;
+
+      align-items:
+        center;
+
+      font-size:
+        13px;
+
+      cursor:
+        pointer;
+
+    }
+
+
+    .code-preview {
+
+      background:
+        #eef7fb;
+
+      border:
+        1px solid
+        #b8dfea;
+
+      border-radius:
+        8px;
+
+      padding:
+        13px;
+
+      margin-top:
+        10px;
+
+    }
+
+
+    .code-preview-label {
+
+      font-size:
+        10px;
+
+      text-transform:
+        uppercase;
+
+      font-weight:
+        800;
+
+      color:
+        var(--muted);
+
+    }
+
+
+    .code-preview-value {
+
       font-family:
         Consolas,
-        "Courier New",
         monospace;
 
-      font-size: 9px;
-      font-weight: 700;
-      color: var(--blue-dark);
+      font-size:
+        18px;
+
+      font-weight:
+        800;
+
+      color:
+        var(--blue);
+
+      margin-top:
+        4px;
+
+      word-break:
+        break-all;
+
     }
+
+
+    .form-actions {
+
+      display:
+        flex;
+
+      justify-content:
+        flex-end;
+
+      gap:
+        8px;
+
+      margin-top:
+        18px;
+
+    }
+
+
+    /* =====================================================
+       TABLAS
+       ===================================================== */
+
+    .table-tools {
+
+      display:
+        flex;
+
+      justify-content:
+        space-between;
+
+      align-items:
+        center;
+
+      gap:
+        10px;
+
+      margin-bottom:
+        12px;
+
+    }
+
+
+    .search {
+
+      max-width:
+        380px;
+
+      width:
+        100%;
+
+    }
+
+
+    .table-wrapper {
+
+      overflow:
+        auto;
+
+      max-height:
+        560px;
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius:
+        7px;
+
+    }
+
+
+    table {
+
+      width:
+        100%;
+
+      border-collapse:
+        collapse;
+
+      font-size:
+        11px;
+
+      min-width:
+        1100px;
+
+    }
+
+
+    th {
+
+      position:
+        sticky;
+
+      top:
+        0;
+
+      background:
+        var(--blue);
+
+      color:
+        white;
+
+      z-index:
+        5;
+
+      padding:
+        9px 8px;
+
+      text-align:
+        left;
+
+      white-space:
+        nowrap;
+
+      font-size:
+        10px;
+
+    }
+
+
+    td {
+
+      padding:
+        8px;
+
+      border-bottom:
+        1px solid
+        #edf0f2;
+
+      white-space:
+        nowrap;
+
+      max-width:
+        230px;
+
+      overflow:
+        hidden;
+
+      text-overflow:
+        ellipsis;
+
+    }
+
+
+    tbody tr:hover {
+
+      background:
+        #f5fafc;
+
+    }
+
+
+    .code-cell {
+
+      font-family:
+        Consolas,
+        monospace;
+
+      font-weight:
+        700;
+
+      color:
+        var(--blue);
+
+    }
+
 
     .badge {
-      display: inline-block;
-      padding: 3px 6px;
-      border-radius: 12px;
-      font-size: 8px;
-      font-weight: 800;
+
+      display:
+        inline-block;
+
+      border-radius:
+        20px;
+
+      padding:
+        3px 8px;
+
+      font-size:
+        9px;
+
+      font-weight:
+        800;
+
     }
 
-    .badge-green {
-      background: #e8f6ee;
-      color: #167243;
-    }
 
-    .badge-orange {
-      background: #fff4e2;
-      color: #a76105;
-    }
-
-    .badge-gray {
-      background: #eef1f3;
-      color: #5e6b74;
-    }
-
-    /* =========================================================
-       MODAL
-       ========================================================= */
-
-    .modal-overlay {
-      display: none;
-
-      position: fixed;
-      inset: 0;
-      z-index: 1000;
+    .badge-project {
 
       background:
-        rgba(3, 21, 34, 0.62);
+        #e5f3fb;
 
-      padding: 20px;
+      color:
+        #075985;
 
-      align-items: center;
-      justify-content: center;
     }
+
+
+    .badge-internal {
+
+      background:
+        #edf2f7;
+
+      color:
+        #475569;
+
+    }
+
+
+    .badge-success {
+
+      background:
+        #e7f7ef;
+
+      color:
+        #166534;
+
+    }
+
+
+    .badge-warning {
+
+      background:
+        #fff7df;
+
+      color:
+        #92400e;
+
+    }
+
+
+    .action-btn {
+
+      border:
+        1px solid
+        var(--border);
+
+      background:
+        white;
+
+      color:
+        var(--blue);
+
+      border-radius:
+        5px;
+
+      padding:
+        5px 8px;
+
+      cursor:
+        pointer;
+
+      font-size:
+        10px;
+
+      font-weight:
+        700;
+
+    }
+
+
+    .action-btn:hover {
+
+      background:
+        #edf7fb;
+
+    }
+
+
+    /* =====================================================
+       MODAL
+       ===================================================== */
+
+    .modal-backdrop {
+
+      position:
+        fixed;
+
+      inset:
+        0;
+
+      background:
+        rgba(
+          0,
+          0,
+          0,
+          .45
+        );
+
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        center;
+
+      padding:
+        20px;
+
+      z-index:
+        100;
+
+    }
+
 
     .modal {
-      width: 100%;
-      max-width: 950px;
-      max-height: 92vh;
-      overflow-y: auto;
-
-      background: white;
-      border-radius: 12px;
-      box-shadow:
-        0 25px 80px rgba(0,0,0,0.3);
-    }
-
-    .modal-header {
-      padding: 15px 18px;
-
-      border-bottom: 1px solid var(--border);
-
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .modal-title {
-      font-size: 15px;
-      font-weight: 800;
-      color: var(--blue-dark);
-    }
-
-    .modal-close {
-      border: none;
-      background: transparent;
-      font-size: 22px;
-      cursor: pointer;
-      color: #697984;
-    }
-
-    .modal-body {
-      padding: 18px;
-    }
-
-    /* =========================================================
-       TOAST
-       ========================================================= */
-
-    #toastContainer {
-      position: fixed;
-      right: 18px;
-      bottom: 18px;
-      z-index: 2000;
-
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .toast {
-      min-width: 260px;
-      max-width: 400px;
-
-      background: #152b3c;
-      color: white;
-
-      border-radius: 8px;
-      padding: 11px 13px;
-
-      font-size: 11px;
-
-      box-shadow:
-        0 8px 25px rgba(0,0,0,0.2);
-    }
-
-    .toast.success {
-      background: #17663e;
-    }
-
-    .toast.error {
-      background: #9e3329;
-    }
-
-    .toast.warning {
-      background: #a9670d;
-    }
-
-    /* =========================================================
-       LOADING
-       ========================================================= */
-
-    #loadingOverlay {
-      display: none;
-
-      position: fixed;
-      inset: 0;
-
-      z-index: 3000;
 
       background:
-        rgba(255,255,255,0.72);
+        white;
 
-      align-items: center;
-      justify-content: center;
+      width:
+        min(
+          850px,
+          100%
+        );
+
+      max-height:
+        90vh;
+
+      overflow:
+        auto;
+
+      border-radius:
+        12px;
+
+      box-shadow:
+        0 20px 60px
+        rgba(
+          0,
+          0,
+          0,
+          .25
+        );
+
     }
 
-    .loading-box {
-      background: white;
-      border-radius: 10px;
-      padding: 20px 25px;
-      box-shadow: var(--shadow);
 
-      text-align: center;
-      font-size: 12px;
-      color: var(--blue-dark);
-      font-weight: 700;
+    .modal-header {
+
+      padding:
+        16px 20px;
+
+      border-bottom:
+        1px solid
+        var(--border);
+
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        space-between;
+
     }
 
-    .spinner {
-      width: 28px;
-      height: 28px;
 
-      border: 3px solid #dbe5eb;
-      border-top-color: var(--blue-light);
+    .modal-title {
 
-      border-radius: 50%;
+      font-weight:
+        800;
+
+      color:
+        var(--blue);
+
+    }
+
+
+    .modal-close {
+
+      border:
+        none;
+
+      background:
+        transparent;
+
+      font-size:
+        22px;
+
+      cursor:
+        pointer;
+
+      color:
+        var(--muted);
+
+    }
+
+
+    .modal-body {
+
+      padding:
+        20px;
+
+    }
+
+
+    .modal-footer {
+
+      padding:
+        15px 20px;
+
+      border-top:
+        1px solid
+        var(--border);
+
+      display:
+        flex;
+
+      justify-content:
+        flex-end;
+
+      gap:
+        8px;
+
+    }
+
+
+    /* =====================================================
+       TOAST
+       ===================================================== */
+
+    #toastContainer {
+
+      position:
+        fixed;
+
+      right:
+        20px;
+
+      bottom:
+        20px;
+
+      z-index:
+        300;
+
+      display:
+        flex;
+
+      flex-direction:
+        column;
+
+      gap:
+        8px;
+
+      width:
+        min(
+          380px,
+          calc(
+            100vw - 40px
+          )
+        );
+
+    }
+
+
+    .toast {
+
+      padding:
+        12px 14px;
+
+      border-radius:
+        8px;
+
+      color:
+        white;
+
+      font-size:
+        12px;
+
+      box-shadow:
+        0 8px 20px
+        rgba(
+          0,
+          0,
+          0,
+          .2
+        );
 
       animation:
-        spin 0.8s linear infinite;
+        toastIn .2s ease;
 
-      margin: 0 auto 10px;
     }
+
+
+    .toast-success {
+
+      background:
+        var(--success);
+
+    }
+
+
+    .toast-error {
+
+      background:
+        var(--danger);
+
+    }
+
+
+    .toast-info {
+
+      background:
+        var(--blue);
+
+    }
+
+
+    @keyframes toastIn {
+
+      from {
+
+        transform:
+          translateY(10px);
+
+        opacity:
+          0;
+
+      }
+
+      to {
+
+        transform:
+          translateY(0);
+
+        opacity:
+          1;
+
+      }
+
+    }
+
+
+    /* =====================================================
+       LOADING
+       ===================================================== */
+
+    #loading {
+
+      position:
+        fixed;
+
+      inset:
+        0;
+
+      background:
+        rgba(
+          255,
+          255,
+          255,
+          .85
+        );
+
+      z-index:
+        250;
+
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        center;
+
+      flex-direction:
+        column;
+
+      gap:
+        12px;
+
+    }
+
+
+    .spinner {
+
+      width:
+        38px;
+
+      height:
+        38px;
+
+      border:
+        4px solid #dbeafe;
+
+      border-top-color:
+        var(--blue);
+
+      border-radius:
+        50%;
+
+      animation:
+        spin .8s linear infinite;
+
+    }
+
 
     @keyframes spin {
+
       to {
-        transform: rotate(360deg);
+        transform:
+          rotate(360deg);
       }
+
     }
 
-    /* =========================================================
-       RESPONSIVE
-       ========================================================= */
 
-    @media (max-width: 1100px) {
-      .stats-grid {
+    /* =====================================================
+       RESPONSIVE
+       ===================================================== */
+
+    @media (
+      max-width: 1000px
+    ) {
+
+      .stats {
+
         grid-template-columns:
-          repeat(2, minmax(0, 1fr));
+          repeat(
+            2,
+            1fr
+          );
+
       }
+
 
       .form-grid {
+
         grid-template-columns:
-          repeat(2, minmax(0, 1fr));
+          repeat(
+            2,
+            1fr
+          );
+
       }
+
+
+      .span-4 {
+
+        grid-column:
+          span 2;
+
+      }
+
     }
 
-    @media (max-width: 760px) {
-      #appScreen {
-        flex-direction: column;
-      }
+
+    @media (
+      max-width: 700px
+    ) {
 
       .sidebar {
-        width: 100%;
-        min-width: 0;
-        min-height: auto;
+
+        width:
+          65px;
+
       }
+
+
+      .brand-title,
+      .brand-subtitle,
+      .menu-text,
+      .sidebar-user {
+
+        display:
+          none;
+
+      }
+
 
       .brand {
-        padding: 15px;
+
+        text-align:
+          center;
+
       }
 
-      .menu {
-        display: flex;
-        gap: 5px;
-        overflow-x: auto;
-      }
-
-      .menu-button {
-        min-width: 130px;
-      }
-
-      .sidebar-footer {
-        display: none;
-      }
 
       .main {
-        padding: 12px;
+
+        margin-left:
+          65px;
+
       }
 
-      .stats-grid {
-        grid-template-columns:
-          1fr 1fr;
+
+      .menu-item {
+
+        justify-content:
+          center;
+
       }
+
+
+      .stats {
+
+        grid-template-columns:
+          1fr;
+
+      }
+
 
       .form-grid {
-        grid-template-columns: 1fr;
+
+        grid-template-columns:
+          1fr;
+
       }
 
-      .form-group.span2 {
-        grid-column: span 1;
+
+      .span-2,
+      .span-4 {
+
+        grid-column:
+          span 1;
+
       }
 
-      .topbar {
-        align-items: flex-start;
-        flex-direction: column;
+
+      .content {
+
+        padding:
+          12px;
+
       }
+
     }
+
   </style>
+
 </head>
+
 
 <body>
 
-<!-- =========================================================
-     LOGIN SCREEN
-     ========================================================= -->
+  <!-- =====================================================
+       LOADING
+       ===================================================== -->
 
-<div id="loginScreen">
+  <div
+    id="loading"
+    class="hidden"
+  >
 
-  <div class="login-card">
+    <div class="spinner"></div>
 
-    <div class="login-logo">
-      AQ
-    </div>
-
-    <div class="login-title">
-      Plataforma de Codificación
-    </div>
-
-    <div class="login-subtitle">
-      Aqua Service · Gestión documental
-    </div>
-
-    <div id="loginError" class="login-error"></div>
-
-    <label class="login-label">
-      Correo electrónico
-    </label>
-
-    <input
-      id="loginEmail"
-      class="login-input"
-      type="email"
-      placeholder="usuario@aquaservices.cl"
-      autocomplete="email"
-    >
-
-    <label class="login-label">
-      Contraseña
-    </label>
-
-    <input
-      id="loginPassword"
-      class="login-input"
-      type="password"
-      placeholder="Contraseña"
-      autocomplete="current-password"
-    >
-
-    <button
-      id="loginButton"
-      class="login-button"
-      type="button"
-    >
-      Ingresar
-    </button>
-
-    <div
-      id="forgotPassword"
-      class="forgot-password"
-    >
-      ¿Olvidaste tu contraseña?
+    <div>
+      Cargando plataforma...
     </div>
 
   </div>
 
-</div>
 
+  <!-- =====================================================
+       LOGIN
+       ===================================================== -->
 
-<!-- =========================================================
-     APPLICATION
-     ========================================================= -->
+  <div id="loginScreen">
 
-<div id="appScreen">
+    <div class="login-card">
 
-  <!-- SIDEBAR -->
+      <div class="login-logo">
 
-  <aside class="sidebar">
+        <div class="logo-box">
+          AQ
+        </div>
 
-    <div class="brand">
+        <h1>
+          Codificación AQ
+        </h1>
 
-      <div class="brand-title">
-        AQUA SERVICE
+        <p>
+          Plataforma de control documental
+        </p>
+
       </div>
 
-      <div class="brand-subtitle">
-        Plataforma de Codificación Documental
-      </div>
-
-    </div>
-
-    <nav class="menu">
-
-      <button
-        class="menu-button active"
-        data-section="dashboardSection"
-      >
-        <span class="menu-icon">▦</span>
-        Dashboard
-      </button>
-
-      <button
-        class="menu-button"
-        data-section="newDocumentSection"
-      >
-        <span class="menu-icon">＋</span>
-        Nuevo documento
-      </button>
-
-      <button
-        class="menu-button"
-        data-section="listadoSection"
-      >
-        <span class="menu-icon">☷</span>
-        Listado Maestro
-      </button>
-
-      <button
-        class="menu-button"
-        data-section="matrizSection"
-      >
-        <span class="menu-icon">▤</span>
-        Matriz de Trazabilidad
-      </button>
-
-    </nav>
-
-    <div class="sidebar-footer">
 
       <div
-        id="userEmail"
-        class="user-email"
-      >
-        Usuario
-      </div>
+        id="loginError"
+        class="login-error"
+      ></div>
 
-      <button
-        id="logoutButton"
-        class="logout-button"
-      >
-        Cerrar sesión
-      </button>
+
+      <form id="loginForm">
+
+        <div class="form-group">
+
+          <label>
+            Correo electrónico
+          </label>
+
+          <input
+            id="loginEmail"
+            class="form-control"
+            type="email"
+            autocomplete="email"
+            placeholder="usuario@aquaservices.cl"
+            required
+          />
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Contraseña
+          </label>
+
+          <input
+            id="loginPassword"
+            class="form-control"
+            type="password"
+            autocomplete="current-password"
+            placeholder="Contraseña"
+            required
+          />
+
+        </div>
+
+
+        <button
+          type="submit"
+          class="btn btn-primary btn-block"
+        >
+          Ingresar
+        </button>
+
+      </form>
+
+
+      <div class="login-links">
+
+        <button
+          id="forgotPasswordBtn"
+          type="button"
+        >
+          ¿Olvidaste tu contraseña?
+        </button>
+
+      </div>
 
     </div>
 
-  </aside>
+  </div>
 
 
-  <!-- MAIN -->
+  <!-- =====================================================
+       APP
+       ===================================================== -->
 
-  <main class="main">
+  <div
+    id="appScreen"
+    class="hidden"
+  >
 
-    <!-- =====================================================
-         DASHBOARD
-         ===================================================== -->
+    <!-- SIDEBAR -->
 
-    <section
-      id="dashboardSection"
-      class="app-section"
-    >
+    <aside class="sidebar">
 
-      <div class="topbar">
+      <div class="brand">
 
-        <div>
+        <div class="brand-title">
+          AQUA SERVICE
+        </div>
 
-          <h1 class="page-title">
+        <div class="brand-subtitle">
+          Plataforma de Codificación
+        </div>
+
+      </div>
+
+
+      <div class="sidebar-menu">
+
+        <button
+          class="menu-item active"
+          data-section="dashboard"
+        >
+
+          <span>
+            ▣
+          </span>
+
+          <span class="menu-text">
             Dashboard
-          </h1>
+          </span>
 
-          <div class="page-subtitle">
-            Control de documentos y trazabilidad
-          </div>
-
-        </div>
-
-        <div class="status-pill">
-
-          <span class="status-dot"></span>
-
-          Sistema conectado
-
-        </div>
-
-      </div>
+        </button>
 
 
-      <div class="stats-grid">
+        <button
+          class="menu-item"
+          data-section="newDocument"
+        >
 
-        <div class="card stat-card">
+          <span>
+            ＋
+          </span>
 
-          <div class="stat-label">
-            DOCUMENTOS REGISTRADOS
-          </div>
-
-          <div
-            id="statDocs"
-            class="stat-value"
-          >
-            0
-          </div>
-
-          <div class="stat-small">
-            Registros consolidados
-          </div>
-
-        </div>
-
-
-        <div class="card stat-card">
-
-          <div class="stat-label">
-            CÓDIGOS ÚNICOS
-          </div>
-
-          <div
-            id="statUnique"
-            class="stat-value"
-          >
-            0
-          </div>
-
-          <div class="stat-small">
-            Identificaciones únicas
-          </div>
-
-        </div>
-
-
-        <div class="card stat-card">
-
-          <div class="stat-label">
-            LISTADO MAESTRO
-          </div>
-
-          <div
-            id="statListado"
-            class="stat-value"
-          >
-            0
-          </div>
-
-          <div class="stat-small">
-            Registros en control maestro
-          </div>
-
-        </div>
-
-
-        <div class="card stat-card">
-
-          <div class="stat-label">
-            MATRIZ TRAZABILIDAD
-          </div>
-
-          <div
-            id="statMatriz"
-            class="stat-value"
-          >
-            0
-          </div>
-
-          <div class="stat-small">
-            Registros de trazabilidad
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <div class="card">
-
-        <div class="card-header">
-
-          <div class="card-title">
-            Información del sistema
-          </div>
-
-        </div>
-
-        <div class="card-body">
-
-          <p style="
-            font-size:12px;
-            line-height:1.6;
-            color:#5d6b75;
-            margin:0;
-          ">
-            Esta plataforma permite generar, verificar y controlar
-            códigos documentales de Aqua Service, manteniendo la
-            trazabilidad entre el Listado Maestro y la Matriz de
-            Trazabilidad.
-          </p>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- =====================================================
-         NEW DOCUMENT
-         ===================================================== -->
-
-    <section
-      id="newDocumentSection"
-      class="app-section hidden"
-    >
-
-      <div class="topbar">
-
-        <div>
-
-          <h1 class="page-title">
+          <span class="menu-text">
             Nuevo documento
-          </h1>
+          </span>
 
-          <div class="page-subtitle">
-            Generación y registro de identificación documental
-          </div>
+        </button>
 
-        </div>
+
+        <button
+          class="menu-item"
+          data-section="masterList"
+        >
+
+          <span>
+            ☷
+          </span>
+
+          <span class="menu-text">
+            Listado Maestro
+          </span>
+
+        </button>
+
+
+        <button
+          class="menu-item"
+          data-section="matrix"
+        >
+
+          <span>
+            ▤
+          </span>
+
+          <span class="menu-text">
+            Matriz de Trazabilidad
+          </span>
+
+        </button>
 
       </div>
 
 
-      <div class="card">
+      <div class="sidebar-user">
 
-        <div class="card-header">
-
-          <div class="card-title">
-            Datos del documento
-          </div>
-
+        <div
+          id="sidebarEmail"
+          class="sidebar-user-email"
+        >
         </div>
 
-        <div class="card-body">
+        <button
+          id="logoutBtn"
+          class="btn btn-danger btn-block"
+        >
+          Cerrar sesión
+        </button>
 
-          <div class="form-grid">
+      </div>
 
-            <!-- TIPO DE DOCUMENTACIÓN -->
+    </aside>
 
-            <div class="form-group full">
 
-              <label>
-                Tipo de documentación
-              </label>
+    <!-- MAIN -->
 
-              <div class="radio-group">
+    <main class="main">
 
-                <label class="radio-option">
+      <header class="topbar">
 
-                  <input
-                    type="radio"
-                    name="newMode"
-                    value="internal"
-                    checked
-                  >
+        <div
+          id="topbarTitle"
+          class="topbar-title"
+        >
+          Dashboard
+        </div>
 
-                  <span class="radio-label">
-                    Documentación Interna
-                  </span>
+        <div
+          id="topbarUser"
+          class="topbar-user"
+        >
+        </div>
 
-                </label>
+      </header>
 
-                <label class="radio-option">
 
-                  <input
-                    type="radio"
-                    name="newMode"
-                    value="project"
-                  >
+      <div class="content">
 
-                  <span class="radio-label">
-                    Proyecto
-                  </span>
 
-                </label>
+        <!-- =================================================
+             DASHBOARD
+             ================================================= -->
 
+        <section
+          id="dashboardSection"
+          class="app-section"
+        >
+
+          <div class="stats">
+
+            <div class="stat-card">
+
+              <div class="stat-label">
+                Total documentos
+              </div>
+
+              <div
+                id="statTotal"
+                class="stat-number"
+              >
+                0
               </div>
 
             </div>
 
 
-            <!-- CLIENTE -->
+            <div class="stat-card">
 
-            <div
-              id="newClientGroup"
-              class="form-group"
-            >
+              <div class="stat-label">
+                Proyectos
+              </div>
 
-              <label>
-                Cliente
-              </label>
-
-              <input
-                id="newClient"
-                type="text"
-                placeholder="Ej.: Alto Norte"
+              <div
+                id="statProjects"
+                class="stat-number"
               >
+                0
+              </div>
 
             </div>
 
 
-            <!-- N° PROYECTO -->
+            <div class="stat-card">
 
-            <div
-              id="newProjectNoGroup"
-              class="form-group"
-            >
+              <div class="stat-label">
+                Documentación interna
+              </div>
 
-              <label>
-                N° proyecto / N° cliente
-              </label>
-
-              <input
-                id="newProjectNo"
-                type="text"
-                placeholder="Ej.: 04"
+              <div
+                id="statInternal"
+                class="stat-number"
               >
+                0
+              </div>
 
             </div>
 
 
-            <!-- NOMBRE PROYECTO -->
+            <div class="stat-card">
 
-            <div
-              id="newProjectNameGroup"
-              class="form-group span2"
-            >
+              <div class="stat-label">
+                Última actualización
+              </div>
 
-              <label>
-                Nombre del proyecto
-              </label>
-
-              <input
-                id="newProjectName"
-                type="text"
-                placeholder="Nombre del proyecto"
+              <div
+                id="statLast"
+                class="stat-number"
+                style="font-size:18px;"
               >
-
-            </div>
-
-
-            <!-- AREA -->
-
-            <div class="form-group">
-
-              <label>
-                Área / sistema
-              </label>
-
-              <select id="newArea">
-
-                <option value="">
-                  Seleccionar...
-                </option>
-
-                <option value="AD">
-                  AD · Administración
-                </option>
-
-                <option value="QA">
-                  QA · Aseguramiento de Calidad
-                </option>
-
-                <option value="QC">
-                  QC · Control de Calidad
-                </option>
-
-                <option value="PR">
-                  PR · Producción
-                </option>
-
-                <option value="ING">
-                  ING · Ingeniería
-                </option>
-
-                <option value="SEC">
-                  SEC · Seguridad
-                </option>
-
-                <option value="ADQ">
-                  ADQ · Adquisiciones
-                </option>
-
-                <option value="VEN">
-                  VEN · Ventas
-                </option>
-
-                <option value="RRHH">
-                  RRHH · Recursos Humanos
-                </option>
-
-                <option value="SSO">
-                  SSO · Seguridad y Salud Ocupacional
-                </option>
-
-                <option value="MA">
-                  MA · Medio Ambiente
-                </option>
-
-                <option value="MANT">
-                  MANT · Mantención
-                </option>
-
-                <option value="SIG">
-                  SIG · Sistema Integrado de Gestión
-                </option>
-
-              </select>
-
-            </div>
-
-
-            <!-- TIPO DOCUMENTO -->
-
-            <div class="form-group">
-
-              <label>
-                Tipo de documento
-              </label>
-
-              <select id="newDocType">
-
-                <option value="">
-                  Seleccionar...
-                </option>
-
-                <option value="PROC">
-                  PROC · Procedimiento
-                </option>
-
-                <option value="INS">
-                  INS · Instructivo
-                </option>
-
-                <option value="REG">
-                  REG · Registro
-                </option>
-
-                <option value="MAN">
-                  MAN · Manual
-                </option>
-
-                <option value="PL">
-                  PL · Política
-                </option>
-
-                <option value="PROG">
-                  PROG · Programa
-                </option>
-
-                <option value="ESQ">
-                  ESQ · Esquema
-                </option>
-
-                <option value="MAT">
-                  MAT · Matriz
-                </option>
-
-                <option value="PLN">
-                  PLN · Plano
-                </option>
-
-                <option value="INF">
-                  INF · Informe
-                </option>
-
-                <option value="PAC">
-                  PAC · Plan de Aseguramiento de Calidad
-                </option>
-
-                <option value="PROT">
-                  PROT · Protocolo
-                </option>
-
-                <option value="PIE">
-                  PIE · Plan de Inspección y Ensayo
-                </option>
-
-                <option value="CHK">
-                  CHK · Checklist
-                </option>
-
-                <option value="ORG">
-                  ORG · Organigrama
-                </option>
-
-              </select>
-
-            </div>
-
-
-            <!-- REVISION -->
-
-            <div class="form-group">
-
-              <label>
-                Revisión
-              </label>
-
-              <select id="newRevision">
-                <!-- Se llena dinámicamente -->
-              </select>
-
-            </div>
-
-
-            <!-- NOMBRE -->
-
-            <div class="form-group span2">
-
-              <label>
-                Nombre del documento
-              </label>
-
-              <input
-                id="newName"
-                type="text"
-                placeholder="Ej.: Procedimiento de control documental"
-              >
-
-            </div>
-
-
-            <!-- FECHA -->
-
-            <div class="form-group">
-
-              <label>
-                Fecha emisión
-              </label>
-
-              <input
-                id="newIssueDate"
-                type="date"
-              >
-
-            </div>
-
-
-            <!-- ESTADO -->
-
-            <div class="form-group">
-
-              <label>
-                Estado
-              </label>
-
-              <select id="newState">
-
-                <option value="Vigente">
-                  Vigente
-                </option>
-
-                <option value="En revisión">
-                  En revisión
-                </option>
-
-                <option value="Obsoleto">
-                  Obsoleto
-                </option>
-
-                <option value="Borrador">
-                  Borrador
-                </option>
-
-              </select>
-
-            </div>
-
-
-            <!-- LINK -->
-
-            <div class="form-group span2">
-
-              <label>
-                Enlace al documento
-              </label>
-
-              <input
-                id="newDocLink"
-                type="url"
-                placeholder="https://..."
-              >
-
-            </div>
-
-
-            <!-- DISTRIBUCION -->
-
-            <div class="form-group">
-
-              <label>
-                Distribución
-              </label>
-
-              <input
-                id="newDistribution"
-                type="text"
-                placeholder="Ej.: Interna"
-              >
-
-            </div>
-
-
-            <!-- ASOCIADOS -->
-
-            <div class="form-group">
-
-              <label>
-                Documentos asociados
-              </label>
-
-              <input
-                id="newAssociated"
-                type="text"
-                placeholder="Código / documento asociado"
-              >
-
-            </div>
-
-
-            <!-- DIFUSION -->
-
-            <div class="form-group">
-
-              <label>
-                Difusión
-              </label>
-
-              <input
-                id="newDiffusion"
-                type="text"
-                placeholder="Ej.: Teams / correo"
-              >
-
-            </div>
-
-
-            <!-- EVIDENCIA -->
-
-            <div class="form-group">
-
-              <label>
-                Evidencia / registro
-              </label>
-
-              <input
-                id="newEvidence"
-                type="text"
-                placeholder="Registro asociado"
-              >
-
-            </div>
-
-
-            <!-- NORMA -->
-
-            <div class="form-group">
-
-              <label>
-                Norma / requisito
-              </label>
-
-              <input
-                id="newStandard"
-                type="text"
-                placeholder="Ej.: ISO 9001:2015"
-              >
-
-            </div>
-
-
-            <!-- OBSERVACIONES -->
-
-            <div class="form-group full">
-
-              <label>
-                Observaciones
-              </label>
-
-              <textarea
-                id="newObservations"
-                placeholder="Observaciones..."
-              ></textarea>
+                —
+              </div>
 
             </div>
 
           </div>
 
 
-          <!-- CODE PREVIEW -->
+          <div class="section">
 
-          <div class="code-preview">
+            <div class="section-header">
+
+              <div class="section-title">
+                Documentos registrados
+              </div>
+
+              <button
+                id="dashboardRefresh"
+                class="btn btn-secondary"
+              >
+                Actualizar
+              </button>
+
+            </div>
+
+
+            <div class="section-body">
+
+              <div class="table-wrapper">
+
+                <table>
+
+                  <thead>
+
+                    <tr>
+
+                      <th>
+                        CÓDIGO
+                      </th>
+
+                      <th>
+                        DOCUMENTO
+                      </th>
+
+                      <th>
+                        PROYECTO
+                      </th>
+
+                      <th>
+                        CLIENTE
+                      </th>
+
+                      <th>
+                        N° PROY.
+                      </th>
+
+                      <th>
+                        ÁREA
+                      </th>
+
+                      <th>
+                        TIPO
+                      </th>
+
+                      <th>
+                        REV.
+                      </th>
+
+                      <th>
+                        FECHA
+                      </th>
+
+                      <th>
+                        ESTADO
+                      </th>
+
+                      <th>
+                        ACCIÓN
+                      </th>
+
+                    </tr>
+
+                  </thead>
+
+                  <tbody
+                    id="dashboardTable"
+                  ></tbody>
+
+                </table>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- =================================================
+             NUEVO DOCUMENTO
+             ================================================= -->
+
+        <section
+          id="newDocumentSection"
+          class="app-section hidden"
+        >
+
+          <div class="section">
+
+            <div class="section-header">
+
+              <div class="section-title">
+                Registrar nuevo documento
+              </div>
+
+            </div>
+
+
+            <div class="section-body">
+
+              <form
+                id="documentForm"
+              >
+
+                <div class="form-grid">
+
+
+                  <!-- TIPO -->
+
+                  <div class="form-group span-4">
+
+                    <label>
+                      Tipo de documentación
+                    </label>
+
+                    <div class="radio-group">
+
+                      <label
+                        class="radio-option"
+                      >
+
+                        <input
+                          type="radio"
+                          name="mode"
+                          value="project"
+                          checked
+                        />
+
+                        Proyecto
+
+                      </label>
+
+
+                      <label
+                        class="radio-option"
+                      >
+
+                        <input
+                          type="radio"
+                          name="mode"
+                          value="internal"
+                        />
+
+                        Documentación Interna
+
+                      </label>
+
+                    </div>
+
+                  </div>
+
+
+                  <!-- PROYECTO -->
+
+                  <div
+                    id="projectFields"
+                    class="span-4"
+                  >
+
+                    <div
+                      class="form-grid"
+                    >
+
+                      <div class="form-group">
+
+                        <label>
+                          Cliente
+                        </label>
+
+                        <input
+                          id="client"
+                          class="form-control"
+                          placeholder="Ej. Alto Norte"
+                        />
+
+                      </div>
+
+
+                      <div class="form-group">
+
+                        <label>
+                          N° Proyecto
+                        </label>
+
+                        <input
+                          id="projectNo"
+                          class="form-control"
+                          placeholder="Ej. 04"
+                        />
+
+                      </div>
+
+
+                      <div class="form-group span-2">
+
+                        <label>
+                          Nombre del proyecto
+                        </label>
+
+                        <input
+                          id="projectName"
+                          class="form-control"
+                          placeholder="Nombre del proyecto"
+                        />
+
+                      </div>
+
+                    </div>
+
+                  </div>
+
+
+                  <!-- ÁREA -->
+
+                  <div class="form-group">
+
+                    <label>
+                      Área / Sistema *
+                    </label>
+
+                    <select
+                      id="area"
+                      class="form-control"
+                      required
+                    >
+
+                      <option value="">
+                        Seleccionar...
+                      </option>
+
+                      <option value="AD">
+                        AD - Administración
+                      </option>
+
+                      <option value="QA">
+                        QA - Aseguramiento de Calidad
+                      </option>
+
+                      <option value="QC">
+                        QC - Control de Calidad
+                      </option>
+
+                      <option value="PR">
+                        PR - Producción
+                      </option>
+
+                      <option value="ING">
+                        ING - Ingeniería
+                      </option>
+
+                      <option value="SEC">
+                        SEC - Secretaría
+                      </option>
+
+                      <option value="ADQ">
+                        ADQ - Adquisiciones
+                      </option>
+
+                      <option value="VEN">
+                        VEN - Ventas
+                      </option>
+
+                      <option value="RRHH">
+                        RRHH - Recursos Humanos
+                      </option>
+
+                      <option value="SSO">
+                        SSO - Seguridad y Salud Ocupacional
+                      </option>
+
+                      <option value="MA">
+                        MA - Medio Ambiente
+                      </option>
+
+                      <option value="MANT">
+                        MANT - Mantención
+                      </option>
+
+                      <option value="SIG">
+                        SIG - Sistema Integrado de Gestión
+                      </option>
+
+                    </select>
+
+                  </div>
+
+
+                  <!-- TIPO DOCUMENTO -->
+
+                  <div class="form-group">
+
+                    <label>
+                      Tipo de documento *
+                    </label>
+
+                    <select
+                      id="docType"
+                      class="form-control"
+                      required
+                    >
+
+                      <option value="">
+                        Seleccionar...
+                      </option>
+
+                      <option value="PROC">
+                        PROC - Procedimiento
+                      </option>
+
+                      <option value="INS">
+                        INS - Instructivo
+                      </option>
+
+                      <option value="REG">
+                        REG - Registro
+                      </option>
+
+                      <option value="MAN">
+                        MAN - Manual
+                      </option>
+
+                      <option value="PL">
+                        PL - Política
+                      </option>
+
+                      <option value="PROG">
+                        PROG - Programa
+                      </option>
+
+                      <option value="ESQ">
+                        ESQ - Esquema
+                      </option>
+
+                      <option value="MAT">
+                        MAT - Matriz
+                      </option>
+
+                      <option value="PLN">
+                        PLN - Plano
+                      </option>
+
+                      <option value="INF">
+                        INF - Informe
+                      </option>
+
+                      <option value="PAC">
+                        PAC - Plan de Aseguramiento de Calidad
+                      </option>
+
+                      <option value="PROT">
+                        PROT - Protocolo
+                      </option>
+
+                      <option value="PIE">
+                        PIE - Plan de Inspección y Ensayo
+                      </option>
+
+                      <option value="CHK">
+                        CHK - Checklist
+                      </option>
+
+                      <option value="ORG">
+                        ORG - Organigrama
+                      </option>
+
+                    </select>
+
+                  </div>
+
+
+                  <!-- REVISION -->
+
+                  <div class="form-group">
+
+                    <label>
+                      Revisión *
+                    </label>
+
+                    <select
+                      id="revision"
+                      class="form-control"
+                      required
+                    >
+
+                      <option value="">
+                        Seleccionar...
+                      </option>
+
+                      <option value="Rev.B">
+                        Rev.B - Origen / Revisión del cliente
+                      </option>
+
+                      <option value="Rev0">
+                        Rev0 - Aprobado por cliente / Original
+                      </option>
+
+                      <option value="Rev1">
+                        Rev1
+                      </option>
+
+                      <option value="Rev2">
+                        Rev2
+                      </option>
+
+                      <option value="Rev3">
+                        Rev3
+                      </option>
+
+                      <option value="Rev4">
+                        Rev4
+                      </option>
+
+                      <option value="Rev5">
+                        Rev5
+                      </option>
+
+                    </select>
+
+                  </div>
+
+
+                  <!-- NOMBRE -->
+
+                  <div class="form-group span-2">
+
+                    <label>
+                      Nombre del documento *
+                    </label>
+
+                    <input
+                      id="documentName"
+                      class="form-control"
+                      placeholder="Ej. Procedimiento de Control Documental"
+                      required
+                    />
+
+                  </div>
+
+
+                  <!-- FECHA -->
+
+                  <div class="form-group">
+
+                    <label>
+                      Fecha de emisión
+                    </label>
+
+                    <input
+                      id="issueDate"
+                      type="date"
+                      class="form-control"
+                    />
+
+                  </div>
+
+
+                  <!-- ESTADO -->
+
+                  <div class="form-group">
+
+                    <label>
+                      Estado
+                    </label>
+
+                    <select
+                      id="state"
+                      class="form-control"
+                    >
+
+                      <option value="">
+                        Seleccionar...
+                      </option>
+
+                      <option value="Vigente">
+                        Vigente
+                      </option>
+
+                      <option value="En revisión">
+                        En revisión
+                      </option>
+
+                      <option value="Obsoleto">
+                        Obsoleto
+                      </option>
+
+                      <option value="Borrador">
+                        Borrador
+                      </option>
+
+                    </select>
+
+                  </div>
+
+
+                  <!-- LINK -->
+
+                  <div class="form-group span-2">
+
+                    <label>
+                      Link del documento
+                    </label>
+
+                    <input
+                      id="docLink"
+                      class="form-control"
+                      type="url"
+                      placeholder="https://..."
+                    />
+
+                  </div>
+
+
+                  <!-- DISTRIBUCION -->
+
+                  <div class="form-group">
+
+                    <label>
+                      Distribución
+                    </label>
+
+                    <input
+                      id="distribution"
+                      class="form-control"
+                      placeholder="Ej. Interna"
+                    />
+
+                  </div>
+
+
+                  <!-- DIFUSION -->
+
+                  <div class="form-group">
+
+                    <label>
+                      Difusión
+                    </label>
+
+                    <input
+                      id="diffusion"
+                      class="form-control"
+                      placeholder="Ej. Teams"
+                    />
+
+                  </div>
+
+
+                  <!-- ASOCIADOS -->
+
+                  <div class="form-group span-2">
+
+                    <label>
+                      Documentos asociados
+                    </label>
+
+                    <input
+                      id="associated"
+                      class="form-control"
+                    />
+
+                  </div>
+
+
+                  <!-- EVIDENCIA -->
+
+                  <div class="form-group">
+
+                    <label>
+                      Evidencia / Registro asociado
+                    </label>
+
+                    <input
+                      id="evidence"
+                      class="form-control"
+                    />
+
+                  </div>
+
+
+                  <!-- NORMA -->
+
+                  <div class="form-group">
+
+                    <label>
+                      Norma / Requisito
+                    </label>
+
+                    <input
+                      id="standard"
+                      class="form-control"
+                      placeholder="Ej. ISO 9001:2015"
+                    />
+
+                  </div>
+
+
+                  <!-- OBSERVACIONES -->
+
+                  <div class="form-group span-4">
+
+                    <label>
+                      Observaciones
+                    </label>
+
+                    <textarea
+                      id="observations"
+                      class="form-control"
+                    ></textarea>
+
+                  </div>
+
+
+                  <!-- PREVIEW -->
+
+                  <div
+                    class="span-4 code-preview"
+                  >
+
+                    <div class="code-preview-label">
+                      Código generado
+                    </div>
+
+                    <div
+                      id="codePreview"
+                      class="code-preview-value"
+                    >
+                      Complete los campos para generar el código
+                    </div>
+
+                  </div>
+
+                </div>
+
+
+                <div class="form-actions">
+
+                  <button
+                    type="button"
+                    id="previewBtn"
+                    class="btn btn-secondary"
+                  >
+                    Generar código
+                  </button>
+
+
+                  <button
+                    type="button"
+                    id="clearBtn"
+                    class="btn btn-secondary"
+                  >
+                    Limpiar
+                  </button>
+
+
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                  >
+                    Registrar documento
+                  </button>
+
+                </div>
+
+              </form>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- =================================================
+             LISTADO MAESTRO
+             ================================================= -->
+
+        <section
+          id="masterListSection"
+          class="app-section hidden"
+        >
+
+          <div class="section">
+
+            <div class="section-header">
+
+              <div class="section-title">
+                Listado Maestro
+              </div>
+
+              <button
+                id="masterRefresh"
+                class="btn btn-secondary"
+              >
+                Actualizar
+              </button>
+
+            </div>
+
+
+            <div class="section-body">
+
+              <div class="table-tools">
+
+                <input
+                  id="masterSearch"
+                  class="form-control search"
+                  placeholder="Buscar código, documento, proyecto, área..."
+                />
+
+                <span
+                  id="masterCount"
+                  style="
+                    font-size:12px;
+                    color:#6b7280;
+                  "
+                >
+                  0 registros
+                </span>
+
+              </div>
+
+
+              <div class="table-wrapper">
+
+                <table>
+
+                  <thead>
+
+                    <tr>
+
+                      <th>
+                        CÓDIGO
+                      </th>
+
+                      <th>
+                        DOCUMENTO
+                      </th>
+
+                      <th>
+                        PROYECTO
+                      </th>
+
+                      <th>
+                        CLIENTE
+                      </th>
+
+                      <th>
+                        N° PROY.
+                      </th>
+
+                      <th>
+                        ÁREA
+                      </th>
+
+                      <th>
+                        TIPO
+                      </th>
+
+                      <th>
+                        REV.
+                      </th>
+
+                      <th>
+                        FECHA
+                      </th>
+
+                      <th>
+                        ESTADO
+                      </th>
+
+                      <th>
+                        ACCIÓN
+                      </th>
+
+                    </tr>
+
+                  </thead>
+
+                  <tbody
+                    id="masterTable"
+                  ></tbody>
+
+                </table>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- =================================================
+             MATRIZ
+             ================================================= -->
+
+        <section
+          id="matrixSection"
+          class="app-section hidden"
+        >
+
+          <div class="section">
+
+            <div class="section-header">
+
+              <div class="section-title">
+                Matriz de Trazabilidad
+              </div>
+
+              <button
+                id="matrixRefresh"
+                class="btn btn-secondary"
+              >
+                Actualizar
+              </button>
+
+            </div>
+
+
+            <div class="section-body">
+
+              <div class="table-tools">
+
+                <input
+                  id="matrixSearch"
+                  class="form-control search"
+                  placeholder="Buscar..."
+                />
+
+                <span
+                  id="matrixCount"
+                  style="
+                    font-size:12px;
+                    color:#6b7280;
+                  "
+                >
+                  0 registros
+                </span>
+
+              </div>
+
+
+              <div class="table-wrapper">
+
+                <table>
+
+                  <thead>
+
+                    <tr>
+
+                      <th>
+                        CÓDIGO
+                      </th>
+
+                      <th>
+                        DOCUMENTO
+                      </th>
+
+                      <th>
+                        PROYECTO
+                      </th>
+
+                      <th>
+                        CLIENTE
+                      </th>
+
+                      <th>
+                        N° PROY.
+                      </th>
+
+                      <th>
+                        ÁREA
+                      </th>
+
+                      <th>
+                        TIPO
+                      </th>
+
+                      <th>
+                        REV.
+                      </th>
+
+                      <th>
+                        FECHA
+                      </th>
+
+                      <th>
+                        ESTADO
+                      </th>
+
+                      <th>
+                        ACCIÓN
+                      </th>
+
+                    </tr>
+
+                  </thead>
+
+                  <tbody
+                    id="matrixTable"
+                  ></tbody>
+
+                </table>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+      </div>
+
+    </main>
+
+  </div>
+
+
+  <!-- =====================================================
+       MODAL EDITAR
+       ===================================================== -->
+
+  <div
+    id="editModal"
+    class="modal-backdrop hidden"
+  >
+
+    <div class="modal">
+
+      <div class="modal-header">
+
+        <div class="modal-title">
+          Editar documento
+        </div>
+
+        <button
+          id="closeEditModal"
+          class="modal-close"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <div class="modal-body">
+
+        <input
+          id="editOriginalCode"
+          type="hidden"
+        />
+
+
+        <div class="form-grid">
+
+
+          <div class="form-group">
+
+            <label>
+              Tipo
+            </label>
+
+            <select
+              id="editMode"
+              class="form-control"
+            >
+
+              <option value="project">
+                Proyecto
+              </option>
+
+              <option value="internal">
+                Documentación Interna
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Cliente
+            </label>
+
+            <input
+              id="editClient"
+              class="form-control"
+            />
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              N° Proyecto
+            </label>
+
+            <input
+              id="editProjectNo"
+              class="form-control"
+            />
+
+          </div>
+
+
+          <div class="form-group span-2">
+
+            <label>
+              Nombre del proyecto
+            </label>
+
+            <input
+              id="editProjectName"
+              class="form-control"
+            />
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Área
+            </label>
+
+            <select
+              id="editArea"
+              class="form-control"
+            >
+
+              <option value="AD">
+                AD
+              </option>
+
+              <option value="QA">
+                QA
+              </option>
+
+              <option value="QC">
+                QC
+              </option>
+
+              <option value="PR">
+                PR
+              </option>
+
+              <option value="ING">
+                ING
+              </option>
+
+              <option value="SEC">
+                SEC
+              </option>
+
+              <option value="ADQ">
+                ADQ
+              </option>
+
+              <option value="VEN">
+                VEN
+              </option>
+
+              <option value="RRHH">
+                RRHH
+              </option>
+
+              <option value="SSO">
+                SSO
+              </option>
+
+              <option value="MA">
+                MA
+              </option>
+
+              <option value="MANT">
+                MANT
+              </option>
+
+              <option value="SIG">
+                SIG
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Tipo documento
+            </label>
+
+            <select
+              id="editDocType"
+              class="form-control"
+            >
+
+              <option value="PROC">
+                PROC
+              </option>
+
+              <option value="INS">
+                INS
+              </option>
+
+              <option value="REG">
+                REG
+              </option>
+
+              <option value="MAN">
+                MAN
+              </option>
+
+              <option value="PL">
+                PL
+              </option>
+
+              <option value="PROG">
+                PROG
+              </option>
+
+              <option value="ESQ">
+                ESQ
+              </option>
+
+              <option value="MAT">
+                MAT
+              </option>
+
+              <option value="PLN">
+                PLN
+              </option>
+
+              <option value="INF">
+                INF
+              </option>
+
+              <option value="PAC">
+                PAC
+              </option>
+
+              <option value="PROT">
+                PROT
+              </option>
+
+              <option value="PIE">
+                PIE
+              </option>
+
+              <option value="CHK">
+                CHK
+              </option>
+
+              <option value="ORG">
+                ORG
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Revisión
+            </label>
+
+            <select
+              id="editRevision"
+              class="form-control"
+            >
+
+              <option value="Rev.B">
+                Rev.B
+              </option>
+
+              <option value="Rev0">
+                Rev0
+              </option>
+
+              <option value="Rev1">
+                Rev1
+              </option>
+
+              <option value="Rev2">
+                Rev2
+              </option>
+
+              <option value="Rev3">
+                Rev3
+              </option>
+
+              <option value="Rev4">
+                Rev4
+              </option>
+
+              <option value="Rev5">
+                Rev5
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="form-group span-2">
+
+            <label>
+              Nombre del documento
+            </label>
+
+            <input
+              id="editName"
+              class="form-control"
+            />
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Fecha
+            </label>
+
+            <input
+              id="editIssueDate"
+              type="date"
+              class="form-control"
+            />
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Estado
+            </label>
+
+            <select
+              id="editState"
+              class="form-control"
+            >
+
+              <option value="">
+                Seleccionar...
+              </option>
+
+              <option value="Vigente">
+                Vigente
+              </option>
+
+              <option value="En revisión">
+                En revisión
+              </option>
+
+              <option value="Obsoleto">
+                Obsoleto
+              </option>
+
+              <option value="Borrador">
+                Borrador
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="form-group span-2">
+
+            <label>
+              Link
+            </label>
+
+            <input
+              id="editDocLink"
+              class="form-control"
+              type="url"
+            />
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Distribución
+            </label>
+
+            <input
+              id="editDistribution"
+              class="form-control"
+            />
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Difusión
+            </label>
+
+            <input
+              id="editDiffusion"
+              class="form-control"
+            />
+
+          </div>
+
+
+          <div class="form-group span-2">
+
+            <label>
+              Documentos asociados
+            </label>
+
+            <input
+              id="editAssociated"
+              class="form-control"
+            />
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Evidencia
+            </label>
+
+            <input
+              id="editEvidence"
+              class="form-control"
+            />
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Norma / Requisito
+            </label>
+
+            <input
+              id="editStandard"
+              class="form-control"
+            />
+
+          </div>
+
+
+          <div class="form-group span-4">
+
+            <label>
+              Observaciones
+            </label>
+
+            <textarea
+              id="editObservations"
+              class="form-control"
+            ></textarea>
+
+          </div>
+
+
+          <div
+            class="span-4 code-preview"
+          >
 
             <div class="code-preview-label">
-              Código generado
+              Código
             </div>
 
             <div
-              id="newCodePreview"
+              id="editCodePreview"
               class="code-preview-value"
             >
-              Complete los datos para generar el código
+              —
             </div>
 
           </div>
 
-
-          <div class="button-row">
-
-            <button
-              id="verifyCodeButton"
-              class="btn btn-secondary"
-              type="button"
-            >
-              Verificar código
-            </button>
-
-            <button
-              id="createDocumentButton"
-              class="btn btn-primary"
-              type="button"
-            >
-              Registrar documento
-            </button>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- =====================================================
-         LISTADO MAESTRO
-         ===================================================== -->
-
-    <section
-      id="listadoSection"
-      class="app-section hidden"
-    >
-
-      <div class="topbar">
-
-        <div>
-
-          <h1 class="page-title">
-            Listado Maestro
-          </h1>
-
-          <div class="page-subtitle">
-            Control documental y versiones
-          </div>
-
         </div>
 
       </div>
 
 
-      <div class="card">
-
-        <div class="card-body">
-
-          <div class="table-toolbar">
-
-            <input
-              id="listadoSearch"
-              class="search-box"
-              type="text"
-              placeholder="Buscar código, documento, área..."
-            >
-
-            <button
-              id="refreshListado"
-              class="btn btn-secondary btn-small"
-            >
-              Actualizar
-            </button>
-
-          </div>
-
-
-          <div class="table-container">
-
-            <table>
-
-              <thead>
-
-                <tr>
-
-                  <th>Código</th>
-                  <th>Documento</th>
-                  <th>Proyecto</th>
-                  <th>Cliente</th>
-                  <th>N° Proy.</th>
-                  <th>Área</th>
-                  <th>Tipo</th>
-                  <th>Rev.</th>
-                  <th>Fecha</th>
-                  <th>Estado</th>
-                  <th>Acción</th>
-
-                </tr>
-
-              </thead>
-
-              <tbody id="listadoTableBody">
-              </tbody>
-
-            </table>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- =====================================================
-         MATRIZ
-         ===================================================== -->
-
-    <section
-      id="matrizSection"
-      class="app-section hidden"
-    >
-
-      <div class="topbar">
-
-        <div>
-
-          <h1 class="page-title">
-            Matriz de Trazabilidad
-          </h1>
-
-          <div class="page-subtitle">
-            Trazabilidad de documentos del SGC
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <div class="card">
-
-        <div class="card-body">
-
-          <div class="table-toolbar">
-
-            <input
-              id="matrizSearch"
-              class="search-box"
-              type="text"
-              placeholder="Buscar código, documento, área..."
-            >
-
-            <button
-              id="refreshMatriz"
-              class="btn btn-secondary btn-small"
-            >
-              Actualizar
-            </button>
-
-          </div>
-
-
-          <div class="table-container">
-
-            <table>
-
-              <thead>
-
-                <tr>
-
-                  <th>Código</th>
-                  <th>Documento</th>
-                  <th>Proyecto</th>
-                  <th>Cliente</th>
-                  <th>N° Proy.</th>
-                  <th>Área</th>
-                  <th>Tipo</th>
-                  <th>Rev.</th>
-                  <th>Fecha</th>
-                  <th>Estado</th>
-                  <th>Acción</th>
-
-                </tr>
-
-              </thead>
-
-              <tbody id="matrizTableBody">
-              </tbody>
-
-            </table>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-  </main>
-
-</div>
-
-
-<!-- =========================================================
-     EDIT MODAL
-     ========================================================= -->
-
-<div
-  id="editModal"
-  class="modal-overlay"
->
-
-  <div class="modal">
-
-    <div class="modal-header">
-
-      <div class="modal-title">
-        Editar documento
-      </div>
-
-      <button
-        id="closeEditModal"
-        class="modal-close"
-        type="button"
-      >
-        ×
-      </button>
-
-    </div>
-
-
-    <div class="modal-body">
-
-      <input
-        id="editOriginalCode"
-        type="hidden"
-      >
-
-
-      <div class="form-grid">
-
-        <!-- MODO -->
-
-        <div class="form-group full">
-
-          <label>
-            Tipo de documentación
-          </label>
-
-          <div class="radio-group">
-
-            <label class="radio-option">
-
-              <input
-                type="radio"
-                name="editMode"
-                value="internal"
-              >
-
-              <span class="radio-label">
-                Documentación Interna
-              </span>
-
-            </label>
-
-            <label class="radio-option">
-
-              <input
-                type="radio"
-                name="editMode"
-                value="project"
-              >
-
-              <span class="radio-label">
-                Proyecto
-              </span>
-
-            </label>
-
-          </div>
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label>
-            Cliente
-          </label>
-
-          <input id="editClient">
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label>
-            N° proyecto / N° cliente
-          </label>
-
-          <input id="editProjectNo">
-
-        </div>
-
-
-        <div class="form-group span2">
-
-          <label>
-            Nombre del proyecto
-          </label>
-
-          <input id="editProjectName">
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label>
-            Área / sistema
-          </label>
-
-          <select id="editArea">
-
-            <option value="AD">AD</option>
-            <option value="QA">QA</option>
-            <option value="QC">QC</option>
-            <option value="PR">PR</option>
-            <option value="ING">ING</option>
-            <option value="SEC">SEC</option>
-            <option value="ADQ">ADQ</option>
-            <option value="VEN">VEN</option>
-            <option value="RRHH">RRHH</option>
-            <option value="SSO">SSO</option>
-            <option value="MA">MA</option>
-            <option value="MANT">MANT</option>
-            <option value="SIG">SIG</option>
-
-          </select>
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label>
-            Tipo documento
-          </label>
-
-          <select id="editDocType">
-
-            <option value="PROC">PROC</option>
-            <option value="INS">INS</option>
-            <option value="REG">REG</option>
-            <option value="MAN">MAN</option>
-            <option value="PL">PL</option>
-            <option value="PROG">PROG</option>
-            <option value="ESQ">ESQ</option>
-            <option value="MAT">MAT</option>
-            <option value="PLN">PLN</option>
-            <option value="INF">INF</option>
-            <option value="PAC">PAC</option>
-            <option value="PROT">PROT</option>
-            <option value="PIE">PIE</option>
-            <option value="CHK">CHK</option>
-            <option value="ORG">ORG</option>
-
-          </select>
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label>
-            Revisión
-          </label>
-
-          <select id="editRevision">
-          </select>
-
-        </div>
-
-
-        <div class="form-group span2">
-
-          <label>
-            Nombre del documento
-          </label>
-
-          <input id="editName">
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label>
-            Fecha emisión
-          </label>
-
-          <input
-            id="editIssueDate"
-            type="date"
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label>
-            Estado
-          </label>
-
-          <select id="editState">
-
-            <option value="Vigente">
-              Vigente
-            </option>
-
-            <option value="En revisión">
-              En revisión
-            </option>
-
-            <option value="Obsoleto">
-              Obsoleto
-            </option>
-
-            <option value="Borrador">
-              Borrador
-            </option>
-
-          </select>
-
-        </div>
-
-
-        <div class="form-group span2">
-
-          <label>
-            Enlace al documento
-          </label>
-
-          <input
-            id="editDocLink"
-            type="url"
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label>
-            Distribución
-          </label>
-
-          <input id="editDistribution">
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label>
-            Documentos asociados
-          </label>
-
-          <input id="editAssociated">
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label>
-            Difusión
-          </label>
-
-          <input id="editDiffusion">
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label>
-            Evidencia / registro
-          </label>
-
-          <input id="editEvidence">
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label>
-            Norma / requisito
-          </label>
-
-          <input id="editStandard">
-
-        </div>
-
-
-        <div class="form-group full">
-
-          <label>
-            Observaciones
-          </label>
-
-          <textarea id="editObservations"></textarea>
-
-        </div>
-
-      </div>
-
-
-      <div class="code-preview">
-
-        <div class="code-preview-label">
-          Nuevo código
-        </div>
-
-        <div
-          id="editCodePreview"
-          class="code-preview-value"
-        >
-          -
-        </div>
-
-      </div>
-
-
-      <div class="button-row">
+      <div class="modal-footer">
 
         <button
           id="cancelEdit"
@@ -2346,2069 +3666,2714 @@
 
   </div>
 
-</div>
 
+  <!-- =====================================================
+       TOAST
+       ===================================================== -->
 
-<!-- =========================================================
-     LOADING
-     ========================================================= -->
+  <div
+    id="toastContainer"
+  ></div>
 
-<div id="loadingOverlay">
 
-  <div class="loading-box">
+  <!-- =====================================================
+       JAVASCRIPT PRINCIPAL
+       ===================================================== -->
 
-    <div class="spinner"></div>
+  <script>
 
-    Procesando...
+    /* =====================================================
+       CONFIGURACIÓN
+       ===================================================== */
 
-  </div>
+    const BACKEND_URL =
+      "https://script.google.com/macros/s/AKfycbxyFbgc0RqkKuDpFK3m8uPAQXGs8_9USjR7gFNVH-PBkTAVujzvgK9OQTd4Snsx5SRk/exec";
 
-</div>
 
+    let appData = {
 
-<!-- =========================================================
-     TOAST
-     ========================================================= -->
+      listado: [],
 
-<div id="toastContainer"></div>
+      matriz: []
 
-
-<!-- =========================================================
-     JAVASCRIPT
-     ========================================================= -->
-
-<script type="module">
-
-  /* =========================================================
-     CONFIGURACIÓN
-     ========================================================= */
-
-  const BACKEND_URL =
-    "https://script.google.com/macros/s/AKfycbxyFbgc0RqkKuDpFK3m8uPAQXGs8_9USjR7gFNVH-PBkTAVujzvgK9OQTd4Snsx5SRk/exec";
-
-
-  /* =========================================================
-     VARIABLES
-     ========================================================= */
-
-  let allListado = [];
-  let allMatriz = [];
-
-  let editingRecord = null;
-
-
-  /* =========================================================
-     HELPERS
-     ========================================================= */
-
-  const $ = (id) =>
-    document.getElementById(id);
-
-
-  function showLoading(show = true) {
-
-    $("loadingOverlay").style.display =
-      show ? "flex" : "none";
-
-  }
-
-
-  function toast(
-    message,
-    type = ""
-  ) {
-
-    const container =
-      $("toastContainer");
-
-    const item =
-      document.createElement("div");
-
-    item.className =
-      "toast " + type;
-
-    item.textContent =
-      message;
-
-    container.appendChild(item);
-
-    setTimeout(() => {
-      item.remove();
-    }, 4500);
-  }
-
-
-  function escapeHtml(value) {
-
-    if (
-      value === null ||
-      value === undefined
-    ) {
-      return "";
-    }
-
-    return String(value)
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
-  }
-
-
-  function normalizeRevision(revision) {
-
-    const value =
-      String(revision || "")
-        .trim()
-        .toUpperCase()
-        .replace(/\s+/g, "");
-
-    if (
-      value === "REVB" ||
-      value === "REV.B" ||
-      value === "B"
-    ) {
-      return "Rev.B";
-    }
-
-    if (
-      value === "REV0" ||
-      value === "0"
-    ) {
-      return "Rev0";
-    }
-
-    const match =
-      value.match(/^REV(\d+)$/);
-
-    if (match) {
-      return "Rev" + match[1];
-    }
-
-    return revision || "";
-  }
-
-
-  function fillRevisionSelect(
-    select,
-    mode,
-    current = ""
-  ) {
-
-    select.innerHTML = "";
-
-    if (mode === "project") {
-
-      const revisions = [
-        {
-          value: "Rev.B",
-          text: "Rev.B - Origen / Revisión del cliente"
-        },
-        {
-          value: "Rev0",
-          text: "Rev0 - Aprobado por cliente / Original"
-        },
-        {
-          value: "Rev1",
-          text: "Rev1 - Primera modificación"
-        },
-        {
-          value: "Rev2",
-          text: "Rev2 - Segunda modificación"
-        },
-        {
-          value: "Rev3",
-          text: "Rev3 - Tercera modificación"
-        },
-        {
-          value: "Rev4",
-          text: "Rev4 - Cuarta modificación"
-        },
-        {
-          value: "Rev5",
-          text: "Rev5 - Quinta modificación"
-        }
-      ];
-
-      revisions.forEach(item => {
-
-        const option =
-          document.createElement("option");
-
-        option.value =
-          item.value;
-
-        option.textContent =
-          item.text;
-
-        select.appendChild(option);
-
-      });
-
-    } else {
-
-      const revisions = [
-        {
-          value: "Rev0",
-          text: "Rev0 - Original"
-        },
-        {
-          value: "Rev1",
-          text: "Rev1 - Primera modificación"
-        },
-        {
-          value: "Rev2",
-          text: "Rev2 - Segunda modificación"
-        },
-        {
-          value: "Rev3",
-          text: "Rev3 - Tercera modificación"
-        },
-        {
-          value: "Rev4",
-          text: "Rev4 - Cuarta modificación"
-        },
-        {
-          value: "Rev5",
-          text: "Rev5 - Quinta modificación"
-        }
-      ];
-
-      revisions.forEach(item => {
-
-        const option =
-          document.createElement("option");
-
-        option.value =
-          item.value;
-
-        option.textContent =
-          item.text;
-
-        select.appendChild(option);
-
-      });
-
-    }
-
-    const normalized =
-      normalizeRevision(current);
-
-    const exists =
-      [...select.options]
-        .some(
-          option =>
-            option.value === normalized
-        );
-
-    if (exists) {
-      select.value =
-        normalized;
-    }
-
-  }
-
-
-  /* =========================================================
-     FIREBASE API
-     ========================================================= */
-
-  async function getFirebaseToken() {
-
-    const user =
-      window.currentFirebaseUser;
-
-    if (!user) {
-      throw new Error(
-        "No existe una sesión de Firebase."
-      );
-    }
-
-    return await user.getIdToken(true);
-  }
-
-
-  async function api(
-    action,
-    payload = {}
-  ) {
-
-    const token =
-      await getFirebaseToken();
-
-    const body = {
-      action,
-      token,
-      ...payload
     };
 
-    const response =
-      await fetch(
-        BACKEND_URL,
-        {
-          method: "POST",
 
-          headers: {
-            "Content-Type":
-              "text/plain;charset=utf-8"
-          },
+    let currentSection =
+      "dashboard";
 
-          body:
-            JSON.stringify(body)
+
+    /* =====================================================
+       UTILIDADES
+       ===================================================== */
+
+    function showLoading(
+      show
+    ) {
+
+      document
+        .getElementById(
+          "loading"
+        )
+        .classList.toggle(
+          "hidden",
+          !show
+        );
+
+    }
+
+
+    function showToast(
+      message,
+      type = "info"
+    ) {
+
+      const container =
+        document.getElementById(
+          "toastContainer"
+        );
+
+
+      const toast =
+        document.createElement(
+          "div"
+        );
+
+
+      toast.className =
+        "toast toast-" +
+        type;
+
+
+      toast.textContent =
+        message;
+
+
+      container.appendChild(
+        toast
+      );
+
+
+      setTimeout(
+        () => {
+
+          toast.remove();
+
+        },
+        4500
+      );
+
+    }
+
+
+    function escapeHtml(
+      value
+    ) {
+
+      return String(
+        value === undefined ||
+        value === null
+          ? ""
+          : value
+      )
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+        .replace(
+          /</g,
+          "&lt;"
+        )
+        .replace(
+          />/g,
+          "&gt;"
+        )
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+        .replace(
+          /'/g,
+          "&#039;"
+        );
+
+    }
+
+
+    function formatDate(
+      value
+    ) {
+
+      if (!value) {
+        return "";
+      }
+
+
+      const date =
+        new Date(
+          value
+        );
+
+
+      if (
+        isNaN(
+          date.getTime()
+        )
+      ) {
+
+        return String(
+          value
+        );
+
+      }
+
+
+      return date
+        .toLocaleDateString(
+          "es-CL"
+        );
+
+    }
+
+
+    /* =====================================================
+       FIREBASE TOKEN
+       ===================================================== */
+
+    async function getFirebaseToken() {
+
+      const user =
+        window.currentFirebaseUser;
+
+
+      if (!user) {
+
+        throw new Error(
+          "La sesión de Firebase no está disponible."
+        );
+
+      }
+
+
+      /*
+       * true fuerza la renovación del token
+       * cuando Firebase lo considere necesario.
+       */
+
+      const token =
+        await user.getIdToken(
+          true
+        );
+
+
+      if (!token) {
+
+        throw new Error(
+          "Firebase no devolvió un ID token."
+        );
+
+      }
+
+
+      return token;
+
+    }
+
+
+    /* =====================================================
+       API
+       ===================================================== */
+
+    async function api(
+      action,
+      payload = {}
+    ) {
+
+      const token =
+        await getFirebaseToken();
+
+
+      /*
+       * IMPORTANTE:
+       *
+       * Enviamos los datos como
+       * application/x-www-form-urlencoded.
+       *
+       * De esta manera Apps Script recibe:
+       *
+       * e.parameter.action
+       * e.parameter.token
+       * e.parameter.document
+       */
+
+      const form =
+        new URLSearchParams();
+
+
+      form.append(
+        "action",
+        action
+      );
+
+
+      form.append(
+        "token",
+        token
+      );
+
+
+      /*
+       * Si existe document,
+       * enviarlo como JSON.
+       */
+
+      if (
+        payload &&
+        payload.document
+      ) {
+
+        form.append(
+          "document",
+          JSON.stringify(
+            payload.document
+          )
+        );
+
+      }
+
+
+      /*
+       * Otros parámetros.
+       */
+
+      Object.keys(
+        payload || {}
+      ).forEach(
+        key => {
+
+          if (
+            key === "document"
+          ) {
+
+            return;
+
+          }
+
+
+          const value =
+            payload[key];
+
+
+          if (
+            value !== undefined &&
+            value !== null
+          ) {
+
+            form.append(
+              key,
+              String(value)
+            );
+
+          }
+
         }
       );
 
-    const text =
-      await response.text();
 
-    let result;
+      const response =
+        await fetch(
+          BACKEND_URL,
+          {
 
-    try {
-      result =
-        JSON.parse(text);
-    } catch (error) {
+            method:
+              "POST",
 
-      console.error(
-        "Respuesta no JSON:",
+            /*
+             * NO agregamos manualmente
+             * Content-Type.
+             *
+             * fetch lo establecerá correctamente
+             * para URLSearchParams.
+             */
+
+            body:
+              form
+
+          }
+        );
+
+
+      const text =
+        await response.text();
+
+
+      console.log(
+        "Respuesta Apps Script:",
         text
       );
 
-      throw new Error(
-        "El servidor no devolvió una respuesta válida."
-      );
-    }
 
-    if (!result.ok) {
-
-      throw new Error(
-        result.error ||
-        "Error en el servidor."
-      );
-
-    }
-
-    return result;
-  }
+      let result;
 
 
-  /* =========================================================
-     LOAD DATA
-     ========================================================= */
+      try {
 
-  async function loadDataFromBackend() {
+        result =
+          JSON.parse(
+            text
+          );
 
-    try {
-
-      showLoading(true);
-
-      const result =
-        await api("getData");
-
-      allListado =
-        Array.isArray(result.listado)
-          ? result.listado
-          : [];
-
-      allMatriz =
-        Array.isArray(result.matriz)
-          ? result.matriz
-          : [];
-
-      renderDashboard();
-
-      renderListado(
-        allListado
-      );
-
-      renderMatriz(
-        allMatriz
-      );
-
-    } catch (error) {
-
-      console.error(error);
-
-      toast(
-        error.message ||
-        "No fue posible cargar los datos.",
-        "error"
-      );
-
-    } finally {
-
-      showLoading(false);
-
-    }
-
-  }
-
-  window.loadDataFromBackend =
-    loadDataFromBackend;
-
-
-  /* =========================================================
-     DASHBOARD
-     ========================================================= */
-
-  function renderDashboard() {
-
-    const maxDocs =
-      Math.max(
-        allListado.length,
-        allMatriz.length
-      );
-
-    const allCodes = [
-      ...allListado,
-      ...allMatriz
-    ]
-      .map(item => item.code)
-      .filter(Boolean);
-
-    const uniqueCodes =
-      new Set(
-        allCodes
-      ).size;
-
-    $("statDocs").textContent =
-      maxDocs;
-
-    $("statUnique").textContent =
-      uniqueCodes;
-
-    $("statListado").textContent =
-      allListado.length;
-
-    $("statMatriz").textContent =
-      allMatriz.length;
-  }
-
-
-  /* =========================================================
-     TABLE RENDER
-     ========================================================= */
-
-  function renderTable(
-    data,
-    tbodyId
-  ) {
-
-    const tbody =
-      $(tbodyId);
-
-    tbody.innerHTML = "";
-
-    if (!data.length) {
-
-      tbody.innerHTML = `
-        <tr>
-          <td
-            colspan="11"
-            style="
-              text-align:center;
-              padding:25px;
-              color:#74818a;
-            "
-          >
-            No hay registros.
-          </td>
-        </tr>
-      `;
-
-      return;
-    }
-
-
-    data.forEach(record => {
-
-      const tr =
-        document.createElement("tr");
-
-
-      const state =
-        String(
-          record.state || ""
-        ).toLowerCase();
-
-
-      let badgeClass =
-        "badge-gray";
-
-      if (
-        state.includes("vigente")
+      } catch (
+        error
       ) {
-        badgeClass =
-          "badge-green";
-      }
 
-      if (
-        state.includes("revisión")
-      ) {
-        badgeClass =
-          "badge-orange";
-      }
-
-
-      tr.innerHTML = `
-
-        <td
-          class="code-cell"
-          title="${escapeHtml(record.code)}"
-        >
-          ${escapeHtml(record.code)}
-        </td>
-
-        <td
-          title="${escapeHtml(record.name)}"
-        >
-          ${escapeHtml(record.name)}
-        </td>
-
-        <td
-          title="${escapeHtml(record.projectName)}"
-        >
-          ${escapeHtml(record.projectName)}
-        </td>
-
-        <td>
-          ${escapeHtml(record.client)}
-        </td>
-
-        <td>
-          ${escapeHtml(record.projectNo)}
-        </td>
-
-        <td>
-          ${escapeHtml(record.area)}
-        </td>
-
-        <td>
-          ${escapeHtml(record.docType)}
-        </td>
-
-        <td>
-          ${escapeHtml(
-            normalizeRevision(
-              record.revision
-            )
-          )}
-        </td>
-
-        <td>
-          ${escapeHtml(
-            record.issueDate
-          )}
-        </td>
-
-        <td>
-          <span
-            class="badge ${badgeClass}"
-          >
-            ${escapeHtml(
-              record.state
-            )}
-          </span>
-        </td>
-
-        <td>
-
-          <button
-            class="btn btn-secondary btn-small edit-button"
-            type="button"
-          >
-            Editar
-          </button>
-
-        </td>
-
-      `;
-
-
-      const editButton =
-        tr.querySelector(
-          ".edit-button"
+        console.error(
+          "Respuesta no JSON:",
+          text
         );
 
 
-      editButton.addEventListener(
-        "click",
-        () => {
+        throw new Error(
+          "Apps Script no devolvió una respuesta JSON válida."
+        );
 
-          openEditModal(
-            record
-          );
+      }
+
+
+      if (
+        !result.ok
+      ) {
+
+        throw new Error(
+          result.error ||
+          "Error en el servidor."
+        );
+
+      }
+
+
+      return result;
+
+    }
+
+
+    /* =====================================================
+       LOGIN
+       ===================================================== */
+
+    document
+      .getElementById(
+        "loginForm"
+      )
+      .addEventListener(
+        "submit",
+        async (
+          event
+        ) => {
+
+          event.preventDefault();
+
+
+          const email =
+            document
+              .getElementById(
+                "loginEmail"
+              )
+              .value
+              .trim();
+
+
+          const password =
+            document
+              .getElementById(
+                "loginPassword"
+              )
+              .value;
+
+
+          const errorBox =
+            document
+              .getElementById(
+                "loginError"
+              );
+
+
+          errorBox.style.display =
+            "none";
+
+
+          try {
+
+            showLoading(
+              true
+            );
+
+
+            await window.firebaseLogin(
+              window.firebaseAuth,
+              email,
+              password
+            );
+
+
+          } catch (
+            error
+          ) {
+
+            console.error(
+              error
+            );
+
+
+            errorBox.textContent =
+              getFirebaseErrorMessage(
+                error
+              );
+
+
+            errorBox.style.display =
+              "block";
+
+
+          } finally {
+
+            showLoading(
+              false
+            );
+
+          }
 
         }
       );
 
 
-      tbody.appendChild(tr);
+    /* =====================================================
+       RESET PASSWORD
+       ===================================================== */
 
-    });
-
-  }
-
-
-  function renderListado(data) {
-
-    renderTable(
-      data,
-      "listadoTableBody"
-    );
-
-  }
-
-
-  function renderMatriz(data) {
-
-    renderTable(
-      data,
-      "matrizTableBody"
-    );
-
-  }
-
-
-  /* =========================================================
-     FILTER
-     ========================================================= */
-
-  function filterRecords(
-    records,
-    query
-  ) {
-
-    const q =
-      String(query || "")
-        .trim()
-        .toLowerCase();
-
-    if (!q) {
-      return records;
-    }
-
-    return records.filter(
-      record => {
-
-        const values = [
-          record.code,
-          record.name,
-          record.projectName,
-          record.client,
-          record.projectNo,
-          record.area,
-          record.docType,
-          record.revision,
-          record.issueDate,
-          record.state
-        ];
-
-        return values.some(
-          value =>
-            String(value || "")
-              .toLowerCase()
-              .includes(q)
-        );
-
-      }
-    );
-
-  }
-
-
-  /* =========================================================
-     CODE PREVIEW
-     ========================================================= */
-
-  async function previewNewCode() {
-
-    const mode =
-      document.querySelector(
-        'input[name="newMode"]:checked'
-      )?.value || "internal";
-
-    const area =
-      $("newArea").value.trim();
-
-    const docType =
-      $("newDocType").value.trim();
-
-    const revision =
-      $("newRevision").value.trim();
-
-    const client =
-      $("newClient").value.trim();
-
-    const projectNo =
-      $("newProjectNo").value.trim();
-
-    if (
-      !area ||
-      !docType ||
-      !revision
-    ) {
-
-      $("newCodePreview").textContent =
-        "Complete Área, Tipo y Revisión";
-
-      return;
-
-    }
-
-
-    if (
-      mode === "project" &&
-      (
-        !client ||
-        !projectNo
+    document
+      .getElementById(
+        "forgotPasswordBtn"
       )
-    ) {
+      .addEventListener(
+        "click",
+        async () => {
 
-      $("newCodePreview").textContent =
-        "Complete Cliente y N° de proyecto";
+          const email =
+            document
+              .getElementById(
+                "loginEmail"
+              )
+              .value
+              .trim();
 
-      return;
 
-    }
+          if (!email) {
 
+            showToast(
+              "Ingresa primero tu correo electrónico.",
+              "error"
+            );
 
-    try {
+            return;
 
-      const result =
-        await api(
-          "previewCode",
-          {
-            mode,
-            client,
-            projectNo,
-            area,
-            docType,
-            revision
           }
-        );
-
-      $("newCodePreview").textContent =
-        result.code ||
-        "No disponible";
-
-    } catch (error) {
-
-      $("newCodePreview").textContent =
-        "No se pudo generar";
-
-    }
-
-  }
 
 
-  /* =========================================================
-     CREATE DOCUMENT
-     ========================================================= */
+          try {
 
-  async function createDocument() {
-
-    const mode =
-      document.querySelector(
-        'input[name="newMode"]:checked'
-      )?.value || "internal";
-
-    const data = {
-
-      mode,
-
-      client:
-        $("newClient").value.trim(),
-
-      projectNo:
-        $("newProjectNo").value.trim(),
-
-      projectName:
-        $("newProjectName").value.trim(),
-
-      area:
-        $("newArea").value.trim(),
-
-      docType:
-        $("newDocType").value.trim(),
-
-      revision:
-        $("newRevision").value.trim(),
-
-      name:
-        $("newName").value.trim(),
-
-      issueDate:
-        $("newIssueDate").value,
-
-      docLink:
-        $("newDocLink").value.trim(),
-
-      distribution:
-        $("newDistribution").value.trim(),
-
-      state:
-        $("newState").value.trim(),
-
-      associated:
-        $("newAssociated").value.trim(),
-
-      diffusion:
-        $("newDiffusion").value.trim(),
-
-      evidence:
-        $("newEvidence").value.trim(),
-
-      standard:
-        $("newStandard").value.trim(),
-
-      observations:
-        $("newObservations").value.trim()
-
-    };
+            showLoading(
+              true
+            );
 
 
-    if (!data.area) {
-
-      toast(
-        "Seleccione el área.",
-        "warning"
-      );
-
-      return;
-
-    }
+            await window.firebaseResetPassword(
+              window.firebaseAuth,
+              email
+            );
 
 
-    if (!data.docType) {
-
-      toast(
-        "Seleccione el tipo de documento.",
-        "warning"
-      );
-
-      return;
-
-    }
+            showToast(
+              "Se envió el correo para restablecer la contraseña.",
+              "success"
+            );
 
 
-    if (!data.name) {
+          } catch (
+            error
+          ) {
 
-      toast(
-        "Ingrese el nombre del documento.",
-        "warning"
-      );
+            showToast(
+              getFirebaseErrorMessage(
+                error
+              ),
+              "error"
+            );
 
-      return;
+          } finally {
 
-    }
+            showLoading(
+              false
+            );
 
-
-    if (
-      mode === "project" &&
-      (
-        !data.client ||
-        !data.projectNo
-      )
-    ) {
-
-      toast(
-        "Para un proyecto debe ingresar Cliente y N° de proyecto.",
-        "warning"
-      );
-
-      return;
-
-    }
-
-
-    try {
-
-      showLoading(true);
-
-      const result =
-        await api(
-          "createDocument",
-          {
-            document: data
           }
-        );
 
-
-      toast(
-        "Documento registrado correctamente: " +
-        result.code,
-        "success"
+        }
       );
 
 
-      $("newCodePreview").textContent =
-        result.code;
-
-
-      clearNewDocumentForm();
-
-      await loadDataFromBackend();
-
-
-    } catch (error) {
-
-      console.error(error);
-
-      toast(
-        error.message ||
-        "No fue posible registrar el documento.",
-        "error"
-      );
-
-    } finally {
-
-      showLoading(false);
-
-    }
-
-  }
-
-
-  /* =========================================================
-     CLEAR NEW FORM
-     ========================================================= */
-
-  function clearNewDocumentForm() {
-
-    $("newClient").value = "";
-    $("newProjectNo").value = "";
-    $("newProjectName").value = "";
-    $("newArea").value = "";
-    $("newDocType").value = "";
-    $("newName").value = "";
-    $("newIssueDate").value = "";
-    $("newDocLink").value = "";
-    $("newDistribution").value = "";
-    $("newState").value = "Vigente";
-    $("newAssociated").value = "";
-    $("newDiffusion").value = "";
-    $("newEvidence").value = "";
-    $("newStandard").value = "";
-    $("newObservations").value = "";
-
-    fillRevisionSelect(
-      $("newRevision"),
-      "internal",
-      "Rev0"
-    );
-
-    document.querySelector(
-      'input[name="newMode"][value="internal"]'
-    ).checked = true;
-
-    updateNewModeVisibility();
-
-    $("newCodePreview").textContent =
-      "Complete los datos para generar el código";
-
-  }
-
-
-  /* =========================================================
-     NEW MODE
-     ========================================================= */
-
-  function updateNewModeVisibility() {
-
-    const mode =
-      document.querySelector(
-        'input[name="newMode"]:checked'
-      )?.value || "internal";
-
-
-    const isProject =
-      mode === "project";
-
-
-    $("newClientGroup")
-      .classList.toggle(
-        "hidden",
-        !isProject
-      );
-
-    $("newProjectNoGroup")
-      .classList.toggle(
-        "hidden",
-        !isProject
-      );
-
-    $("newProjectNameGroup")
-      .classList.toggle(
-        "hidden",
-        !isProject
-      );
-
-
-    fillRevisionSelect(
-      $("newRevision"),
-      mode,
-      isProject
-        ? "Rev.B"
-        : "Rev0"
-    );
-
-
-    previewNewCode();
-
-  }
-
-
-  /* =========================================================
-     EDIT MODAL
-     ========================================================= */
-
-  function openEditModal(record) {
-
-    editingRecord =
-      record;
-
-
-    $("editOriginalCode").value =
-      record.code || "";
-
-
-    const mode =
-      record.mode ||
-      inferModeFromCode(
-        record.code
-      );
-
-
-    document.querySelector(
-      `input[name="editMode"][value="${mode}"]`
-    ).checked = true;
-
-
-    $("editClient").value =
-      record.client || "";
-
-    $("editProjectNo").value =
-      record.projectNo || "";
-
-    $("editProjectName").value =
-      record.projectName || "";
-
-    $("editArea").value =
-      record.area || "";
-
-    $("editDocType").value =
-      record.docType || "";
-
-    $("editName").value =
-      record.name || "";
-
-    $("editIssueDate").value =
-      formatDateForInput(
-        record.issueDate
-      );
-
-    $("editDocLink").value =
-      record.docLink || "";
-
-    $("editDistribution").value =
-      record.distribution || "";
-
-    $("editState").value =
-      record.state || "Vigente";
-
-    $("editAssociated").value =
-      record.associated || "";
-
-    $("editDiffusion").value =
-      record.diffusion || "";
-
-    $("editEvidence").value =
-      record.evidence || "";
-
-    $("editStandard").value =
-      record.standard || "";
-
-    $("editObservations").value =
-      record.observations || "";
-
-
-    fillRevisionSelect(
-      $("editRevision"),
-      mode,
-      record.revision
-    );
-
-
-    updateEditModeVisibility();
-
-
-    $("editModal").style.display =
-      "flex";
-
-
-    previewEditCode();
-
-  }
-
-
-  function closeEditModal() {
-
-    editingRecord =
-      null;
-
-    $("editModal").style.display =
-      "none";
-
-  }
-
-
-  function inferModeFromCode(code) {
-
-    const value =
-      String(code || "")
-        .trim()
-        .toUpperCase();
-
-    /*
-      Proyecto:
-      AQ-AN-04-QA-PROC-01-Rev.B
-
-      Interno:
-      AQ-QA-PROC-01-Rev0
-    */
-
-    const parts =
-      value.split("-");
-
-    if (
-      parts.length >= 6
+    function getFirebaseErrorMessage(
+      error
     ) {
-      return "project";
-    }
-
-    return "internal";
-
-  }
-
-
-  function formatDateForInput(value) {
-
-    if (!value) {
-      return "";
-    }
-
-    const text =
-      String(value)
-        .trim();
-
-    if (
-      /^\d{4}-\d{2}-\d{2}$/.test(text)
-    ) {
-      return text;
-    }
-
-    const date =
-      new Date(text);
-
-    if (
-      Number.isNaN(
-        date.getTime()
-      )
-    ) {
-      return "";
-    }
-
-    const year =
-      date.getFullYear();
-
-    const month =
-      String(
-        date.getMonth() + 1
-      ).padStart(2, "0");
-
-    const day =
-      String(
-        date.getDate()
-      ).padStart(2, "0");
-
-    return `${year}-${month}-${day}`;
-
-  }
-
-
-  function updateEditModeVisibility() {
-
-    const mode =
-      document.querySelector(
-        'input[name="editMode"]:checked'
-      )?.value || "internal";
-
-
-    const isProject =
-      mode === "project";
-
-
-    /*
-      En edición mantenemos visibles
-      Cliente y proyecto para poder
-      transformar correctamente el código.
-    */
-
-    $("editClient")
-      .parentElement
-      .classList.toggle(
-        "hidden",
-        !isProject
-      );
-
-    $("editProjectNo")
-      .parentElement
-      .classList.toggle(
-        "hidden",
-        !isProject
-      );
-
-    $("editProjectName")
-      .parentElement
-      .classList.toggle(
-        "hidden",
-        !isProject
-      );
-
-
-    fillRevisionSelect(
-      $("editRevision"),
-      mode,
-      $("editRevision").value
-    );
-
-
-    previewEditCode();
-
-  }
-
-
-  async function previewEditCode() {
-
-    if (!editingRecord) {
-      return;
-    }
-
-
-    const mode =
-      document.querySelector(
-        'input[name="editMode"]:checked'
-      )?.value || "internal";
-
-
-    const data = {
-
-      mode,
-
-      client:
-        $("editClient").value.trim(),
-
-      projectNo:
-        $("editProjectNo").value.trim(),
-
-      area:
-        $("editArea").value.trim(),
-
-      docType:
-        $("editDocType").value.trim(),
-
-      revision:
-        $("editRevision").value.trim(),
-
-      originalCode:
-        $("editOriginalCode").value.trim()
-
-    };
-
-
-    if (
-      !data.area ||
-      !data.docType ||
-      !data.revision
-    ) {
-
-      $("editCodePreview").textContent =
-        "Complete los datos";
-
-      return;
-
-    }
-
-
-    if (
-      mode === "project" &&
-      (
-        !data.client ||
-        !data.projectNo
-      )
-    ) {
-
-      $("editCodePreview").textContent =
-        "Complete Cliente y N° proyecto";
-
-      return;
-
-    }
-
-
-    try {
-
-      const result =
-        await api(
-          "previewCode",
-          data
-        );
-
-      $("editCodePreview").textContent =
-        result.code ||
-        "-";
-
-    } catch (error) {
-
-      $("editCodePreview").textContent =
-        "No se pudo generar";
-
-    }
-
-  }
-
-
-  /* =========================================================
-     SAVE EDIT
-     ========================================================= */
-
-  async function saveEdit() {
-
-    if (!editingRecord) {
-      return;
-    }
-
-
-    const mode =
-      document.querySelector(
-        'input[name="editMode"]:checked'
-      )?.value || "internal";
-
-
-    const data = {
-
-      originalCode:
-        $("editOriginalCode").value.trim(),
-
-      mode,
-
-      client:
-        $("editClient").value.trim(),
-
-      projectNo:
-        $("editProjectNo").value.trim(),
-
-      projectName:
-        $("editProjectName").value.trim(),
-
-      area:
-        $("editArea").value.trim(),
-
-      docType:
-        $("editDocType").value.trim(),
-
-      revision:
-        $("editRevision").value.trim(),
-
-      name:
-        $("editName").value.trim(),
-
-      issueDate:
-        $("editIssueDate").value,
-
-      docLink:
-        $("editDocLink").value.trim(),
-
-      distribution:
-        $("editDistribution").value.trim(),
-
-      state:
-        $("editState").value.trim(),
-
-      associated:
-        $("editAssociated").value.trim(),
-
-      diffusion:
-        $("editDiffusion").value.trim(),
-
-      evidence:
-        $("editEvidence").value.trim(),
-
-      standard:
-        $("editStandard").value.trim(),
-
-      observations:
-        $("editObservations").value.trim()
-
-    };
-
-
-    if (!data.name) {
-
-      toast(
-        "Ingrese el nombre del documento.",
-        "warning"
-      );
-
-      return;
-
-    }
-
-
-    if (
-      mode === "project" &&
-      (
-        !data.client ||
-        !data.projectNo
-      )
-    ) {
-
-      toast(
-        "Para un proyecto debe ingresar Cliente y N° de proyecto.",
-        "warning"
-      );
-
-      return;
-
-    }
-
-
-    try {
-
-      showLoading(true);
-
-      const result =
-        await api(
-          "updateDocument",
-          {
-            document: data
-          }
-        );
-
-
-      toast(
-        "Documento actualizado correctamente: " +
-        result.code,
-        "success"
-      );
-
-
-      closeEditModal();
-
-      await loadDataFromBackend();
-
-
-    } catch (error) {
-
-      console.error(error);
-
-      toast(
-        error.message ||
-        "No fue posible actualizar el documento.",
-        "error"
-      );
-
-    } finally {
-
-      showLoading(false);
-
-    }
-
-  }
-
-
-  /* =========================================================
-     VERIFY CODE
-     ========================================================= */
-
-  async function verifyNewCode() {
-
-    try {
-
-      showLoading(true);
-
-      await previewNewCode();
 
       const code =
-        $("newCodePreview")
-          .textContent
-          .trim();
+        error &&
+        error.code
+          ? error.code
+          : "";
+
+
+      const messages = {
+
+        "auth/invalid-credential":
+          "Correo o contraseña incorrectos.",
+
+        "auth/user-not-found":
+          "No existe un usuario con ese correo.",
+
+        "auth/wrong-password":
+          "Contraseña incorrecta.",
+
+        "auth/invalid-email":
+          "El correo electrónico no es válido.",
+
+        "auth/too-many-requests":
+          "Demasiados intentos. Intenta nuevamente más tarde.",
+
+        "auth/network-request-failed":
+          "No fue posible conectarse con Firebase."
+
+      };
+
+
+      return (
+        messages[code] ||
+        error.message ||
+        "No fue posible iniciar sesión."
+      );
+
+    }
+
+
+    /* =====================================================
+       AUTH STATE
+       ===================================================== */
+
+    window.handleLoggedIn =
+      async function (
+        user
+      ) {
+
+        document
+          .getElementById(
+            "loginScreen"
+          )
+          .classList.add(
+            "hidden"
+          );
+
+
+        document
+          .getElementById(
+            "appScreen"
+          )
+          .classList.remove(
+            "hidden"
+          );
+
+
+        document
+          .getElementById(
+            "sidebarEmail"
+          )
+          .textContent =
+          user.email || "";
+
+
+        document
+          .getElementById(
+            "topbarUser"
+          )
+          .textContent =
+          user.email || "";
+
+
+        try {
+
+          showLoading(
+            true
+          );
+
+
+          await loadData();
+
+
+        } catch (
+          error
+        ) {
+
+          console.error(
+            error
+          );
+
+
+          showToast(
+            error.message,
+            "error"
+          );
+
+        } finally {
+
+          showLoading(
+            false
+          );
+
+        }
+
+      };
+
+
+    window.handleLoggedOut =
+      function () {
+
+        document
+          .getElementById(
+            "loginScreen"
+          )
+          .classList.remove(
+            "hidden"
+          );
+
+
+        document
+          .getElementById(
+            "appScreen"
+          )
+          .classList.add(
+            "hidden"
+          );
+
+      };
+
+
+    /* =====================================================
+       LOGOUT
+       ===================================================== */
+
+    document
+      .getElementById(
+        "logoutBtn"
+      )
+      .addEventListener(
+        "click",
+        async () => {
+
+          try {
+
+            await window.firebaseLogout(
+              window.firebaseAuth
+            );
+
+          } catch (
+            error
+          ) {
+
+            showToast(
+              error.message,
+              "error"
+            );
+
+          }
+
+        }
+      );
+
+
+    /* =====================================================
+       CARGAR DATOS
+       ===================================================== */
+
+    async function loadData() {
+
+      const result =
+        await api(
+          "getData"
+        );
+
+
+      appData.listado =
+        Array.isArray(
+          result.listado
+        )
+          ? result.listado
+          : [];
+
+
+      appData.matriz =
+        Array.isArray(
+          result.matriz
+        )
+          ? result.matriz
+          : [];
+
+
+      renderAll();
+
+    }
+
+
+    /* =====================================================
+       RENDER
+       ===================================================== */
+
+    function renderAll() {
+
+      renderDashboard();
+
+      renderMasterList();
+
+      renderMatrix();
+
+    }
+
+
+    function getAllUniqueRecords() {
+
+      const map =
+        new Map();
+
+
+      [
+        ...appData.listado,
+        ...appData.matriz
+      ].forEach(
+        record => {
+
+          if (
+            record.code &&
+            !map.has(
+              record.code
+            )
+          ) {
+
+            map.set(
+              record.code,
+              record
+            );
+
+          }
+
+        }
+      );
+
+
+      return Array.from(
+        map.values()
+      );
+
+    }
+
+
+    /* =====================================================
+       DASHBOARD
+       ===================================================== */
+
+    function renderDashboard() {
+
+      const records =
+        getAllUniqueRecords();
+
+
+      const projects =
+        records.filter(
+          r =>
+            r.mode === "project"
+        );
+
+
+      const internal =
+        records.filter(
+          r =>
+            r.mode === "internal"
+        );
+
+
+      document
+        .getElementById(
+          "statTotal"
+        )
+        .textContent =
+        records.length;
+
+
+      document
+        .getElementById(
+          "statProjects"
+        )
+        .textContent =
+        projects.length;
+
+
+      document
+        .getElementById(
+          "statInternal"
+        )
+        .textContent =
+        internal.length;
+
+
+      document
+        .getElementById(
+          "statLast"
+        )
+        .textContent =
+        new Date()
+          .toLocaleDateString(
+            "es-CL"
+          );
+
+
+      renderTable(
+        records.slice(
+          0,
+          20
+        ),
+        "dashboardTable"
+      );
+
+    }
+
+
+    /* =====================================================
+       MASTER LIST
+       ===================================================== */
+
+    function renderMasterList(
+      search = ""
+    ) {
+
+      const records =
+        filterRecords(
+          appData.listado,
+          search
+        );
+
+
+      document
+        .getElementById(
+          "masterCount"
+        )
+        .textContent =
+        records.length +
+        (
+          records.length === 1
+            ? " registro"
+            : " registros"
+        );
+
+
+      renderTable(
+        records,
+        "masterTable"
+      );
+
+    }
+
+
+    /* =====================================================
+       MATRIX
+       ===================================================== */
+
+    function renderMatrix(
+      search = ""
+    ) {
+
+      const records =
+        filterRecords(
+          appData.matriz,
+          search
+        );
+
+
+      document
+        .getElementById(
+          "matrixCount"
+        )
+        .textContent =
+        records.length +
+        (
+          records.length === 1
+            ? " registro"
+            : " registros"
+        );
+
+
+      renderTable(
+        records,
+        "matrixTable"
+      );
+
+    }
+
+
+    function filterRecords(
+      records,
+      search
+    ) {
+
+      const term =
+        String(
+          search || ""
+        )
+          .trim()
+          .toLowerCase();
+
+
+      if (!term) {
+
+        return records;
+
+      }
+
+
+      return records.filter(
+        record => {
+
+          return Object
+            .values(
+              record
+            )
+            .some(
+              value =>
+                String(
+                  value || ""
+                )
+                  .toLowerCase()
+                  .includes(
+                    term
+                  )
+            );
+
+        }
+      );
+
+    }
+
+
+    /* =====================================================
+       TABLE
+       ===================================================== */
+
+    function renderTable(
+      records,
+      tbodyId
+    ) {
+
+      const tbody =
+        document
+          .getElementById(
+            tbodyId
+          );
+
+
+      tbody.innerHTML =
+        "";
 
 
       if (
-        !code ||
-        code.startsWith("Complete") ||
-        code.startsWith("No se")
+        !records.length
       ) {
 
-        toast(
-          "Complete los datos necesarios para verificar.",
-          "warning"
+        const row =
+          document.createElement(
+            "tr"
+          );
+
+
+        row.innerHTML = `
+          <td colspan="11"
+              style="
+                text-align:center;
+                padding:25px;
+                color:#6b7280;
+              ">
+            No hay registros.
+          </td>
+        `;
+
+
+        tbody.appendChild(
+          row
         );
+
 
         return;
 
       }
 
 
-      const result =
-        await api(
-          "previewCode",
-          {
+      records.forEach(
+        record => {
 
-            mode:
-              document.querySelector(
-                'input[name="newMode"]:checked'
-              )?.value || "internal",
+          const row =
+            document.createElement(
+              "tr"
+            );
 
-            client:
-              $("newClient").value.trim(),
 
-            projectNo:
-              $("newProjectNo").value.trim(),
+          const modeBadge =
+            record.mode ===
+              "project"
 
-            area:
-              $("newArea").value.trim(),
+              ? `
+                <span class="badge badge-project">
+                  PROYECTO
+                </span>
+              `
 
-            docType:
-              $("newDocType").value.trim(),
+              : `
+                <span class="badge badge-internal">
+                  INTERNO
+                </span>
+              `;
 
-            revision:
-              $("newRevision").value.trim()
+
+          const stateBadge =
+            record.state
+              ? `
+                <span class="badge badge-success">
+                  ${escapeHtml(
+                    record.state
+                  )}
+                </span>
+              `
+              : "";
+
+
+          row.innerHTML = `
+
+            <td
+              class="code-cell"
+              title="${escapeHtml(
+                record.code
+              )}"
+            >
+              ${escapeHtml(
+                record.code
+              )}
+            </td>
+
+
+            <td
+              title="${escapeHtml(
+                record.name
+              )}"
+            >
+              ${escapeHtml(
+                record.name
+              )}
+            </td>
+
+
+            <td
+              title="${escapeHtml(
+                record.projectName
+              )}"
+            >
+              ${escapeHtml(
+                record.projectName
+              )}
+            </td>
+
+
+            <td>
+              ${escapeHtml(
+                record.client
+              )}
+            </td>
+
+
+            <td>
+              ${escapeHtml(
+                record.projectNo
+              )}
+            </td>
+
+
+            <td>
+              ${escapeHtml(
+                record.area
+              )}
+            </td>
+
+
+            <td>
+              ${escapeHtml(
+                record.docType
+              )}
+            </td>
+
+
+            <td>
+              ${escapeHtml(
+                record.revision
+              )}
+            </td>
+
+
+            <td>
+              ${escapeHtml(
+                formatDate(
+                  record.issueDate
+                )
+              )}
+            </td>
+
+
+            <td>
+              ${stateBadge}
+            </td>
+
+
+            <td>
+              ${modeBadge}
+
+              <button
+                class="action-btn"
+                data-code="${escapeHtml(
+                  record.code
+                )}"
+                style="margin-left:5px;"
+              >
+                Editar
+              </button>
+            </td>
+
+          `;
+
+
+          const editButton =
+            row.querySelector(
+              ".action-btn"
+            );
+
+
+          editButton.addEventListener(
+            "click",
+            () => {
+
+              openEditModal(
+                record
+              );
+
+            }
+          );
+
+
+          tbody.appendChild(
+            row
+          );
+
+        }
+      );
+
+    }
+
+
+    /* =====================================================
+       NAVEGACIÓN
+       ===================================================== */
+
+    document
+      .querySelectorAll(
+        ".menu-item"
+      )
+      .forEach(
+        button => {
+
+          button.addEventListener(
+            "click",
+            () => {
+
+              const section =
+                button.dataset.section;
+
+
+              switchSection(
+                section
+              );
+
+            }
+          );
+
+        }
+      );
+
+
+    function switchSection(
+      section
+    ) {
+
+      currentSection =
+        section;
+
+
+      document
+        .querySelectorAll(
+          ".menu-item"
+        )
+        .forEach(
+          item => {
+
+            item.classList.toggle(
+              "active",
+              item.dataset.section ===
+                section
+            );
 
           }
+        );
+
+
+      document
+        .querySelectorAll(
+          ".app-section"
+        )
+        .forEach(
+          item => {
+
+            item.classList.add(
+              "hidden"
+            );
+
+          }
+        );
+
+
+      const sectionMap = {
+
+        dashboard:
+          "dashboardSection",
+
+        newDocument:
+          "newDocumentSection",
+
+        masterList:
+          "masterListSection",
+
+        matrix:
+          "matrixSection"
+
+      };
+
+
+      const target =
+        document.getElementById(
+          sectionMap[section]
+        );
+
+
+      if (target) {
+
+        target.classList.remove(
+          "hidden"
+        );
+
+      }
+
+
+      const titles = {
+
+        dashboard:
+          "Dashboard",
+
+        newDocument:
+          "Nuevo documento",
+
+        masterList:
+          "Listado Maestro",
+
+        matrix:
+          "Matriz de Trazabilidad"
+
+      };
+
+
+      document
+        .getElementById(
+          "topbarTitle"
+        )
+        .textContent =
+        titles[section] ||
+        "Dashboard";
+
+    }
+
+
+    /* =====================================================
+       MODO PROYECTO / INTERNO
+       ===================================================== */
+
+    document
+      .querySelectorAll(
+        'input[name="mode"]'
+      )
+      .forEach(
+        radio => {
+
+          radio.addEventListener(
+            "change",
+            updateMode
+          );
+
+        }
+      );
+
+
+    function updateMode() {
+
+      const mode =
+        document.querySelector(
+          'input[name="mode"]:checked'
+        ).value;
+
+
+      const projectFields =
+        document.getElementById(
+          "projectFields"
         );
 
 
       if (
-        result.exists
+        mode === "project"
       ) {
 
-        toast(
-          "El código ya existe: " +
-          result.code,
-          "error"
+        projectFields.classList.remove(
+          "hidden"
+        );
+
+
+        setRevisionOptions(
+          false
         );
 
       } else {
 
-        toast(
-          "Código disponible: " +
-          result.code,
+        projectFields.classList.add(
+          "hidden"
+        );
+
+
+        setRevisionOptions(
+          true
+        );
+
+      }
+
+
+      updatePreview();
+
+    }
+
+
+    function setRevisionOptions(
+      internal
+    ) {
+
+      const revision =
+        document.getElementById(
+          "revision"
+        );
+
+
+      const current =
+        revision.value;
+
+
+      if (internal) {
+
+        revision.innerHTML = `
+
+          <option value="">
+            Seleccionar...
+          </option>
+
+          <option value="Rev0">
+            Rev0 - Original
+          </option>
+
+          <option value="Rev1">
+            Rev1
+          </option>
+
+          <option value="Rev2">
+            Rev2
+          </option>
+
+          <option value="Rev3">
+            Rev3
+          </option>
+
+          <option value="Rev4">
+            Rev4
+          </option>
+
+          <option value="Rev5">
+            Rev5
+          </option>
+
+        `;
+
+
+        if (
+          current !== "Rev.B"
+        ) {
+
+          revision.value =
+            current;
+
+        }
+
+      } else {
+
+        revision.innerHTML = `
+
+          <option value="">
+            Seleccionar...
+          </option>
+
+          <option value="Rev.B">
+            Rev.B - Origen / Revisión del cliente
+          </option>
+
+          <option value="Rev0">
+            Rev0 - Aprobado por cliente / Original
+          </option>
+
+          <option value="Rev1">
+            Rev1
+          </option>
+
+          <option value="Rev2">
+            Rev2
+          </option>
+
+          <option value="Rev3">
+            Rev3
+          </option>
+
+          <option value="Rev4">
+            Rev4
+          </option>
+
+          <option value="Rev5">
+            Rev5
+          </option>
+
+        `;
+
+
+        revision.value =
+          current ||
+          "Rev.B";
+
+      }
+
+    }
+
+
+    /* =====================================================
+       PREVIEW
+       ===================================================== */
+
+    document
+      .getElementById(
+        "previewBtn"
+      )
+      .addEventListener(
+        "click",
+        updatePreview
+      );
+
+
+    [
+      "client",
+      "projectNo",
+      "area",
+      "docType",
+      "revision"
+    ].forEach(
+      id => {
+
+        document
+          .getElementById(
+            id
+          )
+          .addEventListener(
+            "change",
+            updatePreview
+          );
+
+        document
+          .getElementById(
+            id
+          )
+          .addEventListener(
+            "input",
+            updatePreview
+          );
+
+      }
+    );
+
+
+    async function updatePreview() {
+
+      try {
+
+        const data =
+          getFormData();
+
+
+        if (
+          !data.area ||
+          !data.docType ||
+          !data.revision
+        ) {
+
+          document
+            .getElementById(
+              "codePreview"
+            )
+            .textContent =
+            "Complete los campos para generar el código";
+
+
+          return;
+
+        }
+
+
+        if (
+          data.mode ===
+            "project" &&
+          (
+            !data.client ||
+            !data.projectNo
+          )
+        ) {
+
+          document
+            .getElementById(
+              "codePreview"
+            )
+            .textContent =
+            "Complete Cliente y N° Proyecto";
+
+
+          return;
+
+        }
+
+
+        /*
+         * No necesitamos enviar el documento completo.
+         * Enviamos los campos utilizados por previewCode.
+         */
+
+        const result =
+          await api(
+            "previewCode",
+            data
+          );
+
+
+        document
+          .getElementById(
+            "codePreview"
+          )
+          .textContent =
+          result.code;
+
+
+      } catch (
+        error
+      ) {
+
+        console.error(
+          error
+        );
+
+
+        /*
+         * No mostrar error continuamente
+         * mientras el usuario está escribiendo.
+         */
+
+      }
+
+    }
+
+
+    /* =====================================================
+       OBTENER FORMULARIO
+       ===================================================== */
+
+    function getFormData() {
+
+      const mode =
+        document.querySelector(
+          'input[name="mode"]:checked'
+        ).value;
+
+
+      return {
+
+        mode,
+
+        client:
+          document
+            .getElementById(
+              "client"
+            )
+            .value
+            .trim(),
+
+        projectNo:
+          document
+            .getElementById(
+              "projectNo"
+            )
+            .value
+            .trim(),
+
+        projectName:
+          document
+            .getElementById(
+              "projectName"
+            )
+            .value
+            .trim(),
+
+        area:
+          document
+            .getElementById(
+              "area"
+            )
+            .value,
+
+        docType:
+          document
+            .getElementById(
+              "docType"
+            )
+            .value,
+
+        revision:
+          document
+            .getElementById(
+              "revision"
+            )
+            .value,
+
+        name:
+          document
+            .getElementById(
+              "documentName"
+            )
+            .value
+            .trim(),
+
+        issueDate:
+          document
+            .getElementById(
+              "issueDate"
+            )
+            .value,
+
+        docLink:
+          document
+            .getElementById(
+              "docLink"
+            )
+            .value
+            .trim(),
+
+        distribution:
+          document
+            .getElementById(
+              "distribution"
+            )
+            .value
+            .trim(),
+
+        state:
+          document
+            .getElementById(
+              "state"
+            )
+            .value,
+
+        associated:
+          document
+            .getElementById(
+              "associated"
+            )
+            .value
+            .trim(),
+
+        diffusion:
+          document
+            .getElementById(
+              "diffusion"
+            )
+            .value
+            .trim(),
+
+        evidence:
+          document
+            .getElementById(
+              "evidence"
+            )
+            .value
+            .trim(),
+
+        standard:
+          document
+            .getElementById(
+              "standard"
+            )
+            .value
+            .trim(),
+
+        observations:
+          document
+            .getElementById(
+              "observations"
+            )
+            .value
+            .trim()
+
+      };
+
+    }
+
+
+    /* =====================================================
+       CREAR DOCUMENTO
+       ===================================================== */
+
+    document
+      .getElementById(
+        "documentForm"
+      )
+      .addEventListener(
+        "submit",
+        async (
+          event
+        ) => {
+
+          event.preventDefault();
+
+
+          try {
+
+            const data =
+              getFormData();
+
+
+            if (
+              !data.area
+            ) {
+
+              throw new Error(
+                "Debe seleccionar el área."
+              );
+
+            }
+
+
+            if (
+              !data.docType
+            ) {
+
+              throw new Error(
+                "Debe seleccionar el tipo de documento."
+              );
+
+            }
+
+
+            if (
+              !data.revision
+            ) {
+
+              throw new Error(
+                "Debe seleccionar la revisión."
+              );
+
+            }
+
+
+            if (
+              !data.name
+            ) {
+
+              throw new Error(
+                "Debe ingresar el nombre del documento."
+              );
+
+            }
+
+
+            if (
+              data.mode ===
+                "project" &&
+              (
+                !data.client ||
+                !data.projectNo
+              )
+            ) {
+
+              throw new Error(
+                "Para un proyecto debe ingresar Cliente y N° de proyecto."
+              );
+
+            }
+
+
+            showLoading(
+              true
+            );
+
+
+            const result =
+              await api(
+                "createDocument",
+                {
+                  document:
+                    data
+                }
+              );
+
+
+            showToast(
+              "Documento registrado correctamente: " +
+              result.code,
+              "success"
+            );
+
+
+            resetDocumentForm();
+
+
+            await loadData();
+
+
+            switchSection(
+              "masterList"
+            );
+
+
+          } catch (
+            error
+          ) {
+
+            console.error(
+              error
+            );
+
+
+            showToast(
+              error.message,
+              "error"
+            );
+
+          } finally {
+
+            showLoading(
+              false
+            );
+
+          }
+
+        }
+      );
+
+
+    /* =====================================================
+       LIMPIAR
+       ===================================================== */
+
+    document
+      .getElementById(
+        "clearBtn"
+      )
+      .addEventListener(
+        "click",
+        resetDocumentForm
+      );
+
+
+    function resetDocumentForm() {
+
+      document
+        .getElementById(
+          "documentForm"
+        )
+        .reset();
+
+
+      document
+        .querySelector(
+          'input[name="mode"][value="project"]'
+        )
+        .checked =
+        true;
+
+
+      document
+        .getElementById(
+          "projectFields"
+        )
+        .classList.remove(
+          "hidden"
+        );
+
+
+      setRevisionOptions(
+        false
+      );
+
+
+      document
+        .getElementById(
+          "revision"
+        )
+        .value =
+        "Rev.B";
+
+
+      document
+        .getElementById(
+          "codePreview"
+        )
+        .textContent =
+        "Complete los campos para generar el código";
+
+    }
+
+
+    /* =====================================================
+       EDITAR
+       ===================================================== */
+
+    function openEditModal(
+      record
+    ) {
+
+      document
+        .getElementById(
+          "editOriginalCode"
+        )
+        .value =
+        record.code || "";
+
+
+      document
+        .getElementById(
+          "editMode"
+        )
+        .value =
+        record.mode ||
+        "internal";
+
+
+      document
+        .getElementById(
+          "editClient"
+        )
+        .value =
+        record.client || "";
+
+
+      document
+        .getElementById(
+          "editProjectNo"
+        )
+        .value =
+        record.projectNo || "";
+
+
+      document
+        .getElementById(
+          "editProjectName"
+        )
+        .value =
+        record.projectName || "";
+
+
+      document
+        .getElementById(
+          "editArea"
+        )
+        .value =
+        record.area || "";
+
+
+      document
+        .getElementById(
+          "editDocType"
+        )
+        .value =
+        record.docType || "";
+
+
+      document
+        .getElementById(
+          "editRevision"
+        )
+        .value =
+        record.revision || "Rev0";
+
+
+      document
+        .getElementById(
+          "editName"
+        )
+        .value =
+        record.name || "";
+
+
+      document
+        .getElementById(
+          "editIssueDate"
+        )
+        .value =
+        convertDateForInput(
+          record.issueDate
+        );
+
+
+      document
+        .getElementById(
+          "editDocLink"
+        )
+        .value =
+        record.docLink || "";
+
+
+      document
+        .getElementById(
+          "editDistribution"
+        )
+        .value =
+        record.distribution || "";
+
+
+      document
+        .getElementById(
+          "editState"
+        )
+        .value =
+        record.state || "";
+
+
+      document
+        .getElementById(
+          "editAssociated"
+        )
+        .value =
+        record.associated || "";
+
+
+      document
+        .getElementById(
+          "editDiffusion"
+        )
+        .value =
+        record.diffusion || "";
+
+
+      document
+        .getElementById(
+          "editEvidence"
+        )
+        .value =
+        record.evidence || "";
+
+
+      document
+        .getElementById(
+          "editStandard"
+        )
+        .value =
+        record.standard || "";
+
+
+      document
+        .getElementById(
+          "editObservations"
+        )
+        .value =
+        record.observations || "";
+
+
+      updateEditPreview();
+
+
+      document
+        .getElementById(
+          "editModal"
+        )
+        .classList.remove(
+          "hidden"
+        );
+
+    }
+
+
+    function closeEditModal() {
+
+      document
+        .getElementById(
+          "editModal"
+        )
+        .classList.add(
+          "hidden"
+        );
+
+    }
+
+
+    document
+      .getElementById(
+        "closeEditModal"
+      )
+      .addEventListener(
+        "click",
+        closeEditModal
+      );
+
+
+    document
+      .getElementById(
+        "cancelEdit"
+      )
+      .addEventListener(
+        "click",
+        closeEditModal
+      );
+
+
+    document
+      .getElementById(
+        "editModal"
+      )
+      .addEventListener(
+        "click",
+        event => {
+
+          if (
+            event.target.id ===
+            "editModal"
+          ) {
+
+            closeEditModal();
+
+          }
+
+        }
+      );
+
+
+    [
+      "editMode",
+      "editClient",
+      "editProjectNo",
+      "editArea",
+      "editDocType",
+      "editRevision"
+    ].forEach(
+      id => {
+
+        document
+          .getElementById(
+            id
+          )
+          .addEventListener(
+            "change",
+            updateEditPreview
+          );
+
+      }
+    );
+
+
+    async function updateEditPreview() {
+
+      try {
+
+        const data =
+          getEditData();
+
+
+        const result =
+          await api(
+            "previewCode",
+            {
+
+              ...data,
+
+              originalCode:
+                document
+                  .getElementById(
+                    "editOriginalCode"
+                  )
+                  .value
+
+            }
+          );
+
+
+        document
+          .getElementById(
+            "editCodePreview"
+          )
+          .textContent =
+          result.code;
+
+
+      } catch (
+        error
+      ) {
+
+        document
+          .getElementById(
+            "editCodePreview"
+          )
+          .textContent =
+          "—";
+
+      }
+
+    }
+
+
+    function getEditData() {
+
+      return {
+
+        mode:
+          document
+            .getElementById(
+              "editMode"
+            )
+            .value,
+
+        client:
+          document
+            .getElementById(
+              "editClient"
+            )
+            .value
+            .trim(),
+
+        projectNo:
+          document
+            .getElementById(
+              "editProjectNo"
+            )
+            .value
+            .trim(),
+
+        projectName:
+          document
+            .getElementById(
+              "editProjectName"
+            )
+            .value
+            .trim(),
+
+        area:
+          document
+            .getElementById(
+              "editArea"
+            )
+            .value,
+
+        docType:
+          document
+            .getElementById(
+              "editDocType"
+            )
+            .value,
+
+        revision:
+          document
+            .getElementById(
+              "editRevision"
+            )
+            .value,
+
+        name:
+          document
+            .getElementById(
+              "editName"
+            )
+            .value
+            .trim(),
+
+        issueDate:
+          document
+            .getElementById(
+              "editIssueDate"
+            )
+            .value,
+
+        docLink:
+          document
+            .getElementById(
+              "editDocLink"
+            )
+            .value
+            .trim(),
+
+        distribution:
+          document
+            .getElementById(
+              "editDistribution"
+            )
+            .value
+            .trim(),
+
+        state:
+          document
+            .getElementById(
+              "editState"
+            )
+            .value,
+
+        associated:
+          document
+            .getElementById(
+              "editAssociated"
+            )
+            .value
+            .trim(),
+
+        diffusion:
+          document
+            .getElementById(
+              "editDiffusion"
+            )
+            .value
+            .trim(),
+
+        evidence:
+          document
+            .getElementById(
+              "editEvidence"
+            )
+            .value
+            .trim(),
+
+        standard:
+          document
+            .getElementById(
+              "editStandard"
+            )
+            .value
+            .trim(),
+
+        observations:
+          document
+            .getElementById(
+              "editObservations"
+            )
+            .value
+            .trim()
+
+      };
+
+    }
+
+
+    /* =====================================================
+       GUARDAR EDICIÓN
+       ===================================================== */
+
+    document
+      .getElementById(
+        "saveEdit"
+      )
+      .addEventListener(
+        "click",
+        async () => {
+
+          try {
+
+            const data =
+              getEditData();
+
+
+            data.originalCode =
+              document
+                .getElementById(
+                  "editOriginalCode"
+                )
+                .value;
+
+
+            if (
+              !data.name
+            ) {
+
+              throw new Error(
+                "Debe ingresar el nombre del documento."
+              );
+
+            }
+
+
+            showLoading(
+              true
+            );
+
+
+            const result =
+              await api(
+                "updateDocument",
+                {
+                  document:
+                    data
+                }
+              );
+
+
+            showToast(
+              "Documento actualizado: " +
+              result.code,
+              "success"
+            );
+
+
+            closeEditModal();
+
+
+            await loadData();
+
+
+          } catch (
+            error
+          ) {
+
+            console.error(
+              error
+            );
+
+
+            showToast(
+              error.message,
+              "error"
+            );
+
+          } finally {
+
+            showLoading(
+              false
+            );
+
+          }
+
+        }
+      );
+
+
+    function convertDateForInput(
+      value
+    ) {
+
+      if (!value) {
+        return "";
+      }
+
+
+      const date =
+        new Date(
+          value
+        );
+
+
+      if (
+        isNaN(
+          date.getTime()
+        )
+      ) {
+
+        /*
+         * Si ya viene como YYYY-MM-DD
+         */
+
+        if (
+          /^\d{4}-\d{2}-\d{2}$/.test(
+            String(value)
+          )
+        ) {
+
+          return String(
+            value
+          );
+
+        }
+
+
+        return "";
+
+      }
+
+
+      return date
+        .toISOString()
+        .substring(
+          0,
+          10
+        );
+
+    }
+
+
+    /* =====================================================
+       BUSCADORES
+       ===================================================== */
+
+    document
+      .getElementById(
+        "masterSearch"
+      )
+      .addEventListener(
+        "input",
+        event => {
+
+          renderMasterList(
+            event.target.value
+          );
+
+        }
+      );
+
+
+    document
+      .getElementById(
+        "matrixSearch"
+      )
+      .addEventListener(
+        "input",
+        event => {
+
+          renderMatrix(
+            event.target.value
+          );
+
+        }
+      );
+
+
+    /* =====================================================
+       REFRESH
+       ===================================================== */
+
+    document
+      .getElementById(
+        "dashboardRefresh"
+      )
+      .addEventListener(
+        "click",
+        refreshData
+      );
+
+
+    document
+      .getElementById(
+        "masterRefresh"
+      )
+      .addEventListener(
+        "click",
+        refreshData
+      );
+
+
+    document
+      .getElementById(
+        "matrixRefresh"
+      )
+      .addEventListener(
+        "click",
+        refreshData
+      );
+
+
+    async function refreshData() {
+
+      try {
+
+        showLoading(
+          true
+        );
+
+
+        await loadData();
+
+
+        showToast(
+          "Datos actualizados.",
           "success"
         );
 
+
+      } catch (
+        error
+      ) {
+
+        showToast(
+          error.message,
+          "error"
+        );
+
+      } finally {
+
+        showLoading(
+          false
+        );
+
       }
-
-
-    } catch (error) {
-
-      toast(
-        error.message ||
-        "No fue posible verificar el código.",
-        "error"
-      );
-
-    } finally {
-
-      showLoading(false);
 
     }
 
-  }
 
+    /* =====================================================
+       INICIO
+       ===================================================== */
 
-  /* =========================================================
-     NAVIGATION
-     ========================================================= */
+    /*
+     * La pantalla inicial será Dashboard.
+     */
 
-  function showSection(
-    sectionId
-  ) {
-
-    document
-      .querySelectorAll(".app-section")
-      .forEach(
-        section => {
-          section.classList.add(
-            "hidden"
-          );
-        }
-      );
-
-
-    $(sectionId)
-      .classList.remove(
-        "hidden"
-      );
-
-
-    document
-      .querySelectorAll(".menu-button")
-      .forEach(
-        button => {
-
-          button.classList.toggle(
-            "active",
-            button.dataset.section ===
-              sectionId
-          );
-
-        }
-      );
-
-  }
-
-
-  /* =========================================================
-     EVENT LISTENERS
-     ========================================================= */
-
-  document
-    .querySelectorAll(".menu-button")
-    .forEach(
-      button => {
-
-        button.addEventListener(
-          "click",
-          () => {
-
-            showSection(
-              button.dataset.section
-            );
-
-          }
-        );
-
-      }
+    switchSection(
+      "dashboard"
     );
 
-
-  /* =========================================================
-     LOGIN
-     ========================================================= */
-
-  $("loginButton")
-    .addEventListener(
-      "click",
-      async () => {
-
-        const email =
-          $("loginEmail")
-            .value
-            .trim();
-
-        const password =
-          $("loginPassword")
-            .value;
-
-
-        $("loginError")
-          .style.display =
-          "none";
-
-
-        if (
-          !email ||
-          !password
-        ) {
-
-          $("loginError")
-            .textContent =
-            "Ingrese correo y contraseña.";
-
-          $("loginError")
-            .style.display =
-            "block";
-
-          return;
-
-        }
-
-
-        try {
-
-          await window.firebaseFunctions
-            .signInWithEmailAndPassword(
-              window.firebaseAuth,
-              email,
-              password
-            );
-
-        } catch (error) {
-
-          console.error(error);
-
-          let message =
-            "No fue posible iniciar sesión.";
-
-          if (
-            error.code ===
-            "auth/invalid-credential"
-          ) {
-            message =
-              "Correo o contraseña incorrectos.";
-          }
-
-          if (
-            error.code ===
-            "auth/user-not-found"
-          ) {
-            message =
-              "El usuario no existe.";
-          }
-
-          if (
-            error.code ===
-            "auth/wrong-password"
-          ) {
-            message =
-              "Contraseña incorrecta.";
-          }
-
-          if (
-            error.code ===
-            "auth/too-many-requests"
-          ) {
-            message =
-              "Demasiados intentos. Espere un momento.";
-          }
-
-
-          $("loginError")
-            .textContent =
-            message;
-
-          $("loginError")
-            .style.display =
-            "block";
-
-        }
-
-      }
-    );
-
-
-  /* =========================================================
-     PASSWORD RESET
-     ========================================================= */
-
-  $("forgotPassword")
-    .addEventListener(
-      "click",
-      async () => {
-
-        const email =
-          $("loginEmail")
-            .value
-            .trim();
-
-
-        if (!email) {
-
-          $("loginError")
-            .textContent =
-            "Ingrese primero su correo electrónico.";
-
-          $("loginError")
-            .style.display =
-            "block";
-
-          return;
-
-        }
-
-
-        try {
-
-          await window.firebaseFunctions
-            .sendPasswordResetEmail(
-              window.firebaseAuth,
-              email
-            );
-
-
-          toast(
-            "Se envió el correo para restablecer la contraseña.",
-            "success"
-          );
-
-
-        } catch (error) {
-
-          console.error(error);
-
-          toast(
-            "No fue posible enviar el correo de recuperación.",
-            "error"
-          );
-
-        }
-
-      }
-    );
-
-
-  /* =========================================================
-     LOGOUT
-     ========================================================= */
-
-  $("logoutButton")
-    .addEventListener(
-      "click",
-      async () => {
-
-        try {
-
-          await window.firebaseFunctions
-            .signOut(
-              window.firebaseAuth
-            );
-
-        } catch (error) {
-
-          console.error(error);
-
-          toast(
-            "No fue posible cerrar sesión.",
-            "error"
-          );
-
-        }
-
-      }
-    );
-
-
-  /* =========================================================
-     NEW DOCUMENT EVENTS
-     ========================================================= */
-
-  document
-    .querySelectorAll(
-      'input[name="newMode"]'
-    )
-    .forEach(
-      radio => {
-
-        radio.addEventListener(
-          "change",
-          updateNewModeVisibility
-        );
-
-      }
-    );
-
-
-  [
-    "newArea",
-    "newDocType",
-    "newRevision",
-    "newClient",
-    "newProjectNo"
-  ]
-  .forEach(
-    id => {
-
-      $(id)
-        .addEventListener(
-          "change",
-          previewNewCode
-        );
-
-      $(id)
-        .addEventListener(
-          "input",
-          previewNewCode
-        );
-
-    }
-  );
-
-
-  $("verifyCodeButton")
-    .addEventListener(
-      "click",
-      verifyNewCode
-    );
-
-
-  $("createDocumentButton")
-    .addEventListener(
-      "click",
-      createDocument
-    );
-
-
-  /* =========================================================
-     SEARCH
-     ========================================================= */
-
-  $("listadoSearch")
-    .addEventListener(
-      "input",
-      event => {
-
-        renderListado(
-          filterRecords(
-            allListado,
-            event.target.value
-          )
-        );
-
-      }
-    );
-
-
-  $("matrizSearch")
-    .addEventListener(
-      "input",
-      event => {
-
-        renderMatriz(
-          filterRecords(
-            allMatriz,
-            event.target.value
-          )
-        );
-
-      }
-    );
-
-
-  /* =========================================================
-     REFRESH
-     ========================================================= */
-
-  $("refreshListado")
-    .addEventListener(
-      "click",
-      loadDataFromBackend
-    );
-
-
-  $("refreshMatriz")
-    .addEventListener(
-      "click",
-      loadDataFromBackend
-    );
-
-
-  /* =========================================================
-     EDIT EVENTS
-     ========================================================= */
-
-  document
-    .querySelectorAll(
-      'input[name="editMode"]'
-    )
-    .forEach(
-      radio => {
-
-        radio.addEventListener(
-          "change",
-          updateEditModeVisibility
-        );
-
-      }
-    );
-
-
-  [
-    "editClient",
-    "editProjectNo",
-    "editArea",
-    "editDocType",
-    "editRevision"
-  ]
-  .forEach(
-    id => {
-
-      $(id)
-        .addEventListener(
-          "input",
-          previewEditCode
-        );
-
-      $(id)
-        .addEventListener(
-          "change",
-          previewEditCode
-        );
-
-    }
-  );
-
-
-  $("saveEdit")
-    .addEventListener(
-      "click",
-      saveEdit
-    );
-
-
-  $("cancelEdit")
-    .addEventListener(
-      "click",
-      closeEditModal
-    );
-
-
-  $("closeEditModal")
-    .addEventListener(
-      "click",
-      closeEditModal
-    );
-
-
-  $("editModal")
-    .addEventListener(
-      "click",
-      event => {
-
-        if (
-          event.target ===
-          $("editModal")
-        ) {
-
-          closeEditModal();
-
-        }
-
-      }
-    );
-
-
-  /* =========================================================
-     INITIALIZE
-     ========================================================= */
-
-  fillRevisionSelect(
-    $("newRevision"),
-    "internal",
-    "Rev0"
-  );
-
-  fillRevisionSelect(
-    $("editRevision"),
-    "internal",
-    "Rev0"
-  );
-
-  updateNewModeVisibility();
-
-</script>
+  </script>
 
 </body>
 </html>
