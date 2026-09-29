@@ -1,455 +1,947 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aqua Service | Sistema de Codificación Documental</title>
+
+<title>
+Aqua Service | Sistema de Codificación Documental
+</title>
 
 <style>
+
 :root{
-  --navy:#0b3552;
-  --navy2:#123f5f;
-  --blue:#0d78a8;
-  --light:#eef6fa;
-  --border:#d6e0e7;
-  --text:#173042;
-  --muted:#667b89;
-  --ok:#137a4b;
-  --okbg:#eaf8f1;
-  --warn:#9a6500;
-  --warnbg:#fff7df;
-  --danger:#b42318;
-  --dangerbg:#fff0ef;
-  --white:#fff
+  --navy:#082f49;
+  --navy2:#0d4668;
+  --blue:#087db5;
+  --blue2:#1296d4;
+  --light:#f3f8fb;
+  --border:#d7e3ea;
+  --text:#183447;
+  --muted:#6b8190;
+  --white:#ffffff;
+  --green:#15945b;
+  --green-bg:#eaf8f1;
+  --orange:#e88b16;
+  --orange-bg:#fff6e6;
+  --red:#c52b21;
+  --red-bg:#fff0ee;
+  --shadow:0 5px 20px rgba(10,45,70,.07);
 }
 
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
 body{
   margin:0;
-  font-family:Arial,Helvetica,sans-serif;
-  background:#f5f8fa;
-  color:var(--text)
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+  background:#f4f8fa;
+  color:var(--text);
 }
 
-.hidden{display:none!important}
+button,
+input,
+select,
+textarea{
+  font-family:inherit;
+}
+
+.hidden{
+  display:none!important;
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+.login{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:
+    linear-gradient(
+      135deg,
+      #082f49 0%,
+      #0b4668 45%,
+      #eaf4f8 100%
+    );
+}
+
+.login-box{
+  width:min(440px,92vw);
+  background:white;
+  border-radius:20px;
+  padding:38px;
+  box-shadow:0 20px 60px rgba(0,0,0,.18);
+}
+
+.login-logo{
+  width:70px;
+  height:70px;
+  border-radius:18px;
+  background:linear-gradient(
+    135deg,
+    #0a84bd,
+    #0d4c6e
+  );
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  font-weight:bold;
+  margin:0 auto 18px;
+}
+
+.login-brand{
+  text-align:center;
+}
+
+.login-brand h1{
+  margin:0;
+  color:var(--navy);
+  font-size:28px;
+}
+
+.login-brand p{
+  color:var(--muted);
+  margin-top:8px;
+}
+
+.login-info{
+  background:#f2f8fb;
+  border-left:4px solid var(--blue);
+  padding:13px;
+  border-radius:7px;
+  font-size:13px;
+  margin:25px 0;
+}
+
+
+/* =========================================================
+   APP
+========================================================= */
 
 .app{
   min-height:100vh;
-  display:flex
+  display:flex;
 }
 
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
 .sidebar{
-  width:300px;
-  background:var(--navy);
+  width:285px;
+  background:
+    linear-gradient(
+      180deg,
+      #07314d 0%,
+      #0b3d5c 70%,
+      #082f49 100%
+    );
   color:white;
-  padding:28px 20px;
   position:fixed;
-  inset:0 auto 0 0
+  top:0;
+  bottom:0;
+  left:0;
+  padding:25px 18px;
+  z-index:20;
 }
 
 .brand{
-  font-size:25px;
-  font-weight:700
+  padding:5px 12px 25px;
+  border-bottom:1px solid rgba(255,255,255,.12);
 }
 
-.brand small{
-  display:block;
-  font-size:14px;
-  font-weight:400;
-  color:#b9cad6;
-  margin-top:6px
+.brand-title{
+  font-size:24px;
+  font-weight:800;
+  letter-spacing:.3px;
+}
+
+.brand-subtitle{
+  color:#bdd0dc;
+  font-size:13px;
+  line-height:1.4;
+  margin-top:5px;
 }
 
 .nav{
-  margin-top:35px
+  margin-top:25px;
 }
 
 .nav-title{
-  font-size:12px;
-  color:#9eb3c2;
-  margin:25px 14px 10px
+  color:#89a7b9;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:1px;
+  padding:15px 12px 7px;
 }
 
 .nav button{
   width:100%;
   border:0;
   background:transparent;
-  color:white;
+  color:#edf7fb;
   text-align:left;
-  padding:14px;
-  border-radius:10px;
+  padding:13px 14px;
   margin:3px 0;
-  font-size:16px;
-  cursor:pointer
+  border-radius:10px;
+  font-size:15px;
+  cursor:pointer;
+  transition:.2s;
 }
 
-.nav button:hover,
+.nav button:hover{
+  background:rgba(255,255,255,.09);
+}
+
 .nav button.active{
-  background:#28536f
+  background:#245674;
+  box-shadow:
+    inset 3px 0 0 #27a9e0;
+}
+
+.nav-icon{
+  width:25px;
+  display:inline-block;
 }
 
 .logout{
   position:absolute;
-  bottom:24px;
-  left:20px;
-  right:20px
+  bottom:22px;
+  left:18px;
+  right:18px;
 }
 
+
+/* =========================================================
+   MAIN
+========================================================= */
+
 .main{
-  margin-left:300px;
-  width:calc(100% - 300px);
-  padding:30px 38px
+  margin-left:285px;
+  width:calc(100% - 285px);
+  min-height:100vh;
+  padding:25px 35px 45px;
 }
 
 .topbar{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin-bottom:25px
+  margin-bottom:25px;
 }
 
 .topbar h1{
   margin:0;
-  font-size:28px
+  font-size:28px;
+  color:#102f45;
 }
 
-.user{
+.topbar-sub{
+  color:var(--muted);
+  font-size:14px;
+  margin-top:5px;
+}
+
+.user-box{
   background:white;
   border:1px solid var(--border);
-  padding:10px 14px;
-  border-radius:9px;
-  font-size:14px
+  border-radius:12px;
+  padding:9px 14px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  box-shadow:var(--shadow);
 }
+
+.user-avatar{
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:var(--navy);
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+}
+
+.user-email{
+  font-size:13px;
+  font-weight:700;
+}
+
+
+/* =========================================================
+   CARDS
+========================================================= */
+
+.cards{
+  display:grid;
+  grid-template-columns:
+    repeat(4,1fr);
+  gap:16px;
+  margin-bottom:20px;
+}
+
+.stat-card{
+  background:white;
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:19px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+
+.stat-card-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+}
+
+.stat-icon{
+  width:43px;
+  height:43px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+}
+
+.icon-blue{
+  background:#e6f3fb;
+  color:#087db5;
+}
+
+.icon-green{
+  background:#e9f8f0;
+  color:#15945b;
+}
+
+.icon-purple{
+  background:#f0eaff;
+  color:#7651cf;
+}
+
+.icon-orange{
+  background:#fff1dc;
+  color:#e88b16;
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:13px;
+}
+
+.stat-number{
+  font-size:27px;
+  font-weight:800;
+  margin-top:6px;
+  color:#112f46;
+}
+
+.stat-foot{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:5px;
+}
+
+
+/* =========================================================
+   CARDS GENERALES
+========================================================= */
 
 .card{
   background:white;
   border:1px solid var(--border);
-  border-radius:14px;
-  padding:24px;
+  border-radius:15px;
+  padding:23px;
   margin-bottom:20px;
-  box-shadow:0 2px 10px rgba(0,0,0,.03)
+  box-shadow:var(--shadow);
 }
 
-.cards{
+.card-title{
+  margin:0;
+  font-size:20px;
+}
+
+.card-subtitle{
+  color:var(--muted);
+  margin:5px 0 0;
+  font-size:14px;
+}
+
+
+/* =========================================================
+   CONEXIÓN
+========================================================= */
+
+.connection{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  padding:10px 14px;
+  background:white;
+  border:1px solid var(--border);
+  border-radius:10px;
+  font-size:13px;
+}
+
+.connection-dot{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:#b8c4ca;
+}
+
+.connection.ok .connection-dot{
+  background:#20b46e;
+}
+
+.connection.error .connection-dot{
+  background:#d52e26;
+}
+
+
+/* =========================================================
+   FORMULARIO
+========================================================= */
+
+.form-header{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:20px;
+}
+
+.form-header-icon{
+  width:48px;
+  height:48px;
+  border-radius:13px;
+  background:#e8f5fb;
+  color:var(--blue);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:23px;
+}
+
+.radio-grid{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:18px
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+  margin-bottom:22px;
 }
 
-.stat{
-  font-size:30px;
-  font-weight:700;
-  margin-top:10px
+.mode-card{
+  border:1.5px solid var(--border);
+  border-radius:13px;
+  padding:18px;
+  cursor:pointer;
+  transition:.2s;
+  background:white;
 }
 
-.muted{
-  color:var(--muted)
+.mode-card:hover{
+  border-color:#8ebed4;
+}
+
+.mode-card.selected{
+  border-color:#0782bd;
+  background:#f0f9fd;
+  box-shadow:
+    0 0 0 2px rgba(8,125,181,.08);
+}
+
+.mode-radio{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+}
+
+.mode-radio input{
+  margin-top:4px;
+  accent-color:var(--blue);
+}
+
+.mode-title{
+  font-size:16px;
+  font-weight:800;
+}
+
+.mode-description{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.5;
+  margin-top:5px;
+}
+
+.section-label{
+  font-size:14px;
+  font-weight:800;
+  color:#234457;
+  margin:20px 0 12px;
+  padding-bottom:7px;
+  border-bottom:1px solid #edf1f3;
 }
 
 .grid2{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:18px
+  gap:17px;
 }
 
 .grid3{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:18px
+  grid-template-columns:
+    repeat(3,1fr);
+  gap:17px;
 }
 
 .field{
-  margin-bottom:16px
+  margin-bottom:14px;
 }
 
 .field label{
   display:block;
-  font-weight:700;
-  margin-bottom:7px
+  font-size:13px;
+  font-weight:800;
+  margin-bottom:7px;
+  color:#234457;
 }
 
 .field input,
 .field select,
 .field textarea{
   width:100%;
-  padding:13px 14px;
-  border:1px solid #c9d6df;
+  border:1px solid #cad9e1;
   border-radius:9px;
-  font-size:15px;
-  background:white
+  padding:12px 13px;
+  font-size:14px;
+  color:#173042;
+  background:#fff;
+  outline:none;
+  transition:.2s;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+  border-color:#0782bd;
+  box-shadow:
+    0 0 0 3px rgba(8,125,181,.09);
 }
 
 .field textarea{
-  min-height:85px;
-  resize:vertical
+  min-height:90px;
+  resize:vertical;
 }
 
-.radio-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:14px;
-  margin-bottom:20px
+
+/* =========================================================
+   CÓDIGO PROPUESTO
+========================================================= */
+
+.code-panel{
+  border:1px solid #c9e2ee;
+  background:#f0f9fd;
+  border-radius:14px;
+  overflow:hidden;
+  margin:22px 0;
 }
 
-.radio{
-  border:1px solid var(--border);
-  padding:17px;
-  border-radius:11px;
-  cursor:pointer
-}
-
-.radio.selected{
-  border:2px solid var(--blue);
-  background:#f1f9fd
-}
-
-.radio input{
-  margin-right:9px
-}
-
-.preview{
-  background:#edf7fb;
-  border:1px solid #c6e1ec;
-  border-radius:12px;
-  padding:18px;
+.code-panel-title{
+  background:#dff1f9;
+  color:#0675a9;
   text-align:center;
-  margin:20px 0
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.8px;
+  padding:10px;
 }
 
-.preview-code{
-  font-size:25px;
-  font-weight:700;
-  color:#05658e;
-  word-break:break-word
+.code-value{
+  text-align:center;
+  padding:17px 10px 10px;
+  font-size:27px;
+  font-weight:900;
+  color:#0c2d45;
+  word-break:break-word;
 }
 
-.status{
-  padding:13px 15px;
+.code-status{
+  margin:0 18px 18px;
+  padding:12px;
   border-radius:9px;
-  margin:12px 0;
-  font-weight:600
+  text-align:center;
+  font-size:13px;
+  font-weight:700;
 }
 
-.status.ok{
-  background:var(--okbg);
-  color:var(--ok);
-  border:1px solid #b8e4ce
+.code-status.ok{
+  background:var(--green-bg);
+  color:var(--green);
 }
 
-.status.warn{
-  background:var(--warnbg);
-  color:var(--warn);
-  border:1px solid #eedca4
+.code-status.warn{
+  background:var(--orange-bg);
+  color:#94600a;
 }
 
-.status.danger{
-  background:var(--dangerbg);
-  color:var(--danger);
-  border:1px solid #f0b8b3
+.code-status.danger{
+  background:var(--red-bg);
+  color:var(--red);
 }
+
+
+/* =========================================================
+   BOTONES
+========================================================= */
 
 .buttons{
   display:flex;
+  justify-content:flex-end;
   gap:10px;
-  flex-wrap:wrap
+  flex-wrap:wrap;
 }
 
 .btn{
   border:0;
   border-radius:9px;
-  padding:12px 18px;
-  font-size:15px;
-  font-weight:700;
-  cursor:pointer
+  padding:12px 17px;
+  font-size:14px;
+  font-weight:800;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.btn:hover{
+  transform:translateY(-1px);
 }
 
 .btn-primary{
-  background:var(--blue);
-  color:white
+  background:#087db5;
+  color:white;
+}
+
+.btn-success{
+  background:#15945b;
+  color:white;
 }
 
 .btn-secondary{
-  background:#e8eef2;
-  color:#234254
-}
-
-.btn-danger{
-  background:#b42318;
-  color:white
+  background:#edf2f5;
+  color:#29495b;
 }
 
 .btn:disabled{
   opacity:.5;
-  cursor:not-allowed
+  cursor:not-allowed;
+  transform:none;
+}
+
+
+/* =========================================================
+   TABLAS
+========================================================= */
+
+.table-toolbar{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  align-items:center;
+  margin-bottom:16px;
+}
+
+.search{
+  max-width:400px;
 }
 
 .table-wrap{
-  overflow:auto
+  overflow:auto;
+  border:1px solid var(--border);
+  border-radius:10px;
 }
 
 .table{
   width:100%;
   border-collapse:collapse;
-  font-size:13px
-}
-
-.table th,
-.table td{
-  padding:10px;
-  border-bottom:1px solid var(--border);
-  text-align:left;
-  white-space:nowrap
+  font-size:13px;
+  background:white;
 }
 
 .table th{
-  background:#f1f5f7
+  background:#f1f6f9;
+  color:#3c5667;
+  font-size:12px;
+  text-align:left;
+  padding:12px;
+  white-space:nowrap;
 }
 
-.search{
-  max-width:380px;
-  margin-bottom:15px
+.table td{
+  padding:11px 12px;
+  border-top:1px solid #edf1f3;
+  white-space:nowrap;
 }
 
-.login{
-  min-height:100vh;
+.table tr:hover td{
+  background:#f8fbfc;
+}
+
+
+/* =========================================================
+   DASHBOARD INFO
+========================================================= */
+
+.dashboard-grid{
   display:grid;
-  place-items:center;
-  background:#f2f6f8
+  grid-template-columns:
+    1.3fr .7fr;
+  gap:20px;
 }
 
-.login-box{
-  width:min(430px,92vw);
-  background:white;
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:32px;
-  box-shadow:0 8px 35px rgba(0,0,0,.08)
-}
-
-.login-brand{
-  text-align:center;
-  margin-bottom:25px
-}
-
-.login-brand h1{
+.info-list{
   margin:0;
-  color:var(--navy)
+  padding-left:20px;
 }
 
-.login-brand p{
-  color:var(--muted)
+.info-list li{
+  margin-bottom:11px;
+  color:#526b79;
 }
 
-.notice{
-  background:#f3f7f9;
-  border-left:4px solid var(--blue);
-  padding:13px;
-  margin-bottom:18px;
-  border-radius:6px
+
+/* =========================================================
+   ESTADOS
+========================================================= */
+
+.status{
+  padding:12px 14px;
+  border-radius:9px;
+  font-size:13px;
+  font-weight:600;
+  margin:10px 0;
 }
 
-.small{
-  font-size:12px
+.status.ok{
+  background:var(--green-bg);
+  color:var(--green);
 }
+
+.status.warn{
+  background:var(--orange-bg);
+  color:#94600a;
+}
+
+.status.danger{
+  background:var(--red-bg);
+  color:var(--red);
+}
+
+
+/* =========================================================
+   LOADER
+========================================================= */
 
 .loader{
-  display:inline-block;
   width:15px;
   height:15px;
-  border:2px solid #ccc;
-  border-top-color:var(--blue);
+  display:inline-block;
+  border:2px solid #ccd8df;
+  border-top-color:#087db5;
   border-radius:50%;
   animation:spin .8s linear infinite;
-  vertical-align:-2px
+  vertical-align:-2px;
 }
 
 @keyframes spin{
-  to{transform:rotate(360deg)}
+  to{
+    transform:rotate(360deg);
+  }
 }
 
-@media(max-width:900px){
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1100px){
+
+  .cards{
+    grid-template-columns:
+      repeat(2,1fr);
+  }
+
+  .dashboard-grid{
+    grid-template-columns:1fr;
+  }
+
+}
+
+@media(max-width:850px){
 
   .sidebar{
     position:relative;
     width:100%;
-    height:auto
+    height:auto;
   }
 
   .app{
-    display:block
+    display:block;
   }
 
   .main{
-    margin:0;
     width:100%;
-    padding:20px
+    margin:0;
+    padding:20px;
   }
 
   .logout{
     position:static;
-    margin-top:15px
+    margin-top:20px;
+    width:100%;
   }
 
-  .cards,
+  .topbar{
+    align-items:flex-start;
+    gap:15px;
+    flex-direction:column;
+  }
+
   .grid2,
   .grid3,
-  .radio-grid{
-    grid-template-columns:1fr
+  .radio-grid,
+  .cards{
+    grid-template-columns:1fr;
   }
+
 }
+
+
+/* =========================================================
+   REV.B BADGE
+========================================================= */
+
+.revision-origin{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  background:#fff2dd;
+  color:#a96300;
+  border:1px solid #f1d29f;
+  border-radius:6px;
+  padding:4px 7px;
+  font-size:11px;
+  font-weight:800;
+}
+
 </style>
+
 </head>
 
+
 <body>
+
 
 <!-- =====================================================
 LOGIN
 ===================================================== -->
 
-<div id="loginView" class="login">
+<div
+  id="loginView"
+  class="login">
 
   <div class="login-box">
 
-    <div class="login-brand">
-      <h1>AQUA SERVICE</h1>
-      <p>Sistema de Codificación Documental</p>
+    <div class="login-logo">
+      AQ
     </div>
 
-    <div class="notice">
-      Acceso mediante correo y contraseña autorizados en Firebase.
+    <div class="login-brand">
+
+      <h1>
+        AQUA SERVICE
+      </h1>
+
+      <p>
+        Sistema de Codificación Documental
+      </p>
+
+    </div>
+
+    <div class="login-info">
+
+      Acceso mediante correo y contraseña
+      autorizados en Firebase.
+
     </div>
 
     <div id="loginMsg"></div>
 
+
     <div class="field">
-      <label>Correo electrónico</label>
+
+      <label>
+        Correo electrónico
+      </label>
+
       <input
         id="email"
         type="email"
-        autocomplete="username">
+        autocomplete="username"
+        placeholder="correo@aquaservices.cl">
+
     </div>
 
+
     <div class="field">
-      <label>Contraseña</label>
+
+      <label>
+        Contraseña
+      </label>
+
       <input
         id="password"
         type="password"
-        autocomplete="current-password">
+        autocomplete="current-password"
+        placeholder="••••••••">
+
     </div>
+
 
     <button
       id="loginBtn"
       class="btn btn-primary"
       style="width:100%">
+
       Ingresar
+
     </button>
+
 
     <button
       id="resetBtn"
       class="btn btn-secondary"
       style="width:100%;margin-top:10px">
+
       Restablecer contraseña
+
     </button>
 
   </div>
@@ -461,14 +953,29 @@ LOGIN
 APLICACIÓN
 ===================================================== -->
 
-<div id="appView" class="app hidden">
+<div
+  id="appView"
+  class="app hidden">
+
+
+  <!-- ===================================================
+  SIDEBAR
+  =================================================== -->
 
   <aside class="sidebar">
 
     <div class="brand">
-      AQUA SERVICE
-      <small>Sistema de Codificación Documental</small>
+
+      <div class="brand-title">
+        AQUA SERVICE
+      </div>
+
+      <div class="brand-subtitle">
+        Sistema de Codificación Documental
+      </div>
+
     </div>
+
 
     <div class="nav">
 
@@ -476,12 +983,22 @@ APLICACIÓN
         PRINCIPAL
       </div>
 
+
       <button data-page="dashboard">
-        🏠 Dashboard
+
+        <span class="nav-icon">⌂</span>
+
+        Dashboard
+
       </button>
 
+
       <button data-page="new">
-        📄 Nuevo documento
+
+        <span class="nav-icon">▣</span>
+
+        Nuevo documento
+
       </button>
 
 
@@ -489,12 +1006,22 @@ APLICACIÓN
         CONTROL DOCUMENTAL
       </div>
 
+
       <button data-page="listado">
-        📋 Listado Maestro
+
+        <span class="nav-icon">▤</span>
+
+        Listado Maestro
+
       </button>
 
+
       <button data-page="matriz">
-        🔗 Matriz de Trazabilidad
+
+        <span class="nav-icon">⌘</span>
+
+        Matriz de Trazabilidad
+
       </button>
 
 
@@ -502,8 +1029,13 @@ APLICACIÓN
         SISTEMA
       </div>
 
+
       <button data-page="config">
-        ⚙️ Configuración
+
+        <span class="nav-icon">⚙</span>
+
+        Configuración
+
       </button>
 
     </div>
@@ -512,21 +1044,61 @@ APLICACIÓN
     <button
       id="logoutBtn"
       class="btn btn-secondary logout">
-      🚪 Cerrar sesión
+
+      ⇥ &nbsp; Cerrar sesión
+
     </button>
 
   </aside>
 
 
+  <!-- ===================================================
+  MAIN
+  =================================================== -->
+
   <main class="main">
+
 
     <div class="topbar">
 
-      <h1 id="pageTitle">
-        Dashboard
-      </h1>
+      <div>
 
-      <div id="userEmail" class="user"></div>
+        <h1 id="pageTitle">
+          Dashboard
+        </h1>
+
+        <div class="topbar-sub">
+          Sistema de Control y Codificación Documental
+        </div>
+
+      </div>
+
+
+      <div class="user-box">
+
+        <div
+          id="userAvatar"
+          class="user-avatar">
+          AQ
+        </div>
+
+        <div>
+
+          <div
+            id="userEmail"
+            class="user-email">
+          </div>
+
+          <div
+            style="font-size:11px;color:#789">
+
+            Usuario autorizado
+
+          </div>
+
+        </div>
+
+      </div>
 
     </div>
 
@@ -539,96 +1111,255 @@ APLICACIÓN
       id="page-dashboard"
       class="page">
 
+
       <div
         id="backendNotice"
-        class="notice">
-        Conectando con el control documental…
+        class="status warn">
+
+        Conectando con los controles documentales...
+
       </div>
 
 
       <div class="cards">
 
-        <div class="card">
-          <div class="muted">
-            Documentos registrados
+
+        <div class="stat-card">
+
+          <div class="stat-card-top">
+
+            <div>
+
+              <div class="stat-label">
+                Documentos registrados
+              </div>
+
+              <div
+                id="statDocs"
+                class="stat-number">
+
+                —
+
+              </div>
+
+              <div class="stat-foot">
+                Registros disponibles
+              </div>
+
+            </div>
+
+            <div class="stat-icon icon-blue">
+              ▣
+            </div>
+
           </div>
 
-          <div
-            id="statDocs"
-            class="stat">
-            —
-          </div>
         </div>
 
 
-        <div class="card">
-          <div class="muted">
-            Códigos disponibles revisados
+        <div class="stat-card">
+
+          <div class="stat-card-top">
+
+            <div>
+
+              <div class="stat-label">
+                Códigos verificados
+              </div>
+
+              <div
+                id="statChecked"
+                class="stat-number">
+
+                —
+
+              </div>
+
+              <div class="stat-foot">
+                Códigos únicos
+              </div>
+
+            </div>
+
+            <div class="stat-icon icon-green">
+              ✓
+            </div>
+
           </div>
 
-          <div
-            id="statChecked"
-            class="stat">
-            —
-          </div>
         </div>
 
 
-        <div class="card">
-          <div class="muted">
-            Estado de conexión
+        <div class="stat-card">
+
+          <div class="stat-card-top">
+
+            <div>
+
+              <div class="stat-label">
+                Listado Maestro
+              </div>
+
+              <div
+                id="statListado"
+                class="stat-number">
+
+                —
+
+              </div>
+
+              <div class="stat-foot">
+                Registros detectados
+              </div>
+
+            </div>
+
+            <div class="stat-icon icon-purple">
+              ▤
+            </div>
+
           </div>
 
-          <div
-            id="statConnection"
-            class="stat"
-            style="font-size:22px">
-            —
-          </div>
         </div>
+
+
+        <div class="stat-card">
+
+          <div class="stat-card-top">
+
+            <div>
+
+              <div class="stat-label">
+                Matriz
+              </div>
+
+              <div
+                id="statMatriz"
+                class="stat-number">
+
+                —
+
+              </div>
+
+              <div class="stat-foot">
+                Registros detectados
+              </div>
+
+            </div>
+
+            <div class="stat-icon icon-orange">
+              ⌘
+            </div>
+
+          </div>
+
+        </div>
+
 
       </div>
 
 
-      <div class="card">
+      <div class="dashboard-grid">
 
-        <h2>
-          Cómo funciona
-        </h2>
 
-        <ol>
+        <div class="card">
 
-          <li>
-            Seleccionas
-            <b>Documentación Interna</b>
-            o
-            <b>Proyecto</b>.
-          </li>
+          <h2 class="card-title">
+            Control de codificación
+          </h2>
 
-          <li>
-            La plataforma consulta
-            el Listado Maestro y la Matriz.
-          </li>
+          <p class="card-subtitle">
+            La plataforma verifica la documentación antes de asignar un nuevo código.
+          </p>
 
-          <li>
-            Busca códigos existentes
-            y calcula el siguiente correlativo.
-          </li>
 
-          <li>
-            Si el código ya existe,
-            lo informa y bloquea el registro.
-          </li>
+          <ol class="info-list">
 
-          <li>
-            Si está disponible,
-            registra el documento
-            en ambos controles.
-          </li>
+            <li>
+              Selecciona
+              <b>Documentación Interna</b>
+              o
+              <b>Proyecto</b>.
+            </li>
 
-        </ol>
+            <li>
+              Ingresa los datos del documento.
+            </li>
+
+            <li>
+              El sistema consulta el
+              <b>Listado Maestro</b>
+              y la
+              <b>Matriz de Trazabilidad</b>.
+            </li>
+
+            <li>
+              Se identifica el último correlativo utilizado.
+            </li>
+
+            <li>
+              Se verifica que el código no exista.
+            </li>
+
+            <li>
+              El documento queda disponible para registro.
+            </li>
+
+          </ol>
+
+        </div>
+
+
+        <div class="card">
+
+          <h2 class="card-title">
+            Reglas de revisión
+          </h2>
+
+          <p class="card-subtitle">
+            Ciclo documental
+          </p>
+
+
+          <div style="margin-top:18px">
+
+            <div style="margin-bottom:13px">
+
+              <b>Documentación Interna</b>
+
+              <div
+                style="margin-top:5px;color:#657b89">
+
+                Rev0 → Rev1 → Rev2 → ...
+
+              </div>
+
+            </div>
+
+
+            <div>
+
+              <b>Proyecto</b>
+
+              <div
+                style="margin-top:5px;color:#657b89">
+
+                Rev.B →
+                aprobación cliente →
+                Rev0 →
+                Rev1 →
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
 
       </div>
+
 
     </section>
 
@@ -641,71 +1372,194 @@ APLICACIÓN
       id="page-new"
       class="page hidden">
 
+
       <div class="card">
 
-        <h2>
-          Nuevo documento
-        </h2>
 
-        <p class="muted">
-          El código se calcula a partir de la documentación existente.
-          No se escribe manualmente el correlativo.
-        </p>
+        <div class="form-header">
+
+          <div class="form-header-icon">
+            ▣
+          </div>
+
+          <div>
+
+            <h2
+              class="card-title">
+
+              Nuevo documento
+
+            </h2>
+
+            <p
+              class="card-subtitle">
+
+              Genera y registra un nuevo código documental.
+
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <!-- TIPO -->
+
+        <div class="section-label">
+          1. Tipo de documento
+        </div>
 
 
         <div class="radio-grid">
 
+
           <label
             id="radioInternal"
-            class="radio selected">
+            class="mode-card selected">
 
-            <input
-              type="radio"
-              name="mode"
-              value="internal"
-              checked>
 
-            <b>
-              Documentación Interna
-            </b>
+            <div class="mode-radio">
 
-            <br>
+              <input
+                type="radio"
+                name="mode"
+                value="internal"
+                checked>
 
-            <span class="small muted">
-              AQ + Área + Tipo +
-              Correlativo + Revisión
-            </span>
+
+              <div>
+
+                <div class="mode-title">
+
+                  Documentación Interna
+
+                </div>
+
+                <div class="mode-description">
+
+                  AQ + Área + Tipo +
+                  Correlativo + Revisión
+
+                </div>
+
+              </div>
+
+            </div>
 
           </label>
 
 
           <label
             id="radioProject"
-            class="radio">
+            class="mode-card">
 
-            <input
-              type="radio"
-              name="mode"
-              value="project">
 
-            <b>
-              Proyecto
-            </b>
+            <div class="mode-radio">
 
-            <br>
+              <input
+                type="radio"
+                name="mode"
+                value="project">
 
-            <span class="small muted">
-              AQ + Cliente + N° Proyecto +
-              Área + Tipo + Correlativo +
-              Revisión
-            </span>
+
+              <div>
+
+                <div class="mode-title">
+
+                  Proyecto
+
+                </div>
+
+                <div class="mode-description">
+
+                  AQ + Cliente + N° Proyecto +
+                  Área + Tipo + Correlativo + Revisión
+
+                </div>
+
+              </div>
+
+            </div>
 
           </label>
+
+
+        </div>
+
+
+        <!-- PROYECTO -->
+
+        <div
+          id="projectFields"
+          class="hidden">
+
+
+          <div class="section-label">
+
+            2. Identificación del proyecto
+
+          </div>
+
+
+          <div class="grid3">
+
+
+            <div class="field">
+
+              <label>
+                Cliente
+              </label>
+
+              <input
+                id="client"
+                placeholder="Ej.: AN">
+
+            </div>
+
+
+            <div class="field">
+
+              <label>
+                N° proyecto / N° cliente
+              </label>
+
+              <input
+                id="projectNo"
+                placeholder="Ej.: 04">
+
+            </div>
+
+
+            <div class="field">
+
+              <label>
+                Nombre del proyecto
+              </label>
+
+              <input
+                id="projectName"
+                placeholder="Ej.: ELECTROIMAN">
+
+            </div>
+
+
+          </div>
+
+
+        </div>
+
+
+        <!-- CLASIFICACIÓN -->
+
+        <div class="section-label">
+
+          3. Clasificación documental
 
         </div>
 
 
         <div class="grid2">
+
 
           <div class="field">
 
@@ -728,61 +1582,14 @@ APLICACIÓN
 
           </div>
 
-        </div>
-
-
-        <!-- DATOS PROYECTO -->
-
-        <div
-          id="projectFields"
-          class="hidden">
-
-          <div class="grid3">
-
-            <div class="field">
-
-              <label>
-                Cliente
-              </label>
-
-              <input
-                id="client"
-                placeholder="Ej.: AN o DPM">
-
-            </div>
-
-
-            <div class="field">
-
-              <label>
-                N° proyecto / N° cliente
-              </label>
-
-              <input
-                id="projectNo"
-                placeholder="Ej.: 03">
-
-            </div>
-
-
-            <div class="field">
-
-              <label>
-                Nombre del proyecto
-              </label>
-
-              <input
-                id="projectName"
-                placeholder="Ej.: CEMS">
-
-            </div>
-
-          </div>
 
         </div>
 
+
+        <!-- IDENTIFICACIÓN -->
 
         <div class="grid2">
+
 
           <div class="field">
 
@@ -790,33 +1597,15 @@ APLICACIÓN
               Revisión
             </label>
 
-            <select id="revision">
+            <select id="revision"></select>
 
-              <option value="REV0">
-                REV0 - Original
-              </option>
 
-              <option value="REV1">
-                REV1 - Primera modificación
-              </option>
+            <div
+              id="revisionHelp"
+              class="small muted"
+              style="margin-top:5px">
 
-              <option value="REV2">
-                REV2
-              </option>
-
-              <option value="REV3">
-                REV3
-              </option>
-
-              <option value="REV4">
-                REV4
-              </option>
-
-              <option value="REV5">
-                REV5
-              </option>
-
-            </select>
+            </div>
 
           </div>
 
@@ -829,14 +1618,106 @@ APLICACIÓN
 
             <input
               id="docName"
-              placeholder="Ej.: Procedimiento de recepción de materiales">
+              placeholder="Ej.: Protocolo de recepción de materiales">
 
           </div>
+
+
+        </div>
+
+
+        <!-- PROYECTO INFO -->
+
+        <div
+          id="projectExtra"
+          class="hidden">
+
+
+          <div class="section-label">
+
+            4. Información complementaria
+
+          </div>
+
+
+          <div class="grid2">
+
+
+            <div class="field">
+
+              <label>
+                Documentos asociados
+              </label>
+
+              <input
+                id="associated"
+                placeholder="Ej.: PAC, planos, procedimientos">
+
+            </div>
+
+
+            <div class="field">
+
+              <label>
+                Difusión del documento
+              </label>
+
+              <input
+                id="diffusion"
+                placeholder="Ej.: Primera difusión">
+
+            </div>
+
+
+          </div>
+
+
+          <div class="grid2">
+
+
+            <div class="field">
+
+              <label>
+                Evidencia / Registro asociado
+              </label>
+
+              <input
+                id="evidence"
+                placeholder="Ej.: Registro de inspección">
+
+            </div>
+
+
+            <div class="field">
+
+              <label>
+                Norma asociada
+              </label>
+
+              <input
+                id="standard"
+                placeholder="Ej.: ISO 9001:2015 7.5">
+
+            </div>
+
+
+          </div>
+
+
+        </div>
+
+
+        <!-- DATOS GENERALES -->
+
+        <div class="section-label">
+
+          Información del documento
 
         </div>
 
 
         <div class="grid2">
+
 
           <div class="field">
 
@@ -863,10 +1744,12 @@ APLICACIÓN
 
           </div>
 
+
         </div>
 
 
         <div class="grid2">
+
 
           <div class="field">
 
@@ -881,7 +1764,7 @@ APLICACIÓN
               </option>
 
               <option>
-                Fisico-Digital
+                Físico-Digital
               </option>
 
               <option>
@@ -917,71 +1800,6 @@ APLICACIÓN
 
           </div>
 
-        </div>
-
-
-        <div
-          id="projectExtra"
-          class="hidden">
-
-          <div class="grid2">
-
-            <div class="field">
-
-              <label>
-                Documentos asociados
-              </label>
-
-              <input
-                id="associated"
-                placeholder="Ej.: PAC, planos, procedimientos">
-
-            </div>
-
-
-            <div class="field">
-
-              <label>
-                Difusión del documento
-              </label>
-
-              <input
-                id="diffusion"
-                placeholder="Ej.: Primera difusión Sep 2026">
-
-            </div>
-
-          </div>
-
-
-          <div class="grid2">
-
-            <div class="field">
-
-              <label>
-                Evidencia o registro asociado
-              </label>
-
-              <input
-                id="evidence"
-                placeholder="Ej.: Acta de Toma de Conocimiento">
-
-            </div>
-
-
-            <div class="field">
-
-              <label>
-                Norma asociada
-              </label>
-
-              <input
-                id="standard"
-                placeholder="Ej.: ISO 9001 7.5">
-
-            </div>
-
-          </div>
 
         </div>
 
@@ -999,48 +1817,40 @@ APLICACIÓN
         </div>
 
 
-        <!-- PREVISUALIZACIÓN -->
+        <!-- CÓDIGO -->
 
-        <div class="preview">
+        <div class="code-panel">
 
-          <div class="muted">
-            Vista previa de estructura
+
+          <div class="code-panel-title">
+
+            CÓDIGO PROPUESTO
+
           </div>
+
 
           <div
             id="previewCode"
-            class="preview-code">
-            AQ-QA-PROC-XX-REV0
+            class="code-value">
+
+            AQ-QA-PROC-XX-Rev0
+
           </div>
+
 
           <div
             id="previewStatus"
-            class="status warn">
-            Completa los datos para consultar el correlativo.
+            class="code-status warn">
+
+            Completa los datos para consultar la documentación.
+
           </div>
+
 
         </div>
 
 
         <div class="buttons">
-
-          <button
-            id="checkBtn"
-            class="btn btn-secondary">
-
-            🔎 Verificar código
-
-          </button>
-
-
-          <button
-            id="saveBtn"
-            class="btn btn-primary"
-            disabled>
-
-            💾 Registrar documento
-
-          </button>
 
 
           <button
@@ -1051,37 +1861,89 @@ APLICACIÓN
 
           </button>
 
+
+          <button
+            id="checkBtn"
+            class="btn btn-primary">
+
+            🔎 Verificar código
+
+          </button>
+
+
+          <button
+            id="saveBtn"
+            class="btn btn-success"
+            disabled>
+
+            ✓ Registrar documento
+
+          </button>
+
+
         </div>
 
+
       </div>
+
 
     </section>
 
 
     <!-- =================================================
-    LISTADO MAESTRO
+    LISTADO
     ================================================= -->
 
     <section
       id="page-listado"
       class="page hidden">
 
+
       <div class="card">
 
-        <h2>
-          Listado Maestro
-        </h2>
 
-        <input
-          id="searchListado"
-          class="field search"
-          placeholder="Buscar código, nombre, proyecto..."
-          style="padding:12px;border:1px solid #c9d6df;border-radius:9px">
+        <div class="table-toolbar">
+
+          <div>
+
+            <h2 class="card-title">
+              Listado Maestro
+            </h2>
+
+            <p class="card-subtitle">
+              Control maestro de documentos.
+            </p>
+
+          </div>
+
+
+          <input
+            id="searchListado"
+            class="search"
+            placeholder="Buscar código, documento, área..."
+            style="
+              padding:11px 13px;
+              border:1px solid #cad9e1;
+              border-radius:9px;
+              font-size:14px;
+            ">
+
+        </div>
+
 
         <div
           id="listadoTable"
           class="table-wrap">
+
+          <div
+            style="padding:20px;color:#71828c">
+
+            Cargando...
+
+          </div>
+
         </div>
+
 
       </div>
 
@@ -1096,22 +1958,52 @@ APLICACIÓN
       id="page-matriz"
       class="page hidden">
 
+
       <div class="card">
 
-        <h2>
-          Matriz de Trazabilidad
-        </h2>
 
-        <input
-          id="searchMatriz"
-          class="field search"
-          placeholder="Buscar código, documento, proyecto..."
-          style="padding:12px;border:1px solid #c9d6df;border-radius:9px">
+        <div class="table-toolbar">
+
+          <div>
+
+            <h2 class="card-title">
+              Matriz de Trazabilidad
+            </h2>
+
+            <p class="card-subtitle">
+              Seguimiento y trazabilidad documental.
+            </p>
+
+          </div>
+
+
+          <input
+            id="searchMatriz"
+            class="search"
+            placeholder="Buscar código, proyecto..."
+            style="
+              padding:11px 13px;
+              border:1px solid #cad9e1;
+              border-radius:9px;
+              font-size:14px;
+            ">
+
+        </div>
+
 
         <div
           id="matrizTable"
           class="table-wrap">
+
+          <div
+            style="padding:20px;color:#71828c">
+
+            Cargando...
+
+          </div>
+
         </div>
+
 
       </div>
 
@@ -1119,48 +2011,110 @@ APLICACIÓN
 
 
     <!-- =================================================
-    CONFIGURACIÓN
+    CONFIG
     ================================================= -->
 
     <section
       id="page-config"
       class="page hidden">
 
+
       <div class="card">
 
-        <h2>
-          Configuración
+        <h2 class="card-title">
+          Configuración del sistema
         </h2>
 
-        <p>
-          <b>Firebase:</b>
-          autenticación por correo y contraseña.
+        <p class="card-subtitle">
+          Parámetros principales de codificación.
         </p>
 
-        <p>
-          <b>Control documental:</b>
-          Listado Maestro + Matriz de Trazabilidad.
-        </p>
 
-        <p>
-          <b>Regla:</b>
-          un código se considera ocupado
-          si aparece en cualquiera de los dos controles.
-        </p>
+        <div
+          style="
+            margin-top:25px;
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:15px;
+          ">
 
-        <p class="small muted">
-          La página utiliza Firebase para autenticación
-          y Google Apps Script como intermediario
-          para trabajar con las hojas.
-        </p>
+
+          <div
+            style="
+              padding:18px;
+              background:#f5f9fb;
+              border-radius:10px;
+            ">
+
+            <b>
+              Documentación Interna
+            </b>
+
+            <p class="muted">
+
+              AQ + Área + Tipo +
+              Correlativo + Rev0
+
+            </p>
+
+          </div>
+
+
+          <div
+            style="
+              padding:18px;
+              background:#f5f9fb;
+              border-radius:10px;
+            ">
+
+            <b>
+              Proyecto
+            </b>
+
+            <p class="muted">
+
+              AQ + Cliente + N° Proyecto +
+              Área + Tipo + Correlativo +
+              Rev.B / Rev0 / Rev1...
+
+            </p>
+
+          </div>
+
+
+        </div>
+
+
+        <div class="status ok">
+
+          ✓ Firebase Authentication activo.
+
+        </div>
+
+
+        <div class="status ok">
+
+          ✓ Google Apps Script configurado.
+
+        </div>
+
+
+        <div class="status ok">
+
+          ✓ Listado Maestro + Matriz de Trazabilidad.
+
+        </div>
+
 
       </div>
 
     </section>
 
+
   </main>
 
 </div>
+
 
 
 <!-- =====================================================
@@ -1168,6 +2122,7 @@ FIREBASE
 ===================================================== -->
 
 <script type="module">
+
 
 import {
   initializeApp
@@ -1188,7 +2143,7 @@ from
 
 
 /* =====================================================
-CONFIGURACIÓN FIREBASE
+FIREBASE CONFIG
 ===================================================== */
 
 const firebaseConfig = {
@@ -1215,7 +2170,7 @@ const firebaseConfig = {
 
 
 /* =====================================================
-URL REAL DE GOOGLE APPS SCRIPT
+APPS SCRIPT
 ===================================================== */
 
 const BACKEND_URL =
@@ -1235,74 +2190,8 @@ getAuth(
 
 
 /* =====================================================
-CATÁLOGOS
+ESTADO
 ===================================================== */
-
-const areas = {
-
-  AD:"Alta Dirección",
-
-  QA:"Aseguramiento de Calidad",
-
-  QC:"Control Calidad",
-
-  PR:"Producción y Operaciones",
-
-  ING:"Ingeniería y Proyectos",
-
-  SEC:"Secretaria",
-
-  ADQ:"Adquisiciones",
-
-  VEN:"Ventas y Cotizaciones",
-
-  RRHH:"Recursos Humanos",
-
-  SSO:"Salud y Seguridad Ocupacional",
-
-  MA:"Medio Ambiente",
-
-  MANT:"Mantenimiento Equipos",
-
-  SIG:"Gestión Integrada"
-
-};
-
-
-const docTypes = {
-
-  PROC:"Procedimiento",
-
-  INS:"Instructivo",
-
-  REG:"Registro",
-
-  MAN:"Manual",
-
-  PL:"Plan",
-
-  PROG:"Programa",
-
-  ESQ:"Esquema",
-
-  MAT:"Matriz",
-
-  PLN:"Plano",
-
-  INF:"Informe",
-
-  PAC:"Plan de Aseguramiento Calidad",
-
-  PROT:"Protocolo",
-
-  PIE:"Plan de Inspección Ensayo",
-
-  CHK:"Check List",
-
-  ORG:"Organigrama"
-
-};
-
 
 const state = {
 
@@ -1310,15 +2199,13 @@ const state = {
 
   listado:[],
 
-  matriz:[],
-
-  lastCheck:0
+  matriz:[]
 
 };
 
 
 /* =====================================================
-UTILIDADES
+SELECTORES
 ===================================================== */
 
 const $ =
@@ -1328,46 +2215,99 @@ document.getElementById(
 );
 
 
-const esc =
-value =>
-String(
-  value ?? ""
-)
-.replace(
-  /[&<>"']/g,
-  character =>
-  ({
-    '&':'&amp;',
-    '<':'&lt;',
-    '>':'&gt;',
-    '"':'&quot;',
-    "'":'&#39;'
-  }[character])
-);
+/* =====================================================
+ESCAPE HTML
+===================================================== */
+
+function esc(value){
+
+  return String(
+    value ?? ""
+  )
+  .replace(
+    /[&<>"']/g,
+    character => {
+
+      const map = {
+
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#39;"
+
+      };
+
+      return map[character];
+
+    }
+  );
+
+}
 
 
 /* =====================================================
-CARGAR SELECT
+CATÁLOGOS
 ===================================================== */
+
+const areas = {
+
+  AD:"Alta Dirección",
+  QA:"Aseguramiento de Calidad",
+  QC:"Control Calidad",
+  PR:"Producción y Operaciones",
+  ING:"Ingeniería y Proyectos",
+  SEC:"Secretaria",
+  ADQ:"Adquisiciones",
+  VEN:"Ventas y Cotizaciones",
+  RRHH:"Recursos Humanos",
+  SSO:"Salud y Seguridad Ocupacional",
+  MA:"Medio Ambiente",
+  MANT:"Mantenimiento Equipos",
+  SIG:"Gestión Integrada"
+
+};
+
+
+const docTypes = {
+
+  PROC:"Procedimiento",
+  INS:"Instructivo",
+  REG:"Registro",
+  MAN:"Manual",
+  PL:"Plan",
+  PROG:"Programa",
+  ESQ:"Esquema",
+  MAT:"Matriz",
+  PLN:"Plano",
+  INF:"Informe",
+  PAC:"Plan de Aseguramiento Calidad",
+  PROT:"Protocolo",
+  PIE:"Plan de Inspección Ensayo",
+  CHK:"Check List",
+  ORG:"Organigrama"
+
+};
+
 
 function fillSelect(
   id,
-  data
+  object
 ){
 
   $(id).innerHTML =
 
     Object.entries(
-      data
+      object
     )
-
     .map(
       ([key,value]) =>
+
       `<option value="${key}">
         ${key} - ${value}
       </option>`
-    )
 
+    )
     .join("");
 
 }
@@ -1395,10 +2335,314 @@ new Date()
 
 
 /* =====================================================
-MENSAJES
+MODO
 ===================================================== */
 
-function showLoginMsg(
+function mode(){
+
+  return document
+    .querySelector(
+      'input[name="mode"]:checked'
+    )
+    .value;
+
+}
+
+
+/* =====================================================
+REVISIONES
+===================================================== */
+
+function updateRevisionOptions(){
+
+  const project =
+    mode() === "project";
+
+
+  const revision =
+    $("revision");
+
+
+  const current =
+    revision.value;
+
+
+  if(project){
+
+    revision.innerHTML = `
+
+      <option value="REVB">
+        Rev.B - Origen / Revisión del cliente
+      </option>
+
+      <option value="REV0">
+        Rev0 - Aprobado por cliente / Original
+      </option>
+
+      <option value="REV1">
+        Rev1 - Primera modificación
+      </option>
+
+      <option value="REV2">
+        Rev2
+      </option>
+
+      <option value="REV3">
+        Rev3
+      </option>
+
+      <option value="REV4">
+        Rev4
+      </option>
+
+      <option value="REV5">
+        Rev5
+      </option>
+
+    `;
+
+
+    if(
+      [
+        "REVB",
+        "REV0",
+        "REV1",
+        "REV2",
+        "REV3",
+        "REV4",
+        "REV5"
+      ].includes(current)
+    ){
+
+      revision.value =
+        current;
+
+    }else{
+
+      revision.value =
+        "REVB";
+
+    }
+
+
+    $("revisionHelp").innerHTML =
+
+      `<span class="revision-origin">
+        Rev.B = origen / revisión del cliente
+      </span>`;
+
+  }else{
+
+    revision.innerHTML = `
+
+      <option value="REV0">
+        Rev0 - Original
+      </option>
+
+      <option value="REV1">
+        Rev1 - Primera modificación
+      </option>
+
+      <option value="REV2">
+        Rev2
+      </option>
+
+      <option value="REV3">
+        Rev3
+      </option>
+
+      <option value="REV4">
+        Rev4
+      </option>
+
+      <option value="REV5">
+        Rev5
+      </option>
+
+    `;
+
+
+    revision.value =
+      "REV0";
+
+
+    $("revisionHelp").textContent =
+
+      "La Documentación Interna comienza en Rev0.";
+
+  }
+
+}
+
+
+/* =====================================================
+FORMATO REVISION
+===================================================== */
+
+function displayRevision(
+  value
+){
+
+  if(
+    value === "REVB"
+  ){
+
+    return "Rev.B";
+
+  }
+
+
+  if(
+    /^REV\d+$/.test(
+      value
+    )
+  ){
+
+    return "Rev" +
+      value.replace(
+        "REV",
+        ""
+      );
+
+  }
+
+
+  return value;
+
+}
+
+
+/* =====================================================
+DATOS FORMULARIO
+===================================================== */
+
+function formData(){
+
+  return {
+
+    mode:
+      mode(),
+
+    area:
+      $("area").value,
+
+    docType:
+      $("docType").value,
+
+    client:
+      $("client")
+      .value
+      .trim()
+      .toUpperCase(),
+
+    projectNo:
+      $("projectNo")
+      .value
+      .trim(),
+
+    projectName:
+      $("projectName")
+      .value
+      .trim(),
+
+    revision:
+      $("revision").value,
+
+    docName:
+      $("docName")
+      .value
+      .trim(),
+
+    issueDate:
+      $("issueDate").value,
+
+    docLink:
+      $("docLink")
+      .value
+      .trim() ||
+      "-",
+
+    distribution:
+      $("distribution").value,
+
+    state:
+      $("state").value,
+
+    associated:
+      $("associated")
+      .value
+      .trim(),
+
+    diffusion:
+      $("diffusion")
+      .value
+      .trim(),
+
+    evidence:
+      $("evidence")
+      .value
+      .trim(),
+
+    standard:
+      $("standard")
+      .value
+      .trim(),
+
+    observations:
+      $("observations")
+      .value
+      .trim()
+
+  };
+
+}
+
+
+/* =====================================================
+VALIDACIÓN
+===================================================== */
+
+function validForm(){
+
+  const data =
+    formData();
+
+
+  if(
+    !data.area ||
+    !data.docType ||
+    !data.docName
+  ){
+
+    return false;
+
+  }
+
+
+  if(
+    data.mode === "project" &&
+    (
+      !data.client ||
+      !data.projectNo ||
+      !data.projectName
+    )
+  ){
+
+    return false;
+
+  }
+
+
+  return true;
+
+}
+
+
+/* =====================================================
+MENSAJE LOGIN
+===================================================== */
+
+function loginMsg(
   text,
   type="warn"
 ){
@@ -1412,7 +2656,11 @@ function showLoginMsg(
 }
 
 
-function appMsg(
+/* =====================================================
+MENSAJE BACKEND
+===================================================== */
+
+function backendMsg(
   text,
   type="warn"
 ){
@@ -1427,129 +2675,106 @@ function appMsg(
 
 
 /* =====================================================
-NAVEGACIÓN
+API
 ===================================================== */
 
-function setPage(
-  page
+async function api(
+  action,
+  payload={}
 ){
 
-  document
-    .querySelectorAll(
-      ".page"
-    )
-    .forEach(
-      element =>
-      element.classList.add(
-        "hidden"
-      )
-    );
-
-
-  $(`page-${page}`)
-    .classList
-    .remove(
-      "hidden"
-    );
-
-
-  document
-    .querySelectorAll(
-      ".nav button[data-page]"
-    )
-    .forEach(
-      button =>
-      button.classList.toggle(
-        "active",
-        button.dataset.page ===
-        page
-      )
-    );
-
-
-  const titles = {
-
-    dashboard:
-      "Dashboard",
-
-    new:
-      "Nuevo documento",
-
-    listado:
-      "Listado Maestro",
-
-    matriz:
-      "Matriz de Trazabilidad",
-
-    config:
-      "Configuración"
-
-  };
-
-
-  $("pageTitle").textContent =
-    titles[page] ||
-    "Sistema";
-
-
   if(
-    page ===
-    "listado"
+    !auth.currentUser
   ){
 
-    renderTable(
-      "listado"
+    throw new Error(
+      "La sesión no está activa."
+    );
+
+  }
+
+
+  const token =
+    await auth.currentUser
+      .getIdToken(
+        true
+      );
+
+
+  const response =
+    await fetch(
+      BACKEND_URL,
+      {
+
+        method:"POST",
+
+        redirect:"follow",
+
+        headers:{
+          "Content-Type":
+            "text/plain;charset=utf-8"
+        },
+
+        body:
+          JSON.stringify({
+
+            action:
+              action,
+
+            idToken:
+              token,
+
+            ...payload
+
+          })
+
+      }
+    );
+
+
+  const text =
+    await response.text();
+
+
+  let result;
+
+
+  try{
+
+    result =
+      JSON.parse(
+        text
+      );
+
+  }catch{
+
+    throw new Error(
+      "El servidor no devolvió una respuesta válida."
     );
 
   }
 
 
   if(
-    page ===
-    "matriz"
+    !result.ok
   ){
 
-    renderTable(
-      "matriz"
+    throw new Error(
+      result.error ||
+      "Error del servidor."
     );
 
   }
+
+
+  return result;
 
 }
-
-
-document
-  .querySelectorAll(
-    ".nav button[data-page]"
-  )
-  .forEach(
-    button =>
-
-    button.addEventListener(
-      "click",
-      () =>
-      setPage(
-        button.dataset.page
-      )
-    )
-
-  );
 
 
 /* =====================================================
-MODO
+ACTUALIZAR MODO
 ===================================================== */
-
-function mode(){
-
-  return document
-    .querySelector(
-      'input[name="mode"]:checked'
-    )
-    .value;
-
-}
-
 
 function updateModeUI(){
 
@@ -1590,6 +2815,9 @@ function updateModeUI(){
     );
 
 
+  updateRevisionOptions();
+
+
   checkPreview(
     false
   );
@@ -1610,255 +2838,14 @@ document
   );
 
 
-/* =====================================================
-LLAMADA AL BACKEND
-===================================================== */
-
-async function api(
-  action,
-  payload={}
-){
-
-  if(
-    !BACKEND_URL ||
-    BACKEND_URL.includes(
-      "PEGA_AQUI"
-    )
-  ){
-
-    throw new Error(
-      "Falta configurar la URL de Google Apps Script."
-    );
-
-  }
-
-
-  if(
-    !auth.currentUser
-  ){
-
-    throw new Error(
-      "Sesión no válida."
-    );
-
-  }
-
-
-  const idToken =
-    await auth.currentUser
-      .getIdToken(
-        true
-      );
-
-
-  const response =
-    await fetch(
-      BACKEND_URL,
-      {
-
-        method:
-          "POST",
-
-        redirect:
-          "follow",
-
-        headers:{
-          "Content-Type":
-            "text/plain;charset=utf-8"
-        },
-
-        body:
-          JSON.stringify({
-            action,
-            idToken,
-            ...payload
-          })
-
-      }
-    );
-
-
-  const text =
-    await response.text();
-
-
-  let data;
-
-
-  try{
-
-    data =
-      JSON.parse(
-        text
-      );
-
-  }catch{
-
-    throw new Error(
-      "Respuesta inválida del servidor: " +
-      text.slice(
-        0,
-        200
-      )
-    );
-
-  }
-
-
-  if(
-    !data.ok
-  ){
-
-    throw new Error(
-      data.error ||
-      "Error del servidor."
-    );
-
-  }
-
-
-  return data;
-
-}
+updateRevisionOptions();
 
 
 /* =====================================================
-DATOS DEL FORMULARIO
+VERIFICAR
 ===================================================== */
 
-function formData(){
-
-  return {
-
-    mode:
-      mode(),
-
-    area:
-      $("area").value,
-
-    docType:
-      $("docType").value,
-
-    client:
-      $("client")
-        .value
-        .trim()
-        .toUpperCase(),
-
-    projectNo:
-      $("projectNo")
-        .value
-        .trim(),
-
-    projectName:
-      $("projectName")
-        .value
-        .trim(),
-
-    revision:
-      $("revision").value,
-
-    docName:
-      $("docName")
-        .value
-        .trim(),
-
-    issueDate:
-      $("issueDate").value,
-
-    docLink:
-      $("docLink")
-        .value
-        .trim() ||
-      "-",
-
-    distribution:
-      $("distribution").value,
-
-    state:
-      $("state").value,
-
-    associated:
-      $("associated")
-        .value
-        .trim(),
-
-    diffusion:
-      $("diffusion")
-        .value
-        .trim(),
-
-    evidence:
-      $("evidence")
-        .value
-        .trim(),
-
-    standard:
-      $("standard")
-        .value
-        .trim(),
-
-    observations:
-      $("observations")
-        .value
-        .trim()
-
-  };
-
-}
-
-
-/* =====================================================
-VALIDACIÓN LOCAL
-===================================================== */
-
-function localFormValid(){
-
-  const data =
-    formData();
-
-
-  if(
-    !data.area ||
-    !data.docType ||
-    !data.docName
-  ){
-
-    return false;
-
-  }
-
-
-  if(
-
-    data.mode ===
-    "project" &&
-
-    (
-      !data.client ||
-      !data.projectNo ||
-      !data.projectName
-    )
-
-  ){
-
-    return false;
-
-  }
-
-
-  return true;
-
-}
-
-
-/* =====================================================
-VERIFICAR CÓDIGO
-===================================================== */
-
-async function checkPreview(
-  showMessage=true
-){
+async function checkPreview(){
 
   $("saveBtn")
     .disabled =
@@ -1866,7 +2853,7 @@ async function checkPreview(
 
 
   if(
-    !localFormValid()
+    !validForm()
   ){
 
     $("previewCode")
@@ -1877,16 +2864,16 @@ async function checkPreview(
 
       ?
 
-      "AQ-CLIENTE-N°-QA-PROC-XX-REV0"
+      "AQ-CLIENTE-N°-QA-PROT-XX-Rev.B"
 
       :
 
-      "AQ-QA-PROC-XX-REV0";
+      "AQ-QA-PROC-XX-Rev0";
 
 
     $("previewStatus")
       .className =
-      "status warn";
+      "code-status warn";
 
 
     $("previewStatus")
@@ -1901,13 +2888,13 @@ async function checkPreview(
 
   $("previewStatus")
     .className =
-    "status warn";
+    "code-status warn";
 
 
   $("previewStatus")
     .innerHTML =
 
-    '<span class="loader"></span> Consultando Listado Maestro y Matriz…';
+    '<span class="loader"></span> Revisando Listado Maestro y Matriz...';
 
 
   try{
@@ -1927,9 +2914,25 @@ async function checkPreview(
       result;
 
 
+    let displayCode =
+      result.code;
+
+
+    /*
+      Si Apps Script devuelve REVB,
+      lo mostramos como Rev.B.
+    */
+
+    displayCode =
+      displayCode.replace(
+        /-REVB$/i,
+        "-Rev.B"
+      );
+
+
     $("previewCode")
       .textContent =
-      result.code;
+      displayCode;
 
 
     if(
@@ -1938,13 +2941,14 @@ async function checkPreview(
 
       $("previewStatus")
         .className =
-        "status danger";
+        "code-status danger";
 
 
       $("previewStatus")
         .textContent =
 
-        `⚠️ ESTE CÓDIGO YA EXISTE: ${result.code}. Registro(s): ${result.matches.join(" | ")}`;
+        "⚠️ ESTE CÓDIGO YA EXISTE: " +
+        displayCode;
 
 
       $("saveBtn")
@@ -1952,49 +2956,114 @@ async function checkPreview(
         true;
 
 
+      return;
+
     }
 
-    else if(
-      result.revision !==
-      "REV0"
+
+    /*
+      REGLA DE REVISION
+    */
+
+    if(
+      data.mode === "internal" &&
+      data.revision !== "REV0"
     ){
 
       $("previewStatus")
         .className =
-        "status warn";
+        "code-status warn";
 
 
       $("previewStatus")
         .textContent =
 
-        `Código disponible, pero ${result.revision} corresponde a una modificación. Para un documento nuevo utiliza REV0.`;
+        "La Documentación Interna debe comenzar en Rev0.";
 
 
-      $("saveBtn")
-        .disabled =
-        true;
-
+      return;
 
     }
 
-    else{
+
+    if(
+      data.mode === "project" &&
+      data.revision !== "REVB" &&
+      data.revision !== "REV0"
+    ){
 
       $("previewStatus")
         .className =
-        "status ok";
+        "code-status warn";
 
 
       $("previewStatus")
         .textContent =
 
-        `✅ CÓDIGO DISPONIBLE. Próximo correlativo detectado: ${String(result.correlative).padStart(2,"0")}. Se verificaron ambos controles.`;
+        "Un Proyecto nuevo debe estar en Rev.B o Rev0 si ya fue aprobado por el cliente.";
 
 
-      $("saveBtn")
-        .disabled =
-        false;
+      return;
 
     }
+
+
+    $("previewStatus")
+      .className =
+      "code-status ok";
+
+
+    if(
+      data.mode === "project" &&
+      data.revision === "REVB"
+    ){
+
+      $("previewStatus")
+        .textContent =
+
+        "✓ CÓDIGO DISPONIBLE. Rev.B corresponde al documento de origen / revisión del cliente. Correlativo: " +
+        String(
+          result.correlative
+        ).padStart(
+          2,
+          "0"
+        );
+
+    }else if(
+      data.mode === "project" &&
+      data.revision === "REV0"
+    ){
+
+      $("previewStatus")
+        .textContent =
+
+        "✓ CÓDIGO DISPONIBLE. Rev0 corresponde al documento aprobado por el cliente. Correlativo: " +
+        String(
+          result.correlative
+        ).padStart(
+          2,
+          "0"
+        );
+
+    }else{
+
+      $("previewStatus")
+        .textContent =
+
+        "✓ CÓDIGO DISPONIBLE. Correlativo: " +
+        String(
+          result.correlative
+        ).padStart(
+          2,
+          "0"
+        );
+
+    }
+
+
+    $("saveBtn")
+      .disabled =
+      false;
 
 
   }catch(error){
@@ -2005,7 +3074,7 @@ async function checkPreview(
 
     $("previewStatus")
       .className =
-      "status danger";
+      "code-status danger";
 
 
     $("previewStatus")
@@ -2018,14 +3087,13 @@ async function checkPreview(
 
 
 /* =====================================================
-GUARDAR DOCUMENTO
+REGISTRAR
 ===================================================== */
 
 async function saveDocument(){
 
   if(
-    !state.preview ||
-    $("saveBtn").disabled
+    !state.preview
   ){
 
     return;
@@ -2045,45 +3113,63 @@ async function saveDocument(){
   $("saveBtn")
     .innerHTML =
 
-    '<span class="loader"></span> Registrando…';
+    '<span class="loader"></span> Registrando...';
 
 
   try{
 
     const result =
       await api(
+
         "createDocument",
+
         {
+
           ...data,
+
           expectedCode:
             state.preview.code
+
         }
+
       );
 
 
-    $("previewStatus")
-      .className =
-      "status ok";
+    let displayCode =
+      result.code;
 
 
-    $("previewStatus")
-      .textContent =
-
-      `✅ DOCUMENTO REGISTRADO. Código asignado: ${result.code}`;
+    displayCode =
+      displayCode.replace(
+        /-REVB$/i,
+        "-Rev.B"
+      );
 
 
     $("previewCode")
       .textContent =
-      result.code;
+      displayCode;
+
+
+    $("previewStatus")
+      .className =
+      "code-status ok";
+
+
+    $("previewStatus")
+      .textContent =
+
+      "✓ DOCUMENTO REGISTRADO: " +
+      displayCode;
 
 
     alert(
 
-      `Documento registrado correctamente.\n\n` +
-
-      `Código: ${result.code}\n\n` +
-
-      `Se actualizó el Listado Maestro y la Matriz de Trazabilidad.`
+      "Documento registrado correctamente.\n\n" +
+      "Código: " +
+      displayCode +
+      "\n\n" +
+      "Se actualizó el Listado Maestro y la Matriz de Trazabilidad."
 
     );
 
@@ -2091,16 +3177,14 @@ async function saveDocument(){
     await loadData();
 
 
-    clearForm(
-      false
-    );
+    clearForm();
 
 
   }catch(error){
 
     $("previewStatus")
       .className =
-      "status danger";
+      "code-status danger";
 
 
     $("previewStatus")
@@ -2108,16 +3192,14 @@ async function saveDocument(){
       error.message;
 
 
-    await checkPreview(
-      false
-    );
+    await checkPreview();
 
 
   }finally{
 
     $("saveBtn")
       .innerHTML =
-      "💾 Registrar documento";
+      "✓ Registrar documento";
 
   }
 
@@ -2128,9 +3210,7 @@ async function saveDocument(){
 LIMPIAR
 ===================================================== */
 
-function clearForm(
-  check=true
-){
+function clearForm(){
 
   [
 
@@ -2146,7 +3226,6 @@ function clearForm(
     "observations"
 
   ]
-
   .forEach(
     id =>
     $(id).value =
@@ -2154,30 +3233,27 @@ function clearForm(
   );
 
 
-  $("revision")
-    .value =
-    "REV0";
+  $("revision").value =
+    mode() === "project"
+    ? "REVB"
+    : "REV0";
 
 
-  $("distribution")
-    .value =
+  $("distribution").value =
     "Digital";
 
 
-  $("state")
-    .value =
+  $("state").value =
     "Vigente";
 
 
-  $("issueDate")
-    .value =
-
+  $("issueDate").value =
     new Date()
-      .toISOString()
-      .slice(
-        0,
-        10
-      );
+    .toISOString()
+    .slice(
+      0,
+      10
+    );
 
 
   state.preview =
@@ -2186,34 +3262,33 @@ function clearForm(
 
   $("previewCode")
     .textContent =
-    "AQ-QA-PROC-XX-REV0";
+
+    mode() ===
+    "project"
+
+    ?
+
+    "AQ-CLIENTE-N°-QA-PROT-XX-Rev.B"
+
+    :
+
+    "AQ-QA-PROC-XX-Rev0";
 
 
   $("previewStatus")
     .className =
-    "status warn";
+    "code-status warn";
 
 
   $("previewStatus")
     .textContent =
 
-    "Completa los datos para consultar el correlativo.";
+    "Completa los datos para consultar la documentación.";
 
 
   $("saveBtn")
     .disabled =
     true;
-
-
-  if(
-    check
-  ){
-
-    checkPreview(
-      false
-    );
-
-  }
 
 }
 
@@ -2225,10 +3300,7 @@ BOTONES
 $("checkBtn")
   .addEventListener(
     "click",
-    () =>
-    checkPreview(
-      true
-    )
+    checkPreview
   );
 
 
@@ -2242,10 +3314,7 @@ $("saveBtn")
 $("clearBtn")
   .addEventListener(
     "click",
-    () =>
-    clearForm(
-      true
-    )
+    clearForm
   );
 
 
@@ -2265,7 +3334,6 @@ ACTUALIZACIÓN AUTOMÁTICA
   "issueDate"
 
 ]
-
 .forEach(
   id => {
 
@@ -2273,9 +3341,7 @@ ACTUALIZACIÓN AUTOMÁTICA
       .addEventListener(
         "change",
         () =>
-        checkPreview(
-          false
-        )
+        checkPreview()
       );
 
 
@@ -2285,17 +3351,14 @@ ACTUALIZACIÓN AUTOMÁTICA
         () => {
 
           clearTimeout(
-            window.__checkTimer
+            window.__previewTimer
           );
 
 
-          window.__checkTimer =
+          window.__previewTimer =
             setTimeout(
-              () =>
-              checkPreview(
-                false
-              ),
-              500
+              checkPreview,
+              600
             );
 
         }
@@ -2329,40 +3392,40 @@ async function loadData(){
       [];
 
 
+    const docs =
+      Math.max(
+        state.listado.length,
+        state.matriz.length
+      );
+
+
     $("statDocs")
       .textContent =
-
-      String(
-        Math.max(
-          state.listado.length,
-          state.matriz.length
-        )
-      );
+      docs;
 
 
     $("statChecked")
       .textContent =
 
-      String(
-        result.totalUniqueCodes ||
-        0
-      );
+      result.totalUniqueCodes ||
+      0;
 
 
-    $("statConnection")
+    $("statListado")
       .textContent =
-      "CONECTADO";
+
+      state.listado.length;
 
 
-    $("statConnection")
-      .style
-      .color =
-      "var(--ok)";
+    $("statMatriz")
+      .textContent =
+
+      state.matriz.length;
 
 
-    appMsg(
+    backendMsg(
 
-      `Conectado: Listado Maestro (${state.listado.length}) + Matriz (${state.matriz.length}).`,
+      "✓ Conectado correctamente al Listado Maestro y Matriz de Trazabilidad.",
 
       "ok"
 
@@ -2381,18 +3444,28 @@ async function loadData(){
 
   }catch(error){
 
-    $("statConnection")
+    $("statDocs")
       .textContent =
-      "SIN CONEXIÓN";
+      "—";
 
 
-    $("statConnection")
-      .style
-      .color =
-      "var(--danger)";
+    $("statChecked")
+      .textContent =
+      "—";
 
 
-    appMsg(
+    $("statListado")
+      .textContent =
+      "—";
+
+
+    $("statMatriz")
+      .textContent =
+      "—";
+
+
+    backendMsg(
+      "Error de conexión: " +
       error.message,
       "danger"
     );
@@ -2407,17 +3480,16 @@ TABLAS
 ===================================================== */
 
 function renderTable(
-  which
+  type
 ){
 
   const rows =
-    state[which];
+    state[type];
 
 
   const target =
 
-    which ===
-    "listado"
+    type === "listado"
 
     ?
 
@@ -2432,8 +3504,7 @@ function renderTable(
 
     (
 
-      which ===
-      "listado"
+      type === "listado"
 
       ?
 
@@ -2477,31 +3548,21 @@ function renderTable(
 
     target.innerHTML =
 
-      '<div class="muted">No hay registros para mostrar.</div>';
+      `<div style="
+        padding:20px;
+        color:#70818c;
+      ">
+        No hay registros para mostrar.
+      </div>`;
 
     return;
 
   }
 
 
-  const maxCols =
-
-    which ===
-    "listado"
-
-    ?
-
-    12
-
-    :
-
-    11;
-
-
   const headers =
 
-    which ===
-    "listado"
+    type === "listado"
 
     ?
 
@@ -2531,7 +3592,7 @@ function renderTable(
       "Nombre",
       "Proyecto",
       "Tipo",
-      "Documentos asociado",
+      "Documento asociado",
       "Área",
       "Difusión",
       "Evidencia",
@@ -2541,9 +3602,7 @@ function renderTable(
     ];
 
 
-  target.innerHTML =
-
-    `
+  target.innerHTML = `
 
     <table class="table">
 
@@ -2552,16 +3611,12 @@ function renderTable(
         <tr>
 
           ${
-
             headers
-
             .map(
-              header =>
-              `<th>${header}</th>`
+              h =>
+              `<th>${h}</th>`
             )
-
             .join("")
-
           }
 
         </tr>
@@ -2572,11 +3627,8 @@ function renderTable(
       <tbody>
 
         ${
-
           filtered
-
           .map(
-
             row =>
 
             `
@@ -2584,14 +3636,8 @@ function renderTable(
             <tr>
 
               ${
-
-                Array.from(
-
-                  {
-                    length:
-                    maxCols
-                  },
-
+                headers
+                .map(
                   (_,index) =>
 
                   `<td>
@@ -2599,26 +3645,21 @@ function renderTable(
                   </td>`
 
                 )
-
                 .join("")
-
               }
 
             </tr>
 
             `
-
           )
-
           .join("")
-
         }
 
       </tbody>
 
     </table>
 
-    `;
+  `;
 
 }
 
@@ -2677,12 +3718,9 @@ $("loginBtn")
 
       }catch(error){
 
-        showLoginMsg(
-
+        loginMsg(
           "Correo o contraseña incorrectos.",
-
           "danger"
-
         );
 
       }finally{
@@ -2711,16 +3749,17 @@ $("resetBtn")
 
       const email =
         $("email")
-          .value
-          .trim();
+        .value
+        .trim();
 
 
       if(
         !email
       ){
 
-        showLoginMsg(
-          "Escribe primero tu correo."
+        loginMsg(
+          "Escribe primero tu correo.",
+          "warn"
         );
 
         return;
@@ -2736,23 +3775,17 @@ $("resetBtn")
         );
 
 
-        showLoginMsg(
-
-          "Se envió el enlace de restablecimiento.",
-
+        loginMsg(
+          "Se envió el enlace para restablecer la contraseña.",
           "ok"
-
         );
 
 
       }catch(error){
 
-        showLoginMsg(
-
+        loginMsg(
           "No fue posible enviar el enlace.",
-
           "danger"
-
         );
 
       }
@@ -2780,7 +3813,7 @@ $("logoutBtn")
 
 
 /* =====================================================
-ESTADO DE AUTENTICACIÓN
+AUTENTICACIÓN
 ===================================================== */
 
 onAuthStateChanged(
@@ -2809,6 +3842,20 @@ onAuthStateChanged(
         .textContent =
         user.email ||
         "";
+
+
+      const initials =
+        (user.email || "AQ")
+        .substring(
+          0,
+          2
+        )
+        .toUpperCase();
+
+
+      $("userAvatar")
+        .textContent =
+        initials;
 
 
       setPage(
@@ -2840,7 +3887,134 @@ onAuthStateChanged(
 
 );
 
+
+/* =====================================================
+NAVEGACIÓN
+===================================================== */
+
+const titles = {
+
+  dashboard:
+    "Dashboard",
+
+  new:
+    "Nuevo documento",
+
+  listado:
+    "Listado Maestro",
+
+  matriz:
+    "Matriz de Trazabilidad",
+
+  config:
+    "Configuración"
+
+};
+
+
+function setPage(
+  page
+){
+
+  document
+    .querySelectorAll(
+      ".page"
+    )
+    .forEach(
+      element =>
+      element
+      .classList
+      .add(
+        "hidden"
+      )
+    );
+
+
+  const selected =
+    $(
+      "page-" +
+      page
+    );
+
+
+  if(selected){
+
+    selected
+      .classList
+      .remove(
+        "hidden"
+      );
+
+  }
+
+
+  $("pageTitle")
+    .textContent =
+    titles[page] ||
+    "Sistema";
+
+
+  document
+    .querySelectorAll(
+      ".nav button[data-page]"
+    )
+    .forEach(
+      button =>
+      button
+      .classList
+      .toggle(
+        "active",
+        button.dataset.page ===
+        page
+      )
+    );
+
+
+  if(
+    page === "listado"
+  ){
+
+    renderTable(
+      "listado"
+    );
+
+  }
+
+
+  if(
+    page === "matriz"
+  ){
+
+    renderTable(
+      "matriz"
+    );
+
+  }
+
+}
+
+
+document
+  .querySelectorAll(
+    ".nav button[data-page]"
+  )
+  .forEach(
+    button => {
+
+      button.addEventListener(
+        "click",
+        () =>
+        setPage(
+          button.dataset.page
+        )
+      );
+
+    }
+  );
+
+
 </script>
 
 </body>
+
 </html>
